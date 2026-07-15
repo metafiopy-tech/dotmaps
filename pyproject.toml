@@ -1,0 +1,35 @@
+[project]
+name = "dotmaps"
+version = "0.1.0"
+description = "Agent-verification harness: maps of promises, sovereign verifiers, and an append-only board that only the world can turn green."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# the hosted-model traveler; the scripted and ollama drivers need none of this
+llm = ["anthropic>=0.40"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+dotmaps = "dotmaps.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "dotmaps" }
+
+[tool.setuptools.packages.find]
+where = ["dotmaps"]
+include = ["dotmaps*"]
+
+[tool.setuptools.package-data]
+"dotmaps.compiler" = ["templates/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["dotmaps/tests"]
