@@ -1,0 +1,32 @@
+name: seq-publish
+version: 0.1.0
+domain: local-publish
+# rule 3 at tool grain: read + write, nothing else (Stage-0 lesson)
+mcp_required: [filesystem.read_file, filesystem.write_file]
+budget:
+  max_cycles: 40
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+dots:
+  - id: s01
+    statement: normalized.json holds one record per source article, slugs lowercase-hyphenated
+    verifier: verifiers/s01_normalized.py
+    depends_on: []
+  - id: s02
+    statement: pages/<slug>.html exists for every normalized record and shows its title in an h1
+    verifier: verifiers/s02_pages.py
+    depends_on: [s01]
+  - id: s03
+    statement: index.html links to every page in pages/
+    verifier: verifiers/s03_index.py
+    depends_on: [s02]
+  - id: s04
+    statement: manifest.json lists every published html file with its exact byte size
+    verifier: verifiers/s04_manifest.py
+    depends_on: [s03]
+  - id: s05
+    statement: sitemap.txt has one line per page path and agrees with the manifest
+    verifier: verifiers/s05_sitemap.py
+    depends_on: [s04]

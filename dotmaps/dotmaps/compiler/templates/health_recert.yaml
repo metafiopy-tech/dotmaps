@@ -1,0 +1,35 @@
+# Intake template — map 3 (health-recert). Same target.json shape as map 1,
+# minus the build/form questions: a health check never rebuilds and never
+# writes to production.
+map: health-recert
+output_file: target.json
+questions:
+  - key: base_url
+    prompt: "What is the production URL to keep re-certifying?"
+    why: "Every heartbeat run checks this address."
+    type: str
+    required: true
+
+  - key: pages
+    prompt: "Which pages should stay up? (comma-separated paths)"
+    why: "These are re-checked every run; a page that vanishes turns the board red."
+    default: ["/"]
+    type: list
+
+  - key: custom_domain
+    prompt: "Custom domain to keep watching, if any? (blank if none)"
+    why: "DNS rot is one of the quietest ways a site dies."
+    type: optional_str
+    required: false
+
+  - key: min_images
+    prompt: "Minimum number of images the homepage should keep showing?"
+    why: "Catches media that silently 404s after a CDN or path change."
+    default: 1
+    type: int
+
+  - key: lighthouse_min
+    prompt: "Minimum Lighthouse performance score to keep certifying?"
+    why: "Performance regressions creep in; this is the line that may not be crossed."
+    default: 80
+    type: int

@@ -1,0 +1,10 @@
+{
+  "source": "source_items.json",
+  "target": "target_items.json",
+  "slug_field": "slug",
+  "required_fields": ["title", "price", "date"],
+  "hash_fields": ["title", "price", "date"],
+  "spot_hash_sample": 3,
+  "links_field": "body",
+  "internal_link_base": null
+}

@@ -1,0 +1,40 @@
+# The trivial two-dot smoke map (spec §4b): build & prove the loop, mounts,
+# resume, and regression detection BEFORE touching Cloudflare.
+#
+# Traveler is the `scripted` driver so this runs deterministically with no model
+# and no API keys — it exercises the harness, not a real agent. Dot 002 depends
+# on 001, so the selector must order them.
+name: smoke
+version: 0.1.0
+domain: harness-selftest
+
+mcp_required: [filesystem]
+
+budget:
+  max_cycles: 10
+  max_usd: 0.00
+
+traveler:
+  driver: scripted
+  # dot_id -> ordered list of whitelisted tool actions
+  script:
+    "001":
+      - tool: filesystem.write_file
+        path: hello.txt
+        content: "placeholder\n"
+    "002":
+      - tool: filesystem.write_file
+        path: hello.txt
+        content: "MAGIC-TOKEN present\n"
+
+dots:
+  - id: "001"
+    statement: "A file hello.txt exists in the workspace"
+    verifier: verifiers/001_file_exists.py
+    depends_on: []
+    destructive: false
+  - id: "002"
+    statement: "hello.txt contains the string MAGIC-TOKEN"
+    verifier: verifiers/002_file_contains.py
+    depends_on: ["001"]
+    destructive: false

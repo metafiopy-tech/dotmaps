@@ -1,0 +1,71 @@
+# Map 3 — Site health re-certification (the E4 heartbeat as a standalone map).
+#
+# Spec §1 map 3 + §7 (map rot): "re-run map 1/2's verifier suite on an existing
+# deployment on demand or on schedule; dots are the same checks, run against
+# production." This is the E4 frozen-vs-tethered logic shipped as a product —
+# and the naturally-recurring one, likely the revenue spine (§6 pricing).
+#
+# It reuses ONLY map 1's read-only, non-destructive, non-build checks. There is
+# no build dot (the deployment already exists) and no form-POST dot (never write
+# to production on a health check). Primary mode is `dotmaps verify` on a
+# schedule -> a fresh health certificate each run. A traveler is optional and
+# would only ever REMEDIATE a red dot; the certificate is the product.
+name: health-recert
+version: 0.1.0
+domain: small-business-website-health
+
+mcp_required: [fetch]              # read-only; no cloudflare write, no filesystem mutate
+
+budget:
+  max_cycles: 8
+  max_usd: 0.25
+
+# Recurrence hint consumed by the scheduler wrapper, not by a dot. Map rot
+# becomes a product feature: run this on a cadence, alert on the first red.
+heartbeat:
+  schedule: "0 */6 * * *"          # every 6 hours (cron)
+  alert_on: first_red
+  certify_on: all_green
+
+traveler:
+  driver: ollama                     # the open/cheap traveler (validated live on the smoke map)
+  model: qwen2.5-coder:7b
+  fallback: claude-haiku-4-5-20251001  # API fallback config (needs ANTHROPIC_API_KEY)
+  temperature: 0.0
+
+dots:
+  - id: "h01"
+    statement: "The production site root returns HTTP 200"
+    verifier: verifiers/h01_deploy_200.py
+    depends_on: []
+    destructive: false
+  - id: "h02"
+    statement: "Every page in the sitemap returns HTTP 200"
+    verifier: verifiers/h02_pages_200.py
+    depends_on: ["h01"]
+    destructive: false
+  - id: "h03"
+    statement: "The sitemap.xml still lists exactly the site's known routes"
+    verifier: verifiers/h03_sitemap_matches_routes.py
+    depends_on: ["h01"]
+    destructive: false
+  - id: "h04"
+    statement: "Every image referenced on the homepage still resolves (HTTP 200)"
+    verifier: verifiers/h04_images_resolve.py
+    depends_on: ["h01"]
+    destructive: false
+  - id: "h05"
+    statement: "The homepage still loads with no console errors"
+    verifier: verifiers/h05_no_console_errors.py
+    depends_on: ["h01"]
+    destructive: false
+  - id: "h06"
+    statement: "If a custom domain is configured, DNS still resolves to the deployment"
+    verifier: verifiers/h06_dns_resolves.py
+    depends_on: ["h01"]
+    destructive: false
+  - id: "h07"
+    statement: "The homepage Lighthouse performance score still meets the threshold"
+    verifier: verifiers/h07_lighthouse_threshold.py
+    depends_on: ["h01"]
+    destructive: false

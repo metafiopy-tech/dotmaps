@@ -1,0 +1,55 @@
+# Intake template — map 1 (deploy-verify-cloudflare). Spec §4.4: a conversation
+# flow, not a form; each question carries its 'why' so a non-technical tester
+# can answer it. Fills <workspace>/target.json.
+map: deploy-verify-cloudflare
+output_file: target.json
+questions:
+  - key: base_url
+    prompt: "What is the site's URL once deployed (or the URL it should deploy to)?"
+    why: "Every check runs against this address — it is the single thing being certified."
+    type: str
+    required: true
+
+  - key: pages
+    prompt: "Which pages should exist? (comma-separated paths, e.g. /, /about, /contact)"
+    why: "These become the 'every page loads' and 'sitemap matches' promises."
+    default: ["/"]
+    type: list
+
+  - key: custom_domain
+    prompt: "Do you have a custom domain pointed at this site? (leave blank if not)"
+    why: "If set, we also verify DNS resolves and HTTPS answers on that domain."
+    type: optional_str
+    required: false
+
+  - key: form_endpoint
+    prompt: "What is the form submission endpoint path? (blank to skip form checks)"
+    why: "We submit one clearly-marked test entry to prove the form pipeline accepts data."
+    default: "/api/public/signup"
+    type: optional_str
+    required: false
+
+  - key: form_staging_base
+    prompt: "Is there a staging URL where the test form submission should go instead of production?"
+    why: "The form check WRITES data. Without a staging address it stays gated off — we never post test entries to your live sheet/inbox unless you explicitly allow it."
+    type: optional_str
+    required: false
+
+  - key: allow_prod_form
+    prompt: "If there is no staging: allow ONE marked test submission to production? (yes/no)"
+    why: "Explicit opt-in only. The test entry is clearly labeled synthetic so it can be deleted."
+    default: false
+    type: bool
+    required: false
+
+  - key: min_images
+    prompt: "Roughly how many images should the homepage show, at minimum?"
+    why: "Guards against a deploy that 'works' but lost its media."
+    default: 1
+    type: int
+
+  - key: lighthouse_min
+    prompt: "Minimum acceptable Lighthouse performance score (0-100)?"
+    why: "The speed bar the site must clear. 80 is a sane default for a small-business site."
+    default: 80
+    type: int

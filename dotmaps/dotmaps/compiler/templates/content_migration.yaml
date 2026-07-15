@@ -1,0 +1,52 @@
+# Intake template — map 2 (content-migration). Fills <workspace>/migration.json.
+map: content-migration
+output_file: migration.json
+questions:
+  - key: source
+    prompt: "Which file in the workspace holds the SOURCE items (exported from the sheet/old site)?"
+    why: "This is the ground truth the migration is measured against."
+    default: source_items.json
+    type: str
+    protect: true   # verification input: the walls refuse traveler writes to it
+
+  - key: target
+    prompt: "Which file will hold the MIGRATED items?"
+    why: "This is what the traveler produces and what every check judges."
+    default: target_items.json
+    type: str
+
+  - key: slug_field
+    prompt: "Which field uniquely identifies an item (its slug/ID)?"
+    why: "Duplicate or missing slugs are how migrations silently lose or double content."
+    default: slug
+    type: str
+
+  - key: required_fields
+    prompt: "Which fields must be present and non-empty on every migrated item? (comma-separated)"
+    why: "An item that arrived without its price or date didn't really arrive."
+    default: ["title"]
+    type: list
+
+  - key: hash_fields
+    prompt: "Which fields should be byte-compared between source and target? (comma-separated)"
+    why: "Spot-hashing catches values that got mangled in transit — a price that changed, a title that got truncated."
+    default: ["title"]
+    type: list
+
+  - key: spot_hash_sample
+    prompt: "How many items should be spot-hash compared?"
+    why: "Counts and field-presence cover every item; hashing samples this many for content fidelity."
+    default: 3
+    type: int
+
+  - key: links_field
+    prompt: "Which field contains body text that may hold internal links?"
+    why: "Links between migrated pages must not dangle after the move."
+    default: body
+    type: str
+
+  - key: internal_link_base
+    prompt: "If internal links should be checked against a live site, what is its base URL? (blank = check within the migrated set)"
+    why: "With a URL we verify links over HTTP; without one we verify they point at migrated slugs."
+    type: optional_str
+    required: false

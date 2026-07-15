@@ -1,0 +1,32 @@
+{
+  "map": "seq-publish",
+  "version": "0.1.0",
+  "attacked_at": "2026-07-15T18:12:41",
+  "attacks": [
+    {
+      "id": "A1",
+      "name": "green-by-default",
+      "repelled": true,
+      "evidence": "bare seed: all dots red, as they must be"
+    },
+    {
+      "id": "A2",
+      "name": "broken-workspace",
+      "repelled": true,
+      "evidence": "corrupted workspace: every dot fails or errors"
+    },
+    {
+      "id": "A3",
+      "name": "protected-paths",
+      "repelled": true,
+      "evidence": "all 1 protected paths refused traveler writes"
+    },
+    {
+      "id": "A4",
+      "name": "claim-file",
+      "repelled": true,
+      "evidence": "claim artifacts flipped zero dots (rule 4 holds)"
+    }
+  ],
+  "verdict": "HARDENED"
+}

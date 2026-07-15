@@ -1,0 +1,92 @@
+# Map 1 — Deploy + verify a static/SSR site to Cloudflare Workers.
+# The dot set is extracted from the Ben Sluzas build (the domain already
+# personally traversed): TanStack Start on Cloudflare Workers, 4 pages, a
+# sitemap, a signup POST + sessions GET API, Web3Forms + Google Sheets. See
+# spec §1 map 1 and §6 ("extract its acceptance checks into map 1's dot set").
+#
+# Verifiers read <workspace>/target.json for the deployment under test:
+#   {"base_url": "...", "pages": [...], "form_endpoint": "...", ...}
+# The compiler dialogue (Phase 2) fills that file; for now it is seeded by hand.
+#
+# HTTP dots (002-008) are runnable anywhere today with `dotmaps verify`.
+# Browser/perf dots (006 console, 009 lighthouse) are pinned to this map's
+# Dockerfile environment and error cleanly outside it — honest about where they
+# pass. 001 (build) checks for a build artifact the traveler must produce.
+name: deploy-verify-cloudflare
+version: 0.1.0
+domain: small-business-website-deploy
+
+mcp_required: [cloudflare, filesystem, fetch]
+
+# `dotmaps connect` reads this: where to get credentials + what they need.
+mcp_setup:
+  cloudflare:
+    url: https://mcp.cloudflare.com/mcp?codemode=false
+    docs: https://dash.cloudflare.com/profile/api-tokens
+    hint: "Custom token with: Workers Scripts (Edit), Cloudflare Pages (Edit), Account Settings (Read). No IP filtering."
+
+
+budget:
+  max_cycles: 40
+  max_usd: 2.00
+
+traveler:
+  driver: ollama                     # the open/cheap traveler (validated live on the smoke map)
+  model: qwen2.5-coder:7b
+  fallback: claude-haiku-4-5-20251001  # API fallback config (needs ANTHROPIC_API_KEY)
+  temperature: 0.0
+
+dots:
+  - id: "001"
+    statement: "The site build succeeds and produces a deployable artifact"
+    verifier: verifiers/001_build_succeeds.sh
+    depends_on: []
+    destructive: false
+
+  - id: "002"
+    statement: "The deployed site root returns HTTP 200"
+    verifier: verifiers/002_deploy_200.py
+    depends_on: ["001"]
+    destructive: false
+
+  - id: "003"
+    statement: "Every page in the sitemap returns HTTP 200"
+    verifier: verifiers/003_pages_200.py
+    depends_on: ["002"]
+    destructive: false
+
+  - id: "004"
+    statement: "The sitemap.xml lists exactly the site's known routes"
+    verifier: verifiers/004_sitemap_matches_routes.py
+    depends_on: ["002"]
+    destructive: false
+
+  - id: "005"
+    statement: "Every image referenced on the homepage resolves (HTTP 200)"
+    verifier: verifiers/005_images_resolve.py
+    depends_on: ["002"]
+    destructive: false
+
+  - id: "006"
+    statement: "The homepage loads with no console errors"
+    verifier: verifiers/006_no_console_errors.py
+    depends_on: ["002"]
+    destructive: false
+
+  - id: "007"
+    statement: "The signup form endpoint accepts a valid submission (against staging)"
+    verifier: verifiers/007_form_submits.py
+    depends_on: ["002"]
+    destructive: true
+
+  - id: "008"
+    statement: "If a custom domain is configured, DNS resolves to the deployment"
+    verifier: verifiers/008_dns_resolves.py
+    depends_on: ["002"]
+    destructive: false
+
+  - id: "009"
+    statement: "The homepage Lighthouse performance score meets the threshold"
+    verifier: verifiers/009_lighthouse_threshold.py
+    depends_on: ["002"]
+    destructive: false

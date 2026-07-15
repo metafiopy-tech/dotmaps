@@ -1,0 +1,10 @@
+{
+  "base_url": "https://bennyslu.lovable.app",
+  "pages": ["/", "/about", "/scoring-camp", "/contact"],
+  "custom_domain": null,
+  "form_endpoint": "/api/public/signup",
+  "form_staging_base": null,
+  "allow_prod_form": false,
+  "min_images": 1,
+  "lighthouse_min": 80
+}

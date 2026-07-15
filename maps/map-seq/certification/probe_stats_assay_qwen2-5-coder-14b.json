@@ -1,0 +1,61 @@
+{
+  "map": "seq-publish",
+  "version": "0.1.0",
+  "traveler": {
+    "driver": "ollama",
+    "model": "qwen2.5-coder:14b"
+  },
+  "probed_at": "2026-07-15T19:44:25.906716+00:00",
+  "runs": 5,
+  "all_green": 0,
+  "required": 4,
+  "certified": false,
+  "pass_rate": 0.0,
+  "wilson_95": [
+    0.0,
+    0.4345
+  ],
+  "cycles_to_green_median": null,
+  "results": [
+    {
+      "run": 1,
+      "ended": "budget_exhausted",
+      "cycles": 40,
+      "eaten": 3,
+      "total": 5,
+      "usd_spent": 0.0
+    },
+    {
+      "run": 2,
+      "ended": "budget_exhausted",
+      "cycles": 40,
+      "eaten": 3,
+      "total": 5,
+      "usd_spent": 0.0
+    },
+    {
+      "run": 3,
+      "ended": "budget_exhausted",
+      "cycles": 40,
+      "eaten": 3,
+      "total": 5,
+      "usd_spent": 0.0
+    },
+    {
+      "run": 4,
+      "ended": "budget_exhausted",
+      "cycles": 40,
+      "eaten": 3,
+      "total": 5,
+      "usd_spent": 0.0
+    },
+    {
+      "run": 5,
+      "ended": "budget_exhausted",
+      "cycles": 40,
+      "eaten": 3,
+      "total": 5,
+      "usd_spent": 0.0
+    }
+  ]
+}

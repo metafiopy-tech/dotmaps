@@ -1,0 +1,56 @@
+# Map 2 — Content migration + verify.
+#
+# Spec §1 map 2: "move page/product content from source (sheet, old site, docs)
+# to target site; dots: item counts match, no duplicate slugs, every migrated
+# field non-empty, spot-hash comparisons source<->target, all internal links
+# resolve." For the Ben domain, the content is the scoring-camp sessions
+# (originally a Google Sheet) migrated to the target site's data.
+#
+# Verifiers are data-driven off <workspace>/migration.json (source file, target
+# file, fields, sample size). The example workspace ships a small synthetic
+# source->target pair so `dotmaps verify` runs today without a live sheet.
+name: content-migration
+version: 0.1.1
+domain: small-business-content-migration
+
+# Tool-level walls (rule 3, Stage-0 finding): a migration traveler with
+# filesystem.delete in reach entered move-mode and deleted its own deliverable
+# when the protected source blocked it. This map needs read + write, nothing else.
+mcp_required: [filesystem.read_file, filesystem.write_file, fetch]
+
+budget:
+  max_cycles: 30
+  max_usd: 1.50
+
+traveler:
+  driver: ollama                     # the open/cheap traveler (validated live on the smoke map)
+  model: qwen2.5-coder:7b
+  fallback: claude-haiku-4-5-20251001  # API fallback config (needs ANTHROPIC_API_KEY)
+  temperature: 0.0
+
+dots:
+  - id: "m01"
+    statement: "The migrated item count matches the source item count"
+    verifier: verifiers/m01_counts_match.py
+    depends_on: []
+    destructive: false
+  - id: "m02"
+    statement: "No target item has a missing or duplicate slug"
+    verifier: verifiers/m02_no_duplicate_slugs.py
+    depends_on: ["m01"]
+    destructive: false
+  - id: "m03"
+    statement: "Every migrated item has all required fields non-empty"
+    verifier: verifiers/m03_fields_non_empty.py
+    depends_on: ["m01"]
+    destructive: false
+  - id: "m04"
+    statement: "Spot-hash comparison source<->target matches on sampled items"
+    verifier: verifiers/m04_spot_hash.py
+    depends_on: ["m01", "m02"]
+    destructive: false
+  - id: "m05"
+    statement: "Every internal link in migrated content resolves"
+    verifier: verifiers/m05_internal_links_resolve.py
+    depends_on: ["m03"]
+    destructive: false
