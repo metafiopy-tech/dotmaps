@@ -1,0 +1,118 @@
+{"t": "2026-07-14T14:09:33", "event": "proposed", "rule": {"statement": "The workspace contains a file named 'source_items.json'.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r001"}}
+{"t": "2026-07-14T14:09:33", "event": "banked", "rule_id": "r001"}
+{"t": "2026-07-14T14:09:39", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with specific attributes.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r002"}}
+{"t": "2026-07-14T14:09:39", "event": "banked", "rule_id": "r002"}
+{"t": "2026-07-14T14:09:52", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with specific attributes.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r004"}}
+{"t": "2026-07-14T14:09:52", "event": "banked", "rule_id": "r004"}
+{"t": "2026-07-14T14:09:59", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'slug' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r005"}}
+{"t": "2026-07-14T14:10:14", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'slug' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r007"}}
+{"t": "2026-07-14T14:10:22", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'slug' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r008"}}
+{"t": "2026-07-14T14:10:50", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'slug' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r011"}}
+{"t": "2026-07-14T14:10:50", "event": "banked", "rule_id": "r011"}
+{"t": "2026-07-14T14:10:58", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'price' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r012"}}
+{"t": "2026-07-14T14:11:07", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'price' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r013"}}
+{"t": "2026-07-14T14:11:16", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'price' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r014"}}
+{"t": "2026-07-14T14:11:37", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'price' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r016"}}
+{"t": "2026-07-14T14:11:47", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'price' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r017"}}
+{"t": "2026-07-14T14:11:57", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'price' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r018"}}
+{"t": "2026-07-14T14:12:33", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'price' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r021"}}
+{"t": "2026-07-14T14:12:33", "event": "banked", "rule_id": "r021"}
+{"t": "2026-07-14T14:14:48", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'name' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r032"}}
+{"t": "2026-07-14T14:14:48", "event": "banked", "rule_id": "r032"}
+{"t": "2026-07-14T14:16:59", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'description' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r042"}}
+{"t": "2026-07-14T14:16:59", "event": "banked", "rule_id": "r042"}
+{"t": "2026-07-14T14:17:26", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with an 'id' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r044"}}
+{"t": "2026-07-14T14:17:26", "event": "banked", "rule_id": "r044"}
+{"t": "2026-07-14T14:17:40", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'date' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r045"}}
+{"t": "2026-07-14T14:17:40", "event": "banked", "rule_id": "r045"}
+{"t": "2026-07-14T14:17:54", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with an 'id' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r046"}}
+{"t": "2026-07-14T14:18:31", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'description' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r049"}}
+{"t": "2026-07-14T14:18:31", "event": "banked", "rule_id": "r049"}
+{"t": "2026-07-14T14:18:57", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with an 'id' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r051"}}
+{"t": "2026-07-14T14:19:27", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with an 'id' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r053"}}
+{"t": "2026-07-14T14:19:40", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with an 'id' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r054"}}
+{"t": "2026-07-14T14:20:06", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with an 'id' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r056"}}
+{"t": "2026-07-14T14:20:37", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'price' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r058"}}
+{"t": "2026-07-14T14:20:37", "event": "banked", "rule_id": "r058"}
+{"t": "2026-07-14T14:20:53", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r059"}}
+{"t": "2026-07-14T14:21:07", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r060"}}
+{"t": "2026-07-14T14:21:32", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r062"}}
+{"t": "2026-07-14T14:21:46", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r063"}}
+{"t": "2026-07-14T14:22:01", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r064"}}
+{"t": "2026-07-14T14:22:15", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r065"}}
+{"t": "2026-07-14T14:22:46", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 10}, "id": "r067"}}
+{"t": "2026-07-14T14:23:34", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 10}, "id": "r070"}}
+{"t": "2026-07-14T14:23:48", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 10}, "id": "r071"}}
+{"t": "2026-07-14T14:24:02", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'quantity' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 10}, "id": "r072"}}
+{"t": "2026-07-14T14:24:55", "event": "fogged", "rule_id": "r005"}
+{"t": "2026-07-14T14:25:38", "event": "fogged", "rule_id": "r007"}
+{"t": "2026-07-14T14:26:22", "event": "fogged", "rule_id": "r008"}
+{"t": "2026-07-14T14:26:57", "event": "fogged", "rule_id": "r012"}
+{"t": "2026-07-14T14:27:26", "event": "fogged", "rule_id": "r013"}
+{"t": "2026-07-14T14:28:03", "event": "fogged", "rule_id": "r014"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r016"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r017"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r018"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r046"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r051"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r053"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r054"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r056"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r059"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r060"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r062"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r063"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r064"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r065"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r067"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r070"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r071"}
+{"t": "2026-07-14T14:28:26", "event": "fogged", "rule_id": "r072"}
+{"t": "2026-07-14T14:28:39", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'title' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r074"}}
+{"t": "2026-07-14T14:28:53", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'title' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r075"}}
+{"t": "2026-07-14T14:29:45", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'body' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"body\":"}, "id": "r078"}}
+{"t": "2026-07-14T14:29:45", "event": "banked", "rule_id": "r078"}
+{"t": "2026-07-14T14:30:26", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'title' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r081"}}
+{"t": "2026-07-14T14:30:51", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'title' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r083"}}
+{"t": "2026-07-14T14:30:51", "event": "banked", "rule_id": "r083"}
+{"t": "2026-07-14T14:31:06", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'title' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r084"}}
+{"t": "2026-07-14T14:31:06", "event": "banked", "rule_id": "r084"}
+{"t": "2026-07-14T14:31:32", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'body' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r085"}}
+{"t": "2026-07-14T14:31:32", "event": "banked", "rule_id": "r085"}
+{"t": "2026-07-14T14:31:48", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'body' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r086"}}
+{"t": "2026-07-14T14:31:48", "event": "banked", "rule_id": "r086"}
+{"t": "2026-07-14T14:32:06", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'body' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r087"}}
+{"t": "2026-07-14T14:32:06", "event": "banked", "rule_id": "r087"}
+{"t": "2026-07-14T14:32:23", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'body' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r088"}}
+{"t": "2026-07-14T14:32:37", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'body' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r089"}}
+{"t": "2026-07-14T14:32:37", "event": "banked", "rule_id": "r089"}
+{"t": "2026-07-14T14:32:56", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r090"}}
+{"t": "2026-07-14T14:33:10", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r091"}}
+{"t": "2026-07-14T14:33:25", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r092"}}
+{"t": "2026-07-14T14:35:27", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r100"}}
+{"t": "2026-07-14T14:35:27", "event": "banked", "rule_id": "r100"}
+{"t": "2026-07-14T14:35:45", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r101"}}
+{"t": "2026-07-14T14:36:37", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with an 'id' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r105"}}
+{"t": "2026-07-14T14:36:51", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 10}, "id": "r106"}}
+{"t": "2026-07-14T14:37:06", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r107"}}
+{"t": "2026-07-14T14:37:41", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 10}, "id": "r109"}}
+{"t": "2026-07-14T14:38:15", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 10}, "id": "r111"}}
+{"t": "2026-07-14T14:38:30", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with an 'id' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r112"}}
+{"t": "2026-07-14T14:39:03", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with an 'id' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 10}, "id": "r114"}}
+{"t": "2026-07-14T14:39:18", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains items with a 'category' attribute.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 10}, "id": "r115"}}
+{"t": "2026-07-14T14:39:52", "event": "fogged", "rule_id": "r074"}
+{"t": "2026-07-14T14:40:21", "event": "fogged", "rule_id": "r075"}
+{"t": "2026-07-14T14:40:56", "event": "fogged", "rule_id": "r081"}
+{"t": "2026-07-14T14:41:25", "event": "fogged", "rule_id": "r088"}
+{"t": "2026-07-14T14:41:53", "event": "fogged", "rule_id": "r090"}
+{"t": "2026-07-14T14:42:22", "event": "fogged", "rule_id": "r091"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r092"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r101"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r105"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r106"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r107"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r109"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r111"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r112"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r114"}
+{"t": "2026-07-14T14:42:44", "event": "fogged", "rule_id": "r115"}

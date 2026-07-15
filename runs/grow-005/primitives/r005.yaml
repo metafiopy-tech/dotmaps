@@ -1,0 +1,13 @@
+statement: source_items.json contains a JSON array (starts with '[') holding item(s)
+  with slug 'spring-junior-clinic'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"slug": "spring-junior-clinic"'
+id: r005
+confirmed_by_poke: 22
+spiral: 0
+banked_at: '2026-07-15T08:55:40'

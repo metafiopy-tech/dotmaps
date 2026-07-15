@@ -1,0 +1,13 @@
+statement: source_items.json contains an item with slug 'spring-junior-clinic' dated
+  '2026-04-12'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '2026-04-12'
+id: r002
+confirmed_by_poke: 5
+spiral: 0
+banked_at: '2026-07-15T08:54:08'

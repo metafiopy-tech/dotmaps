@@ -1,0 +1,60 @@
+{"t": "2026-07-14T14:45:15", "event": "proposed", "rule": {"statement": "The environment has a file named 'source_items.json'.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses"}, "id": "r001"}}
+{"t": "2026-07-14T14:45:21", "event": "proposed", "rule": {"statement": "The environment has a file named 'source_items.json'.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses"}, "id": "r002"}}
+{"t": "2026-07-14T14:45:27", "event": "proposed", "rule": {"statement": "The environment has a file named 'source_items.json'.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r003"}}
+{"t": "2026-07-14T14:45:33", "event": "proposed", "rule": {"statement": "The environment has a file named 'source_items.json'.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses"}, "id": "r004"}}
+{"t": "2026-07-14T14:45:39", "event": "proposed", "rule": {"statement": "The environment has a file named 'source_items.json'.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses"}, "id": "r005"}}
+{"t": "2026-07-14T14:45:46", "event": "proposed", "rule": {"statement": "The environment has a file named 'source_items.json'.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses"}, "id": "r006"}}
+{"t": "2026-07-14T14:45:54", "event": "proposed", "rule": {"statement": "The environment has a file named 'source_items.json'.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses"}, "id": "r007"}}
+{"t": "2026-07-14T14:46:02", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r008"}}
+{"t": "2026-07-14T14:46:12", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r009"}}
+{"t": "2026-07-14T14:46:21", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r010"}}
+{"t": "2026-07-14T14:46:30", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r011"}}
+{"t": "2026-07-14T14:46:41", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r012"}}
+{"t": "2026-07-14T14:46:53", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r013"}}
+{"t": "2026-07-14T14:47:07", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r014"}}
+{"t": "2026-07-14T14:47:23", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r015"}}
+{"t": "2026-07-14T14:48:06", "event": "fogged", "rule_id": "r001"}
+{"t": "2026-07-14T14:48:44", "event": "fogged", "rule_id": "r002"}
+{"t": "2026-07-14T14:49:21", "event": "fogged", "rule_id": "r003"}
+{"t": "2026-07-14T14:49:55", "event": "fogged", "rule_id": "r004"}
+{"t": "2026-07-14T14:50:29", "event": "fogged", "rule_id": "r005"}
+{"t": "2026-07-14T14:51:04", "event": "fogged", "rule_id": "r006"}
+{"t": "2026-07-14T14:51:27", "event": "fogged", "rule_id": "r007"}
+{"t": "2026-07-14T14:51:27", "event": "fogged", "rule_id": "r008"}
+{"t": "2026-07-14T14:51:27", "event": "fogged", "rule_id": "r009"}
+{"t": "2026-07-14T14:51:27", "event": "fogged", "rule_id": "r010"}
+{"t": "2026-07-14T14:51:27", "event": "fogged", "rule_id": "r011"}
+{"t": "2026-07-14T14:51:27", "event": "fogged", "rule_id": "r012"}
+{"t": "2026-07-14T14:51:27", "event": "fogged", "rule_id": "r013"}
+{"t": "2026-07-14T14:51:27", "event": "fogged", "rule_id": "r014"}
+{"t": "2026-07-14T14:51:27", "event": "fogged", "rule_id": "r015"}
+{"t": "2026-07-14T14:51:37", "event": "proposed", "rule": {"statement": "The environment has a file named 'source_items.json'.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses"}, "id": "r016"}}
+{"t": "2026-07-14T14:51:49", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r017"}}
+{"t": "2026-07-14T14:52:01", "event": "proposed", "rule": {"statement": "The 'source_items.json' file can be read.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r018"}}
+{"t": "2026-07-14T14:52:12", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r019"}}
+{"t": "2026-07-14T14:52:23", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r020"}}
+{"t": "2026-07-14T14:52:35", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r021"}}
+{"t": "2026-07-14T14:52:47", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r022"}}
+{"t": "2026-07-14T14:53:00", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r023"}}
+{"t": "2026-07-14T14:53:12", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r024"}}
+{"t": "2026-07-14T14:53:25", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r025"}}
+{"t": "2026-07-14T14:53:38", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r026"}}
+{"t": "2026-07-14T14:53:50", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r027"}}
+{"t": "2026-07-14T14:54:04", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r028"}}
+{"t": "2026-07-14T14:54:16", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r029"}}
+{"t": "2026-07-14T14:54:29", "event": "proposed", "rule": {"statement": "The 'source_items.json' file contains JSON data.", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_parses", "value": true}, "id": "r030"}}
+{"t": "2026-07-14T14:55:03", "event": "fogged", "rule_id": "r016"}
+{"t": "2026-07-14T14:55:40", "event": "fogged", "rule_id": "r017"}
+{"t": "2026-07-14T14:56:17", "event": "fogged", "rule_id": "r018"}
+{"t": "2026-07-14T14:56:53", "event": "fogged", "rule_id": "r019"}
+{"t": "2026-07-14T14:57:28", "event": "fogged", "rule_id": "r020"}
+{"t": "2026-07-14T14:58:03", "event": "fogged", "rule_id": "r021"}
+{"t": "2026-07-14T14:58:27", "event": "fogged", "rule_id": "r022"}
+{"t": "2026-07-14T14:58:27", "event": "fogged", "rule_id": "r023"}
+{"t": "2026-07-14T14:58:27", "event": "fogged", "rule_id": "r024"}
+{"t": "2026-07-14T14:58:27", "event": "fogged", "rule_id": "r025"}
+{"t": "2026-07-14T14:58:27", "event": "fogged", "rule_id": "r026"}
+{"t": "2026-07-14T14:58:27", "event": "fogged", "rule_id": "r027"}
+{"t": "2026-07-14T14:58:27", "event": "fogged", "rule_id": "r028"}
+{"t": "2026-07-14T14:58:27", "event": "fogged", "rule_id": "r029"}
+{"t": "2026-07-14T14:58:27", "event": "fogged", "rule_id": "r030"}

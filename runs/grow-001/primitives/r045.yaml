@@ -1,0 +1,12 @@
+statement: The 'source_items.json' file contains items with a 'date' attribute.
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: json_parses
+  value: true
+id: r045
+confirmed_by_poke: 45
+spiral: 1
+banked_at: '2026-07-14T14:17:40'

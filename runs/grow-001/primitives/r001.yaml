@@ -1,0 +1,12 @@
+statement: The workspace contains a file named 'source_items.json'.
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: json_parses
+  value: true
+id: r001
+confirmed_by_poke: 1
+spiral: 1
+banked_at: '2026-07-14T14:09:33'

@@ -1,0 +1,12 @@
+statement: The 'source_items.json' file contains items with a 'category' attribute.
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: json_parses
+  value: true
+id: r100
+confirmed_by_poke: 113
+spiral: 2
+banked_at: '2026-07-14T14:35:27'

@@ -1,0 +1,13 @@
+statement: source_items.json contains an item with slug 'spring-junior-clinic' titled
+  'Spring Junior Clinic'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"title": "Spring Junior Clinic"'
+id: r004
+confirmed_by_poke: 21
+spiral: 0
+banked_at: '2026-07-15T08:55:23'

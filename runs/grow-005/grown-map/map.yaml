@@ -1,0 +1,49 @@
+name: grown-cold-seed
+version: 0.0.1
+domain: grown
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+budget:
+  max_cycles: 30
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+dots:
+- id: r001
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' priced
+    '45'
+  verifier: verifiers/r001.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 2
+    kind: invariant
+- id: r002
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' dated
+    '2026-04-12'
+  verifier: verifiers/r002.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 5
+    kind: invariant
+- id: r004
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' titled
+    'Spring Junior Clinic'
+  verifier: verifiers/r004.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 21
+    kind: invariant
+- id: r005
+  statement: source_items.json contains a JSON array (starts with '[') holding item(s)
+    with slug 'spring-junior-clinic'
+  verifier: verifiers/r005.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 22
+    kind: invariant

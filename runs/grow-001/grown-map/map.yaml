@@ -1,0 +1,165 @@
+name: grown-cold-seed
+version: 0.0.1
+domain: grown
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+budget:
+  max_cycles: 30
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+dots:
+- id: r001
+  statement: The workspace contains a file named 'source_items.json'.
+  verifier: verifiers/r001.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 1
+    kind: invariant
+- id: r002
+  statement: The 'source_items.json' file contains items with specific attributes.
+  verifier: verifiers/r002.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 2
+    kind: invariant
+- id: r004
+  statement: The 'source_items.json' file contains items with specific attributes.
+  verifier: verifiers/r004.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 4
+    kind: invariant
+- id: r011
+  statement: The 'source_items.json' file contains items with a 'slug' attribute.
+  verifier: verifiers/r011.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 11
+    kind: invariant
+- id: r021
+  statement: The 'source_items.json' file contains items with a 'price' attribute.
+  verifier: verifiers/r021.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 21
+    kind: invariant
+- id: r032
+  statement: The 'source_items.json' file contains items with a 'name' attribute.
+  verifier: verifiers/r032.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 32
+    kind: invariant
+- id: r042
+  statement: The 'source_items.json' file contains items with a 'description' attribute.
+  verifier: verifiers/r042.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 42
+    kind: invariant
+- id: r044
+  statement: The 'source_items.json' file contains items with an 'id' attribute.
+  verifier: verifiers/r044.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 44
+    kind: invariant
+- id: r045
+  statement: The 'source_items.json' file contains items with a 'date' attribute.
+  verifier: verifiers/r045.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 45
+    kind: invariant
+- id: r049
+  statement: The 'source_items.json' file contains items with a 'description' attribute.
+  verifier: verifiers/r049.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 49
+    kind: invariant
+- id: r058
+  statement: The 'source_items.json' file contains items with a 'price' attribute.
+  verifier: verifiers/r058.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 58
+    kind: invariant
+- id: r078
+  statement: The 'source_items.json' file contains items with a 'body' attribute.
+  verifier: verifiers/r078.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 90
+    kind: invariant
+- id: r083
+  statement: The 'source_items.json' file contains items with a 'title' attribute.
+  verifier: verifiers/r083.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 95
+    kind: invariant
+- id: r084
+  statement: The 'source_items.json' file contains items with a 'title' attribute.
+  verifier: verifiers/r084.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 96
+    kind: invariant
+- id: r085
+  statement: The 'source_items.json' file contains items with a 'body' attribute.
+  verifier: verifiers/r085.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 98
+    kind: invariant
+- id: r086
+  statement: The 'source_items.json' file contains items with a 'body' attribute.
+  verifier: verifiers/r086.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 99
+    kind: invariant
+- id: r087
+  statement: The 'source_items.json' file contains items with a 'body' attribute.
+  verifier: verifiers/r087.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 100
+    kind: invariant
+- id: r089
+  statement: The 'source_items.json' file contains items with a 'body' attribute.
+  verifier: verifiers/r089.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 102
+    kind: invariant
+- id: r100
+  statement: The 'source_items.json' file contains items with a 'category' attribute.
+  verifier: verifiers/r100.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 113
+    kind: invariant

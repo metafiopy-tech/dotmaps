@@ -1,0 +1,48 @@
+{"t": "2026-07-15T08:53:15", "event": "proposed", "rule": {"statement": "source_items.json contains an item with slug 'spring-junior-clinic' priced '45'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"price\": \"45\""}, "id": "r001"}}
+{"t": "2026-07-15T08:53:15", "event": "banked", "rule_id": "r001"}
+{"t": "2026-07-15T08:53:26", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r002"}}
+{"t": "2026-07-15T08:54:08", "event": "banked", "rule_id": "r002"}
+{"t": "2026-07-15T08:54:25", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r003"}}
+{"t": "2026-07-15T08:54:28", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r004"}}
+{"t": "2026-07-15T08:54:30", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r005"}}
+{"t": "2026-07-15T08:54:34", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r006"}}
+{"t": "2026-07-15T08:54:36", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r007"}}
+{"t": "2026-07-15T08:54:38", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r008"}}
+{"t": "2026-07-15T08:54:41", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r009"}}
+{"t": "2026-07-15T08:54:46", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r010"}}
+{"t": "2026-07-15T08:54:48", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r011"}}
+{"t": "2026-07-15T08:54:53", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r012"}}
+{"t": "2026-07-15T08:54:56", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r013"}}
+{"t": "2026-07-15T08:55:00", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r014"}}
+{"t": "2026-07-15T08:55:06", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r015"}}
+{"t": "2026-07-15T08:55:19", "event": "fogged", "rule_id": "r003"}
+{"t": "2026-07-15T08:55:23", "event": "banked", "rule_id": "r004"}
+{"t": "2026-07-15T08:55:40", "event": "banked", "rule_id": "r005"}
+{"t": "2026-07-15T08:55:54", "event": "fogged", "rule_id": "r006"}
+{"t": "2026-07-15T08:56:10", "event": "fogged", "rule_id": "r007"}
+{"t": "2026-07-15T08:56:30", "event": "fogged", "rule_id": "r008"}
+{"t": "2026-07-15T08:56:39", "event": "fogged", "rule_id": "r009"}
+{"t": "2026-07-15T08:56:44", "event": "fogged", "rule_id": "r010"}
+{"t": "2026-07-15T08:56:44", "event": "fogged", "rule_id": "r011"}
+{"t": "2026-07-15T08:56:44", "event": "fogged", "rule_id": "r012"}
+{"t": "2026-07-15T08:56:44", "event": "fogged", "rule_id": "r013"}
+{"t": "2026-07-15T08:56:44", "event": "fogged", "rule_id": "r014"}
+{"t": "2026-07-15T08:56:44", "event": "fogged", "rule_id": "r015"}
+{"t": "2026-07-15T08:56:47", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r016"}}
+{"t": "2026-07-15T08:56:49", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r017"}}
+{"t": "2026-07-15T08:56:53", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r018"}}
+{"t": "2026-07-15T08:56:56", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r019"}}
+{"t": "2026-07-15T08:57:11", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 JSON item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r020"}}
+{"t": "2026-07-15T08:57:18", "event": "proposed", "rule": {"statement": "source_items.json holds exactly 1 JSON item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r021"}}
+{"t": "2026-07-15T08:57:35", "event": "proposed", "rule": {"statement": "source_items.json holds exactly 1 JSON item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r022"}}
+{"t": "2026-07-15T08:57:44", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 2 items", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 2}, "id": "r023"}}
+{"t": "2026-07-15T08:57:52", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 1 JSON item", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 1}, "id": "r024"}}
+{"t": "2026-07-15T08:57:52", "event": "fogged", "rule_id": "r016"}
+{"t": "2026-07-15T08:57:52", "event": "fogged", "rule_id": "r017"}
+{"t": "2026-07-15T08:57:52", "event": "fogged", "rule_id": "r018"}
+{"t": "2026-07-15T08:57:52", "event": "fogged", "rule_id": "r019"}
+{"t": "2026-07-15T08:57:52", "event": "fogged", "rule_id": "r020"}
+{"t": "2026-07-15T08:57:52", "event": "fogged", "rule_id": "r021"}
+{"t": "2026-07-15T08:57:52", "event": "fogged", "rule_id": "r022"}
+{"t": "2026-07-15T08:57:52", "event": "fogged", "rule_id": "r023"}
+{"t": "2026-07-15T08:57:52", "event": "fogged", "rule_id": "r024"}
