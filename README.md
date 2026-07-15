@@ -24,7 +24,7 @@ journal you can watch offline, no API keys, no models installed:
 ## Watch it yourself (5 commands, ~2 minutes, no models)
 
 ```bash
-git clone <this-repo> && cd <this-repo>
+git clone https://github.com/metafiopy-tech/dotmaps.git && cd dotmaps
 pip install -e .
 dotmaps replay runs/repro-3b-circular      # a 3B narrates success; the board stays red
 dotmaps replay runs/grow-001               # a 7B reward-hacks its own science
