@@ -1,0 +1,6 @@
+# T3 — the certified base map, untouched (the known-behavior anchor: 5/5 at 2 cycles).
+name: m2-t3-base
+base: ../../../maps/map-content-migration
+tier: T3
+seed: 0
+operators: []

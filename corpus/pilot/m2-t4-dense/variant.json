@@ -1,0 +1,54 @@
+{
+  "name": "m2-t4-dense",
+  "base": "content-migration",
+  "base_path": "maps/map-content-migration",
+  "tier": "T4",
+  "seed": 0,
+  "operators": [
+    {
+      "op": "densify",
+      "add": [
+        {
+          "id": "t00",
+          "statement": "A target_items.json exists and parses as a non-empty JSON array",
+          "verifier": "assets/dense_t00.py",
+          "depends_on": []
+        },
+        {
+          "id": "m02a",
+          "statement": "Every slug is lowercase kebab-case (a-z, 0-9, hyphens)",
+          "verifier": "assets/dense_m02a.py",
+          "depends_on": [
+            "m02"
+          ],
+          "after": "m02"
+        },
+        {
+          "id": "m03a",
+          "statement": "Every price parses as a positive number",
+          "verifier": "assets/dense_m03a.py",
+          "depends_on": [
+            "m03"
+          ],
+          "after": "m03"
+        },
+        {
+          "id": "m03b",
+          "statement": "Every date is a valid ISO date (YYYY-MM-DD)",
+          "verifier": "assets/dense_m03b.py",
+          "depends_on": [
+            "m03"
+          ],
+          "after": "m03a"
+        }
+      ],
+      "rewire": {
+        "m01": [
+          "t00"
+        ]
+      }
+    }
+  ],
+  "tautologized_dots": [],
+  "dot_count": 9
+}

@@ -1,0 +1,70 @@
+name: m2-t4-dense
+version: 0.1.1
+domain: small-business-content-migration
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+- fetch
+budget:
+  max_cycles: 30
+  max_usd: 1.5
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  fallback: claude-haiku-4-5-20251001
+  temperature: 0.0
+dots:
+- id: t00
+  statement: A target_items.json exists and parses as a non-empty JSON array
+  verifier: verifiers/t00_dense.py
+  depends_on: []
+  destructive: false
+- id: m01
+  statement: The migrated item count matches the source item count
+  verifier: verifiers/m01_counts_match.py
+  depends_on:
+  - t00
+  destructive: false
+- id: m02
+  statement: No target item has a missing or duplicate slug
+  verifier: verifiers/m02_no_duplicate_slugs.py
+  depends_on:
+  - m01
+  destructive: false
+- id: m02a
+  statement: Every slug is lowercase kebab-case (a-z, 0-9, hyphens)
+  verifier: verifiers/m02a_dense.py
+  depends_on:
+  - m02
+  destructive: false
+- id: m03
+  statement: Every migrated item has all required fields non-empty
+  verifier: verifiers/m03_fields_non_empty.py
+  depends_on:
+  - m01
+  destructive: false
+- id: m03a
+  statement: Every price parses as a positive number
+  verifier: verifiers/m03a_dense.py
+  depends_on:
+  - m03
+  destructive: false
+- id: m03b
+  statement: Every date is a valid ISO date (YYYY-MM-DD)
+  verifier: verifiers/m03b_dense.py
+  depends_on:
+  - m03
+  destructive: false
+- id: m04
+  statement: Spot-hash comparison source<->target matches on sampled items
+  verifier: verifiers/m04_spot_hash.py
+  depends_on:
+  - m01
+  - m02
+  destructive: false
+- id: m05
+  statement: Every internal link in migrated content resolves
+  verifier: verifiers/m05_internal_links_resolve.py
+  depends_on:
+  - m03
+  destructive: false

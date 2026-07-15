@@ -1,0 +1,32 @@
+name: m2-t1-sparse-blunt
+version: 0.1.1
+domain: small-business-content-migration
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+- fetch
+budget:
+  max_cycles: 30
+  max_usd: 1.5
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  fallback: claude-haiku-4-5-20251001
+  temperature: 0.0
+dots:
+- id: m02
+  statement: Every migrated item has a slug field
+  verifier: verifiers/m02_blunted.py
+  depends_on: []
+  destructive: false
+- id: m04
+  statement: Spot-hash comparison source<->target matches on sampled items
+  verifier: verifiers/m04_spot_hash.py
+  depends_on:
+  - m02
+  destructive: false
+- id: m05
+  statement: Every internal link in migrated content resolves
+  verifier: verifiers/m05_internal_links_resolve.py
+  depends_on: []
+  destructive: false

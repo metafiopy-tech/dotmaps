@@ -1,0 +1,61 @@
+{
+  "map": "m2-t3-base",
+  "version": "0.1.1",
+  "traveler": {
+    "driver": "ollama",
+    "model": "llama3.2:latest"
+  },
+  "probed_at": "2026-07-14T04:53:53.325720+00:00",
+  "runs": 5,
+  "all_green": 0,
+  "required": 4,
+  "certified": false,
+  "pass_rate": 0.0,
+  "wilson_95": [
+    0.0,
+    0.4345
+  ],
+  "cycles_to_green_median": null,
+  "results": [
+    {
+      "run": 1,
+      "ended": "budget_exhausted",
+      "cycles": 30,
+      "eaten": 0,
+      "total": 5,
+      "usd_spent": 0.0
+    },
+    {
+      "run": 2,
+      "ended": "budget_exhausted",
+      "cycles": 30,
+      "eaten": 0,
+      "total": 5,
+      "usd_spent": 0.0
+    },
+    {
+      "run": 3,
+      "ended": "budget_exhausted",
+      "cycles": 30,
+      "eaten": 0,
+      "total": 5,
+      "usd_spent": 0.0
+    },
+    {
+      "run": 4,
+      "ended": "budget_exhausted",
+      "cycles": 30,
+      "eaten": 0,
+      "total": 5,
+      "usd_spent": 0.0
+    },
+    {
+      "run": 5,
+      "ended": "budget_exhausted",
+      "cycles": 30,
+      "eaten": 0,
+      "total": 5,
+      "usd_spent": 0.0
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+# T2 — lightly degraded: one mild operator (blunt m03 from "every item, every
+# required field non-empty" down to "at least one item has the required keys").
+name: m2-t2-blunt
+base: ../../../maps/map-content-migration
+tier: T2
+seed: 7
+operators:
+  - op: blunt
+    dot: m03
+    statement: "At least one migrated item carries the required fields"
+    verifier: assets/blunt_m03.py

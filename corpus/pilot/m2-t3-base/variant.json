@@ -1,0 +1,10 @@
+{
+  "name": "m2-t3-base",
+  "base": "content-migration",
+  "base_path": "maps/map-content-migration",
+  "tier": "T3",
+  "seed": 0,
+  "operators": [],
+  "tautologized_dots": [],
+  "dot_count": 5
+}

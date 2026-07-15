@@ -1,0 +1,15 @@
+# T1 — heavily degraded: sparsify(0.5) + blunt (2 operators, spec §1.1 tier rule).
+# Seed 42 removes m01 (counts) + m03 (fields); m02 survives and is blunted.
+# The teeth (m04 spot-hash, m05 links) stay real — degraded guidance, honest gate.
+name: m2-t1-sparse-blunt
+base: ../../../maps/map-content-migration
+tier: T1
+seed: 42
+terminal: [m04, m05]
+operators:
+  - op: sparsify
+    p: 0.5
+  - op: blunt
+    dot: m02
+    statement: "Every migrated item has a slug field"
+    verifier: assets/blunt_m02.py

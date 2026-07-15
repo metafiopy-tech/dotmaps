@@ -1,0 +1,21 @@
+{
+  "name": "m2-t1-sparse-blunt",
+  "base": "content-migration",
+  "base_path": "maps/map-content-migration",
+  "tier": "T1",
+  "seed": 42,
+  "operators": [
+    {
+      "op": "sparsify",
+      "p": 0.5
+    },
+    {
+      "op": "blunt",
+      "dot": "m02",
+      "statement": "Every migrated item has a slug field",
+      "verifier": "assets/blunt_m02.py"
+    }
+  ],
+  "tautologized_dots": [],
+  "dot_count": 3
+}
