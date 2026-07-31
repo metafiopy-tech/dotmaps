@@ -1,0 +1,92 @@
+{
+  "preregistration": "clean certification rate > degraded, Wilson-separated at n=20 probes/skill",
+  "clean": {
+    "certified": 5,
+    "total": 6,
+    "detail": [
+      {
+        "name": "source-items-json-contains-a-json-array-starts-w",
+        "status": "certified",
+        "verdict": "oracle gate passed (terminates, discriminates, stable)",
+        "wilson": [
+          0.839,
+          1.0
+        ]
+      },
+      {
+        "name": "source-items-json-contains-an-item-with-slug-spr-2",
+        "status": "certified",
+        "verdict": "oracle gate passed (terminates, discriminates, stable)",
+        "wilson": [
+          0.839,
+          1.0
+        ]
+      },
+      {
+        "name": "source-items-json-contains-an-item-with-slug-spr-3",
+        "status": "certified",
+        "verdict": "oracle gate passed (terminates, discriminates, stable)",
+        "wilson": [
+          0.839,
+          1.0
+        ]
+      },
+      {
+        "name": "source-items-json-contains-an-item-with-slug-spr",
+        "status": "certified",
+        "verdict": "oracle gate passed (terminates, discriminates, stable)",
+        "wilson": [
+          0.839,
+          1.0
+        ]
+      },
+      {
+        "name": "the-source-items-json-file-contains-items-with-a",
+        "status": "certified",
+        "verdict": "oracle gate passed (terminates, discriminates, stable)",
+        "wilson": [
+          0.839,
+          1.0
+        ]
+      },
+      {
+        "name": "the-workspace-contains-a-file-named-source-items",
+        "status": "convicted",
+        "verdict": "NON-DISCRIMINATING: check also passes on a broken environment",
+        "wilson": null
+      }
+    ]
+  },
+  "degraded": {
+    "certified": 0,
+    "total": 4,
+    "derived": 4,
+    "detail": [
+      {
+        "name": "degraded-source-items-json-contains-a-json-array-starts-w",
+        "status": "convicted",
+        "verdict": "ORACLE-FAIL: check does not pass on the intact seed",
+        "wilson": null
+      },
+      {
+        "name": "degraded-source-items-json-contains-an-item-with-slug-spr-2",
+        "status": "convicted",
+        "verdict": "ORACLE-FAIL: check does not pass on the intact seed",
+        "wilson": null
+      },
+      {
+        "name": "degraded-source-items-json-contains-an-item-with-slug-spr-3",
+        "status": "convicted",
+        "verdict": "ORACLE-FAIL: check does not pass on the intact seed",
+        "wilson": null
+      },
+      {
+        "name": "degraded-source-items-json-contains-an-item-with-slug-spr",
+        "status": "convicted",
+        "verdict": "ORACLE-FAIL: check does not pass on the intact seed",
+        "wilson": null
+      }
+    ]
+  },
+  "verdict": "PRE-REGISTRATION MET"
+}
