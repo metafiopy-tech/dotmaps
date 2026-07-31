@@ -10,7 +10,7 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-from .banking import confirm, dot_eligible, run_steps, validate_rule
+from .banking import confirm, already_banked, dot_eligible, run_steps, validate_rule
 from .clock import ClockConfig, PhaseClock
 from .metabolize import grow_map
 from .store import GrowStore
@@ -36,9 +36,20 @@ def board_context(directive: str, store: GrowStore, clock: PhaseClock,
                      if not p.name.startswith("."))
     lines.append(f"Workspace files: {', '.join(listing) or '(empty)'}")
     prims = store.primitives()
-    lines.append(f"\nBanked rules ({len(prims)}):")
-    for r in prims[-20:]:
+    # E1 finding F-E1a: a 20-line tail let knowledge scroll off the board and
+    # the learner re-derived it (dup counts 14,2,8,1,33). The board now shows
+    # EVERY banked statement, compact — self-knowledge must not truncate.
+    lines.append(f"\nBanked rules ({len(prims)}) — already known, do NOT re-propose:")
+    for r in prims:
         lines.append(f"  [{r['id']}] {r['statement']}")
+    # E1 finding F-E1b: fog was written to disk and never shown back; the
+    # learner re-proposed undecidable hypotheses 10-40x per run (churn walls).
+    fogged = store.fogged_statements()
+    if fogged:
+        lines.append(f"\nFOGGED — undecidable by this agent, do NOT re-propose "
+                     f"({len(fogged)}):")
+        for st in fogged[-30:]:
+            lines.append(f"  ✕ {st}")
     hyps = store.open_hypotheses()
     lines.append(f"\nOpen hypotheses ({len(hyps)}):")
     for h in hyps[-10:]:
@@ -115,6 +126,13 @@ def grow(seed_dir: str | Path, run_dir: str | Path, learner,
                                                 "args": {"id": rule["id"]}},
                                        f"REJECTED: {problem}")
                     continue
+                dup = already_banked(rule, store.primitives())
+                if dup:
+                    store.journal_poke(spiral, {"tool": "propose",
+                                                "args": {"id": rule["id"]}},
+                                       f"DUPLICATE of banked [{dup}] — not re-banked")
+                    say(f"  DUPLICATE [{rule['id']}] = banked [{dup}]")
+                    continue
                 store.add_hypothesis(rule)
                 ok, obs = confirm(rule, seed)
                 n = store.journal_poke(spiral, {"tool": "confirm",
@@ -184,6 +202,9 @@ def _forage(store: GrowStore, clock: PhaseClock, learner, directive: str,
                 continue
             rule = {**revised, "id": hyp["id"]}
             if validate_rule(rule):
+                continue
+            if already_banked(rule, store.primitives()):
+                store.resolve_hypothesis(rule["id"], "duplicate")
                 continue
             ok, obs = confirm(rule, seed)
             n = store.journal_poke(0, {"tool": "confirm-revised",

@@ -98,6 +98,21 @@ class GrowStore:
                                 "banked": banked_total, "phase": phase}) + "\n")
 
     # -- fog ------------------------------------------------------------------#
+    def fogged_statements(self) -> list[str]:
+        """Statements previously fogged (deduped, order-preserving) — surfaced
+        on the board so the learner stops re-proposing the undecidable."""
+        f = self.root / "fog.md"
+        if not f.exists():
+            return []
+        out, seen = [], set()
+        for line in f.read_text().splitlines():
+            if line.startswith("- "):
+                st = line[2:].split(" — ")[0].strip()
+                if st and st not in seen:
+                    seen.add(st)
+                    out.append(st)
+        return out
+
     def fog(self, statement: str, why: str) -> None:
         p = self.root / "fog.md"
         header = "" if p.exists() else "# Fog — undecidable by this agent\n\n"

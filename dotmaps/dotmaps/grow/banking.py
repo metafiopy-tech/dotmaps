@@ -114,6 +114,24 @@ def break_copy(seed_dir: Path, dst: Path) -> None:
             p.write_text("")
 
 
+def already_banked(rule: dict[str, Any], existing: list[dict]) -> str | None:
+    """E1 finding F-E1a: duplicates ate up to a third of a run's output.
+    Identity = steps + expect (same rule as the BANK extractor). Returns the
+    existing rule id if this candidate is a duplicate."""
+    import hashlib as _h
+    key = _h.sha256(_json_dumps(rule).encode()).hexdigest()
+    for ex in existing:
+        if _h.sha256(_json_dumps(ex).encode()).hexdigest() == key:
+            return ex.get("id", "?")
+    return None
+
+
+def _json_dumps(rule: dict[str, Any]) -> str:
+    import json as _j
+    return _j.dumps({"steps": rule.get("steps"), "expect": rule.get("expect")},
+                    sort_keys=True)
+
+
 def confirm(rule: dict[str, Any], seed_dir: Path) -> tuple[bool, str]:
     """The banking gate, hardened (run-001 autopsy: the learner reward-hacked
     the original gate by converging on `json_parses`, the one predicate that
