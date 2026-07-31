@@ -1,0 +1,45 @@
+{
+  "preregistration": "EQUIPPED >=30% poke-budget reduction OR a readout outcome COLD fails to reach, across 5 paired runs. KILL if EQUIPPED <= COLD across 5 pairs.",
+  "clause_1_budget": "NOT MET \u2014 equipped $0.066/unique dot vs cold $0.060 (+8.4%)",
+  "clause_2_outcome": "NOT MET strictly \u2014 cold reached mutation rules in 3/5 arms; equipped 5/5 (more reliable, but reliability was not the registered bar)",
+  "kill_criterion": "NOT TRIGGERED \u2014 equipped +17.7% unique knowledge (146 vs 124), 3/5 pair wins on unique count, 5/5 frontier reach",
+  "verdict": "BANK works but not as bet: inheritance buys MORE and DEEPER knowledge at slightly higher cost, not cheaper knowledge. Reallocation confirmed directionally; efficiency claim falsified as registered.",
+  "totals": {
+    "cold": {
+      "unique": 124,
+      "usd": 7.49
+    },
+    "equipped": {
+      "unique": 146,
+      "usd": 9.57
+    }
+  },
+  "per_pair_unique": {
+    "cold": [
+      17,
+      22,
+      32,
+      27,
+      26
+    ],
+    "equipped": [
+      38,
+      23,
+      28,
+      22,
+      35
+    ]
+  },
+  "mutation_arms": {
+    "cold": "3/5",
+    "equipped": "5/5"
+  },
+  "quality_gates": "R1 PASSED all 10 maps, zero circular checks",
+  "findings": [
+    "F-E1a self-interference tax: equipped duplication 14,2,8,1,33 vs cold 0,1,18,7,2 \u2014 the board buries inherited+banked knowledge and re-derives it; board-format fix is the highest-leverage patch and likely flips the cost verdict",
+    "F-E1b churn walls dominated cost in EVERY run both arms (10-40 near-identical fogs) \u2014 the registered 30% was sitting in the fog; abort governor (spec 2.1a) moves to front of build queue on this data",
+    "F-E1c between-run variance is large (cold uniques 17-32); five pairs was minimum viable n",
+    "F-E1d one run voided by infra (529, e1-eq-04-VOID-529); learner retry added; infra noise must not masquerade as agent behavior"
+  ],
+  "next": "1) board-surfacing fix; 2) abort governor build; 3) rerun E1 as E1b with both fixes \u2014 pre-register fresh before running"
+}
