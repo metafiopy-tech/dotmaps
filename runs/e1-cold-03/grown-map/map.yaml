@@ -1,0 +1,437 @@
+name: grown-seed-ws
+version: 0.0.1
+domain: grown
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+budget:
+  max_cycles: 30
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+dots:
+- id: r001
+  statement: source_items.json contains exactly 5 items
+  verifier: verifiers/r001.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 3
+    kind: invariant
+- id: r002
+  statement: migration.json specifies required_fields as title, price, date
+  verifier: verifiers/r002.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 4
+    kind: invariant
+- id: r003
+  statement: The source item with slug 'summer-scoring-camp' has price '60'
+  verifier: verifiers/r003.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 5
+    kind: invariant
+- id: r004
+  statement: The source item 'fall-tune-up' has body 'Pre-season sharpening.'
+  verifier: verifiers/r004.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 37
+    kind: invariant
+- id: r005
+  statement: The source item 'spring-junior-clinic' body field contains the link '/summer-scoring-camp'
+    with anchor tag using escaped quotes as stored in JSON
+  verifier: verifiers/r005.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 39
+    kind: invariant
+- id: r006
+  statement: source_items.json raw text contains the literal escaped substring href=\"/summer-scoring-camp\"
+    (backslash-quote as stored in JSON) for spring-junior-clinic
+  verifier: verifiers/r006.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 40
+    kind: invariant
+- id: r007
+  statement: source_items.json body for 'spring-junior-clinic' contains literal text
+    href=\"/summer-scoring-camp\"
+  verifier: verifiers/r007.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 9
+    kind: invariant
+- id: r008
+  statement: migration.json specifies source_sha256 '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'
+  verifier: verifiers/r008.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 11
+    kind: invariant
+- id: r009
+  statement: The source item with slug 'putting-intensive' has price '35'
+  verifier: verifiers/r009.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 13
+    kind: invariant
+- id: r010
+  statement: The source item with slug 'fall-tune-up' has price '40'
+  verifier: verifiers/r010.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 14
+    kind: invariant
+- id: r011
+  statement: The source item with slug 'holiday-mini-camp' has price '30'
+  verifier: verifiers/r011.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 15
+    kind: invariant
+- id: r012
+  statement: The source item 'holiday-mini-camp' has title 'Holiday Mini Camp'
+  verifier: verifiers/r012.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 17
+    kind: invariant
+- id: r013
+  statement: source_items.json body for 'spring-junior-clinic' contains the substring
+    href=\"/summer-scoring-camp\" (escaped quotes as stored in JSON file)
+  verifier: verifiers/r013.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 41
+    kind: invariant
+- id: r014
+  statement: The source item 'spring-junior-clinic' has a body field containing a
+    link to '/summer-scoring-camp'
+  verifier: verifiers/r014.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 19
+    kind: invariant
+- id: r015
+  statement: migration.json specifies spot_hash_sample as 3
+  verifier: verifiers/r015.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 21
+    kind: invariant
+- id: r016
+  statement: migration.json specifies internal_link_base as null
+  verifier: verifiers/r016.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 23
+    kind: invariant
+- id: r017
+  statement: The source item with slug 'summer-scoring-camp' has date '2026-06-20'
+  verifier: verifiers/r017.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 24
+    kind: invariant
+- id: r018
+  statement: source_items.json body for 'spring-junior-clinic' contains the anchor
+    text 'summer camp' inside the <a> tag
+  verifier: verifiers/r018.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 44
+    kind: invariant
+- id: r021
+  statement: migration.json specifies links_field as 'body'
+  verifier: verifiers/r021.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 29
+    kind: invariant
+- id: r022
+  statement: migration.json specifies hash_fields as title, price, date
+  verifier: verifiers/r022.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 30
+    kind: invariant
+- id: r024
+  statement: source_items.json raw text contains literal backslash-quote sequence
+    href=\"/summer-scoring-camp\" in the spring-junior-clinic body field
+  verifier: verifiers/r024.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 50
+    kind: invariant
+- id: r025
+  statement: The source item 'putting-intensive' has body 'Green reading focus.'
+  verifier: verifiers/r025.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 35
+    kind: invariant
+- id: r027
+  statement: migration.json specifies required_fields as title, price, date
+  verifier: verifiers/r027.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 53
+    kind: invariant
+- id: r028
+  statement: source_items.json contains exactly 5 items
+  verifier: verifiers/r028.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 54
+    kind: invariant
+- id: r031
+  statement: The source item 'summer-scoring-camp' has price '60'
+  verifier: verifiers/r031.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 59
+    kind: invariant
+- id: r032
+  statement: migration.json specifies slug_field as 'slug'
+  verifier: verifiers/r032.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 60
+    kind: invariant
+- id: r033
+  statement: The source item 'fall-tune-up' has date '2026-09-14'
+  verifier: verifiers/r033.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 62
+    kind: invariant
+- id: r034
+  statement: The source item 'putting-intensive' has price '35' and date '2026-05-03'
+  verifier: verifiers/r034.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 63
+    kind: invariant
+- id: r035
+  statement: The source item 'fall-tune-up' has title 'Fall Tune-Up' and price '40'
+  verifier: verifiers/r035.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 64
+    kind: invariant
+- id: r036
+  statement: migration.json specifies source as 'source_items.json' and target as
+    'target_items.json'
+  verifier: verifiers/r036.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 65
+    kind: invariant
+- id: r037
+  statement: The source item 'holiday-mini-camp' has title 'Holiday Mini Camp', price
+    '30', and date '2026-12-27'
+  verifier: verifiers/r037.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 66
+    kind: invariant
+- id: r038
+  statement: The source item 'summer-scoring-camp' has body 'Advanced short game.'
+  verifier: verifiers/r038.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 67
+    kind: invariant
+- id: r040
+  statement: migration.json specifies spot_hash_sample as 3
+  verifier: verifiers/r040.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 70
+    kind: invariant
+- id: r041
+  statement: migration.json specifies internal_link_base as null
+  verifier: verifiers/r041.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 71
+    kind: invariant
+- id: r042
+  statement: The source item 'spring-junior-clinic' has title 'Spring Junior Clinic',
+    price '45', and date '2026-04-12'
+  verifier: verifiers/r042.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 73
+    kind: invariant
+- id: r043
+  statement: The source item 'fall-tune-up' has body 'Pre-season sharpening.'
+  verifier: verifiers/r043.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 74
+    kind: invariant
+- id: r044
+  statement: migration.json specifies links_field as 'body'
+  verifier: verifiers/r044.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 75
+    kind: invariant
+- id: r045
+  statement: migration.json specifies hash_fields as title, price, date
+  verifier: verifiers/r045.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 76
+    kind: invariant
+- id: r046
+  statement: The source item 'spring-junior-clinic' body raw JSON text contains the
+    escaped anchor substring '<a href=\"/summer-scoring-camp\">summer camp</a>'
+  verifier: verifiers/r046.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 88
+    kind: invariant
+- id: r047
+  statement: The source item 'spring-junior-clinic' body raw text contains an anchor
+    link to '/summer-scoring-camp' with escaped quotes
+  verifier: verifiers/r047.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 89
+    kind: invariant
+- id: r048
+  statement: The source item 'spring-junior-clinic' body raw JSON text contains the
+    escaped anchor opening tag '<a href=\"/summer-scoring-camp\">'
+  verifier: verifiers/r048.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 90
+    kind: invariant
+- id: r049
+  statement: The source item 'spring-junior-clinic' body raw JSON text contains the
+    full escaped sentence 'See also <a href=\"/summer-scoring-camp\">summer camp</a>.'
+  verifier: verifiers/r049.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 91
+    kind: invariant
+- id: r050
+  statement: The source item 'spring-junior-clinic' body raw JSON text contains the
+    substring 'See also <a href=\"/summer-scoring-camp\">summer camp</a>.' (with escaped
+    quotes as stored in the file)
+  verifier: verifiers/r050.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 92
+    kind: invariant
+- id: r051
+  statement: The source item 'spring-junior-clinic' body raw JSON text contains the
+    substring 'See also <a href=\"/summer-scoring-camp\">summer camp</a>.' with escaped
+    quotes as stored in the file
+  verifier: verifiers/r051.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 93
+    kind: invariant
+- id: r053
+  statement: source_items.json raw text contains the escaped anchor substring for
+    spring-junior-clinic
+  verifier: verifiers/r053.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 85
+    kind: invariant
+- id: r054
+  statement: The source item 'spring-junior-clinic' body field, as stored in source_items.json
+    raw text, contains the substring 'See also <a href=\"/summer-scoring-camp\">summer
+    camp</a>.' (escaped quotes as in file)
+  verifier: verifiers/r054.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 95
+    kind: invariant
+- id: r055
+  statement: The source item 'spring-junior-clinic' body contains the substring 'summer
+    camp</a>.'
+  verifier: verifiers/r055.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 87
+    kind: invariant
+- id: r029
+  statement: target_items.json can be written and read back as an empty JSON array
+  verifier: verifiers/r029.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 57
+    kind: mutation
+- id: r030
+  statement: target_items.json can be written with the full source_items.json content
+    and read back matching item count 5
+  verifier: verifiers/r030.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 58
+    kind: mutation
+- id: r039
+  statement: target_items.json can be written with a single item and read back with
+    json_item_count 1
+  verifier: verifiers/r039.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 69
+    kind: mutation

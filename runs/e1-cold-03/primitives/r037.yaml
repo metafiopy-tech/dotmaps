@@ -1,0 +1,14 @@
+statement: The source item 'holiday-mini-camp' has title 'Holiday Mini Camp', price
+  '30', and date '2026-12-27'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"slug": "holiday-mini-camp",      "title": "Holiday Mini Camp",      "price":
+    "30", "date": "2026-12-27"'
+id: r037
+confirmed_by_poke: 66
+spiral: 2
+banked_at: '2026-07-30T23:34:15'

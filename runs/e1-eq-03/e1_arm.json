@@ -1,0 +1,22 @@
+{
+  "arm": "equipped",
+  "run_dir": "runs/e1-eq-03",
+  "inherited": 5,
+  "wall_clock_s": 515.8,
+  "summary": {
+    "spirals": [
+      {
+        "spiral": 1,
+        "pokes": 7,
+        "banked_total": 9
+      },
+      {
+        "spiral": 2,
+        "pokes": 80,
+        "banked_total": 41
+      }
+    ],
+    "grown_map": "runs/e1-eq-03/grown-map",
+    "primitives": 41
+  }
+}

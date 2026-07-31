@@ -1,0 +1,17 @@
+statement: Writing a single-item JSON object to target_items.json persists and is
+  readable back exactly
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"title": "Spring Junior Clinic", "price": "45", "date": "2026-04-12"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"title": "Spring Junior Clinic", "price": "45", "date": "2026-04-12"}]'
+id: r053
+confirmed_by_poke: 62
+spiral: 2
+banked_at: '2026-07-30T23:41:04'

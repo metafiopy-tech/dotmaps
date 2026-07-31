@@ -1,0 +1,12 @@
+statement: The spring-junior-clinic item's date field equals '2026-04-12'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"date": "2026-04-12"'
+id: r043
+confirmed_by_poke: 48
+spiral: 2
+banked_at: '2026-07-30T23:40:10'

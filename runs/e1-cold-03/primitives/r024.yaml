@@ -1,0 +1,13 @@
+statement: source_items.json raw text contains literal backslash-quote sequence href=\"/summer-scoring-camp\"
+  in the spring-junior-clinic body field
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: href=\"/summer-scoring-camp\"
+id: r024
+confirmed_by_poke: 50
+spiral: 0
+banked_at: '2026-07-30T23:33:21'

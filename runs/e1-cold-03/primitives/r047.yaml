@@ -1,0 +1,13 @@
+statement: The source item 'spring-junior-clinic' body raw text contains an anchor
+  link to '/summer-scoring-camp' with escaped quotes
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: href=\"/summer-scoring-camp\"
+id: r047
+confirmed_by_poke: 89
+spiral: 0
+banked_at: '2026-07-30T23:35:49'

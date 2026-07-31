@@ -1,0 +1,12 @@
+statement: The source item 'summer-scoring-camp' has price '60'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"summer-scoring-camp",    "title": "Summer Scoring Camp",    "price": "60"'
+id: r031
+confirmed_by_poke: 59
+spiral: 2
+banked_at: '2026-07-30T23:33:54'
