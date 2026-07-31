@@ -1,0 +1,14 @@
+statement: source_items.json's first item has slug 'spring-junior-clinic' and price
+  '45'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"slug": "spring-junior-clinic",   "title": "Spring Junior Clinic",   "price":
+    "45"'
+id: r042
+confirmed_by_poke: 70
+spiral: 1
+banked_at: '2026-07-31T00:28:18'

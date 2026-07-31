@@ -1,0 +1,27 @@
+statement: Writing the migrated 5-item JSON array to target_items.json results in
+  a file containing 5 items
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: "[\n  {\"slug\": \"spring-junior-clinic\", \"title\": \"Spring Junior\
+      \ Clinic\", \"price\": \"45\", \"date\": \"2026-04-12\", \"body\": \"See also\
+      \ <a href=\\\"/summer-scoring-camp\\\">summer camp</a>.\"},\n  {\"slug\": \"\
+      summer-scoring-camp\", \"title\": \"Summer Scoring Camp\", \"price\": \"60\"\
+      , \"date\": \"2026-06-20\", \"body\": \"Advanced short game.\"},\n  {\"slug\"\
+      : \"putting-intensive\", \"title\": \"Putting Intensive\", \"price\": \"35\"\
+      , \"date\": \"2026-05-03\", \"body\": \"Green reading focus.\"},\n  {\"slug\"\
+      : \"fall-tune-up\", \"title\": \"Fall Tune-Up\", \"price\": \"40\", \"date\"\
+      : \"2026-09-14\", \"body\": \"Pre-season sharpening.\"},\n  {\"slug\": \"holiday-mini-camp\"\
+      , \"title\": \"Holiday Mini Camp\", \"price\": \"30\", \"date\": \"2026-12-27\"\
+      , \"body\": \"Two-day fundamentals.\"}\n]"
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 5
+id: r043
+confirmed_by_poke: 67
+spiral: 0
+banked_at: '2026-07-31T00:20:41'

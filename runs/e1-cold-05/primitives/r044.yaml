@@ -1,0 +1,17 @@
+statement: Writing a JSON array with 5 items to target_items.json persists and can
+  be read back with 5 items
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"a"},{"slug":"b"},{"slug":"c"},{"slug":"d"},{"slug":"e"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 5
+id: r044
+confirmed_by_poke: 73
+spiral: 1
+banked_at: '2026-07-31T00:28:30'

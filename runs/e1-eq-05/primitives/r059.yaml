@@ -1,0 +1,17 @@
+statement: Writing '[{"slug":"test-item"}]' to target_items.json then reading it back
+  returns content containing 'test-item'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"test-item"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: test-item
+id: r059
+confirmed_by_poke: 121
+spiral: 0
+banked_at: '2026-07-31T00:43:40'

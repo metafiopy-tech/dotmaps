@@ -1,0 +1,13 @@
+statement: source_items.json's spring-junior-clinic body field, as raw JSON text,
+  contains the substring 'See also <a href=\"/summer-scoring-camp\">summer camp</a>.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: See also <a href=\"/summer-scoring-camp\">summer camp</a>.
+id: r009
+confirmed_by_poke: 42
+spiral: 0
+banked_at: '2026-07-31T00:16:10'

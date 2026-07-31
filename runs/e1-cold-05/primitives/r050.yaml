@@ -1,0 +1,12 @@
+statement: source_items.json's third item body is 'Green reading focus.' with no link
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Green reading focus.
+id: r050
+confirmed_by_poke: 82
+spiral: 1
+banked_at: '2026-07-31T00:29:11'

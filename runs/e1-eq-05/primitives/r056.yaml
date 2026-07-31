@@ -1,0 +1,13 @@
+statement: source_items.json contains an item with slug 'fall-tune-up' dated '2026-09-14'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"slug": "fall-tune-up",           "title": "Fall Tune-Up",           "price":
+    "40", "date": "2026-09-14"'
+id: r056
+confirmed_by_poke: 78
+spiral: 2
+banked_at: '2026-07-31T00:40:11'

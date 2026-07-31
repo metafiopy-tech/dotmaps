@@ -1,0 +1,13 @@
+statement: source_items.json's fifth item body is 'Two-day fundamentals.' with no
+  link
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Two-day fundamentals.
+id: r046
+confirmed_by_poke: 78
+spiral: 1
+banked_at: '2026-07-31T00:28:54'
