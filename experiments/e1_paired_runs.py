@@ -101,15 +101,24 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--arm", choices=["cold", "equipped"])
     ap.add_argument("--run-dir")
+    ap.add_argument("--driver", choices=["anthropic", "ollama"],
+                    default="anthropic")
+    ap.add_argument("--model", default="claude-sonnet-5")
     ap.add_argument("--report", nargs="*")
     args = ap.parse_args()
 
     if args.report is not None:
         report([Path(p) for p in args.report])
     else:
-        # learner wiring mirrors the existing grow entrypoint: import your
-        # driver of choice here (ollama / anthropic), same as grow-005.
-        raise SystemExit(
-            "Wire your learner (same driver used for grow-005) and call "
-            "run_arm(args.arm, Path(args.run_dir), learner). This harness "
-            "intentionally refuses to run without a live model.")
+        if not (args.arm and args.run_dir):
+            raise SystemExit("need --arm and --run-dir (or --report)")
+        # identical wiring to `dotmaps grow` (cli.py) — run-005's lineage
+        from dotmaps.grow.learner import AnthropicLearner, OllamaLearner
+        learner = (AnthropicLearner(model=args.model)
+                   if args.driver == "anthropic"
+                   else OllamaLearner(model=args.model))
+        result = run_arm(args.arm, Path(args.run_dir), learner)
+        if hasattr(learner, "usd_estimate"):
+            result["learner_usd_estimate"] = round(learner.usd_estimate, 4)
+        print(json.dumps({k: v for k, v in result.items()
+                          if k != "summary"}, indent=2))
