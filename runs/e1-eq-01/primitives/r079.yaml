@@ -1,0 +1,13 @@
+statement: The 'putting-intensive' item in source_items.json has date '2026-05-03'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"putting-intensive",      "title": "Putting Intensive",      "price": "35",
+    "date": "2026-05-03"'
+id: r079
+confirmed_by_poke: 101
+spiral: 2
+banked_at: '2026-07-30T22:58:58'

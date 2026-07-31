@@ -1,0 +1,12 @@
+statement: migration.json's internal_link_base field is null
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: '"internal_link_base": null'
+id: r029
+confirmed_by_poke: 38
+spiral: 1
+banked_at: '2026-07-30T22:35:28'

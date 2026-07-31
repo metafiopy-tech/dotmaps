@@ -1,0 +1,12 @@
+statement: The first item in source_items.json (by array order) is 'spring-junior-clinic'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"slug": "spring-junior-clinic"'
+id: r059
+confirmed_by_poke: 70
+spiral: 1
+banked_at: '2026-07-30T22:52:58'

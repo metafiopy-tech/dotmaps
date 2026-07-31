@@ -1,0 +1,13 @@
+statement: The 'holiday-mini-camp' item has price '30' and date '2026-12-27'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"holiday-mini-camp",      "title": "Holiday Mini Camp",      "price": "30",
+    "date": "2026-12-27"'
+id: r078
+confirmed_by_poke: 100
+spiral: 2
+banked_at: '2026-07-30T22:58:54'

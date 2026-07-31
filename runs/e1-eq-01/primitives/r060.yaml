@@ -1,0 +1,13 @@
+statement: migration.json's required_fields array has exactly 3 entries
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: "\"required_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n \
+    \ ]"
+id: r060
+confirmed_by_poke: 71
+spiral: 1
+banked_at: '2026-07-30T22:53:02'

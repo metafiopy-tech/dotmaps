@@ -1,0 +1,13 @@
+statement: migration.json specifies links_field as 'body' and internal_link_base as
+  null
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: '"links_field": "body"'
+id: r057
+confirmed_by_poke: 67
+spiral: 1
+banked_at: '2026-07-30T22:52:38'

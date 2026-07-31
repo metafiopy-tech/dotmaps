@@ -1,0 +1,17 @@
+statement: Writing a JSON array with one item having slug 'demo-item' and price '99'
+  to target_items.json and reading it back returns an item with price '99'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "demo-item", "price": "99"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: '"price": "99"'
+id: r089
+confirmed_by_poke: 122
+spiral: 0
+banked_at: '2026-07-30T23:01:18'

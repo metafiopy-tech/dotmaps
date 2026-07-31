@@ -1,0 +1,14 @@
+statement: The 2nd item in source_items.json has slug 'summer-scoring-camp' and price
+  '60'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"slug": "summer-scoring-camp",    "title": "Summer Scoring Camp",    "price":
+    "60"'
+id: r027
+confirmed_by_poke: 35
+spiral: 1
+banked_at: '2026-07-30T22:35:18'

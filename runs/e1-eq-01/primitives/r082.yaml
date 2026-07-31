@@ -1,0 +1,18 @@
+statement: Writing a JSON array with a single item containing slug 'test-item' to
+  target_items.json and reading it back contains that slug
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "test-item", "title": "Test Item", "price": "10", "date":
+      "2026-01-01", "body": "Test body."}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: test-item
+id: r082
+confirmed_by_poke: 108
+spiral: 2
+banked_at: '2026-07-30T22:59:24'

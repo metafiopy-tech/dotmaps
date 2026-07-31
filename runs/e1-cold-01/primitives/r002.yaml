@@ -1,0 +1,14 @@
+statement: 'migration.json''s required_fields list contains exactly 3 fields: title,
+  price, date'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: "\"required_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n \
+    \ ]"
+id: r002
+confirmed_by_poke: 4
+spiral: 1
+banked_at: '2026-07-30T22:33:26'

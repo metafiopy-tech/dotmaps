@@ -1,0 +1,16 @@
+statement: After writing '[]' to target_items.json, reading it back returns '[]'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[]'
+id: r063
+confirmed_by_poke: 76
+spiral: 1
+banked_at: '2026-07-30T22:53:30'
