@@ -112,8 +112,26 @@ class AnthropicLearner:
             headers={"Content-Type": "application/json",
                      "x-api-key": self._key,
                      "anthropic-version": "2023-06-01"})
-        with urllib.request.urlopen(req, timeout=300) as r:
-            resp = _json.loads(r.read())
+        # transient-error retry: a 529 killed e1-eq-04 mid-spiral and voided
+        # a paid run. Infra noise must not masquerade as agent behavior.
+        import time as _time
+        import urllib.error
+        resp = None
+        for attempt in range(6):
+            try:
+                with urllib.request.urlopen(req, timeout=300) as r:
+                    resp = _json.loads(r.read())
+                break
+            except urllib.error.HTTPError as e:
+                if e.code in (429, 500, 502, 503, 529) and attempt < 5:
+                    _time.sleep(min(2 ** attempt * 2, 60))
+                    continue
+                raise
+            except urllib.error.URLError:
+                if attempt < 5:
+                    _time.sleep(min(2 ** attempt * 2, 60))
+                    continue
+                raise
         usage = resp.get("usage", {})
         self.usd_estimate += (usage.get("input_tokens", 0) * 3 +
                               usage.get("output_tokens", 0) * 15) / 1e6
