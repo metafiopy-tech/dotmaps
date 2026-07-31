@@ -1,0 +1,204 @@
+name: grown-seed-ws
+version: 0.0.1
+domain: grown
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+budget:
+  max_cycles: 30
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+dots:
+- id: r001
+  statement: source_items.json contains exactly 5 items
+  verifier: verifiers/r001.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 3
+    kind: invariant
+- id: r002
+  statement: migration.json's required_fields array serializes as ["title", "price",
+    "date"]
+  verifier: verifiers/r002.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 13
+    kind: invariant
+- id: r003
+  statement: migration.json's required_fields array is exactly ["title", "price",
+    "date"]
+  verifier: verifiers/r003.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 5
+    kind: invariant
+- id: r004
+  statement: migration.json's spot_hash_sample field equals 3
+  verifier: verifiers/r004.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 6
+    kind: invariant
+- id: r005
+  statement: migration.json's internal_link_base field is null
+  verifier: verifiers/r005.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 7
+    kind: invariant
+- id: r006
+  statement: migration.json's links_field equals "body"
+  verifier: verifiers/r006.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 9
+    kind: invariant
+- id: r007
+  statement: migration.json's hash_fields array is exactly ["title", "price", "date"]
+  verifier: verifiers/r007.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 14
+    kind: invariant
+- id: r008
+  statement: migration.json's source_sha256 field equals '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'
+  verifier: verifiers/r008.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 12
+    kind: invariant
+- id: r009
+  statement: source_items.json's first item has slug 'spring-junior-clinic' and price
+    '45'
+  verifier: verifiers/r009.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 16
+    kind: invariant
+- id: r010
+  statement: source_items.json's first item body field contains a link to /summer-scoring-camp
+  verifier: verifiers/r010.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 17
+    kind: invariant
+- id: r011
+  statement: migration.json's slug_field equals 'slug'
+  verifier: verifiers/r011.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 18
+    kind: invariant
+- id: r012
+  statement: migration.json's target field equals 'target_items.json'
+  verifier: verifiers/r012.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 20
+    kind: invariant
+- id: r017
+  statement: source_items.json's second item has slug 'summer-scoring-camp' and price
+    '60'
+  verifier: verifiers/r017.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 26
+    kind: invariant
+- id: r018
+  statement: source_items.json's third item has slug 'putting-intensive' and price
+    '35'
+  verifier: verifiers/r018.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 27
+    kind: invariant
+- id: r019
+  statement: source_items.json's fourth item has slug 'fall-tune-up' and price '40'
+  verifier: verifiers/r019.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 28
+    kind: invariant
+- id: r020
+  statement: source_items.json's fifth item has slug 'holiday-mini-camp' and price
+    '30'
+  verifier: verifiers/r020.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 29
+    kind: invariant
+- id: r021
+  statement: source_items.json's second item body field does not contain an anchor
+    tag
+  verifier: verifiers/r021.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 30
+    kind: invariant
+- id: r023
+  statement: source_items.json's third item body field equals 'Green reading focus.'
+  verifier: verifiers/r023.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 33
+    kind: invariant
+- id: r025
+  statement: migration.json's source field equals 'source_items.json'
+  verifier: verifiers/r025.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 36
+    kind: invariant
+- id: r026
+  statement: source_items.json's fourth item body field equals 'Pre-season sharpening.'
+  verifier: verifiers/r026.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 37
+    kind: invariant
+- id: r027
+  statement: source_items.json's fifth item body field equals 'Two-day fundamentals.'
+  verifier: verifiers/r027.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 38
+    kind: invariant
+- id: r034
+  statement: source_items.json contains exactly 5 items
+  verifier: verifiers/r034.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 46
+    kind: invariant
+- id: r016
+  statement: Writing '[]' to target_items.json then reading it returns '[]'
+  verifier: verifiers/r016.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 52
+    kind: mutation

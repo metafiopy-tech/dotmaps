@@ -1,0 +1,12 @@
+statement: source_items.json contains exactly 5 items
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: json_item_count
+  value: 5
+id: r006
+confirmed_by_poke: 3
+spiral: 1
+banked_at: '2026-07-30T23:13:17'

@@ -1,0 +1,12 @@
+statement: migration.json's slug_field equals 'slug'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: '"slug_field": "slug"'
+id: r011
+confirmed_by_poke: 18
+spiral: 2
+banked_at: '2026-07-30T23:07:43'

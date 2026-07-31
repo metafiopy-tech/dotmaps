@@ -1,0 +1,12 @@
+statement: The 'fall-tune-up' item's body is 'Pre-season sharpening.' with no link
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Pre-season sharpening.
+id: r047
+confirmed_by_poke: 67
+spiral: 2
+banked_at: '2026-07-30T23:19:37'
