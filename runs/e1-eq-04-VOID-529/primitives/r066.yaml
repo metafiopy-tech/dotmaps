@@ -1,0 +1,13 @@
+statement: source_items.json item 'spring-junior-clinic' body contains the substring
+  'summer camp</a>.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: summer camp</a>.
+id: r066
+confirmed_by_poke: 75
+spiral: 1
+banked_at: '2026-07-31T00:04:37'
