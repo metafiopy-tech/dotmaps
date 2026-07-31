@@ -1,4 +1,6 @@
 name: source-items-json-contains-a-json-array-starts-w
+statement: source_items.json contains a JSON array (starts with '[') holding item(s)
+  with slug 'spring-junior-clinic'
 trigger:
 - source_items.json::contains::f167415b
 method:

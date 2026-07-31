@@ -1,4 +1,5 @@
 name: the-source-items-json-file-contains-items-with-a
+statement: The 'source_items.json' file contains items with a 'body' attribute.
 trigger:
 - source_items.json::contains::be1a7e65
 method:

@@ -1,4 +1,5 @@
 name: the-workspace-contains-a-file-named-source-items
+statement: The workspace contains a file named 'source_items.json'.
 trigger:
 - source_items.json::json_parses::any
 method:

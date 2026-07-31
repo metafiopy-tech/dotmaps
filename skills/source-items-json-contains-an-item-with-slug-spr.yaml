@@ -1,4 +1,6 @@
 name: source-items-json-contains-an-item-with-slug-spr
+statement: source_items.json contains an item with slug 'spring-junior-clinic' priced
+  '45'
 trigger:
 - source_items.json::contains::cfa05d48
 method:

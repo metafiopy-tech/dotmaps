@@ -93,6 +93,7 @@ def extract_run(run_dir: Path) -> list[dict[str, Any]]:
             continue
         card = {
             "name": _slug(rule.get("statement", rule.get("id", "skill"))),
+            "statement": rule.get("statement"),
             "trigger": [_trigger(rule)],
             "method": {"steps": rule["steps"],
                        "hash": _method_hash(rule["steps"], rule["expect"])},
