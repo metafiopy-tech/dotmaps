@@ -1,0 +1,15 @@
+# Fog — undecidable by this agent
+
+- migration.json required_fields has exactly 3 entries — no confirming poke after forage (2026-07-31T01:54:23)
+- source_items.json first item's body field is exactly 'See also <a href="/summer-scoring-camp">summer camp</a>.' — no confirming poke after forage (2026-07-31T01:55:17)
+- target_items.json currently contains an empty JSON array (0 items) — no confirming poke after forage (2026-07-31T01:57:27)
+- target_items.json does not exist in the original (unmodified) environment — no confirming poke after forage (2026-07-31T01:57:48)
+- target_items.json does not exist in the original (unmodified) environment — no confirming poke after forage (2026-07-31T01:58:00)
+- target_items.json does not exist in the original environment (reading it fails) — no confirming poke after forage (2026-07-31T01:58:16)
+- target_items.json does not exist in the original (unmodified) environment; attempting to read it fails — no confirming poke after forage (2026-07-31T01:58:29)
+- target_items.json does not exist in the original (unmodified) environment — no confirming poke after forage (2026-07-31T01:58:47)
+- target_items.json does not exist in the original (unmodified) environment; reading it fails — no confirming poke after forage (2026-07-31T01:58:53)
+- target_items.json does not exist; reading it raises an error — no confirming poke after forage (2026-07-31T01:58:53)
+- target_items.json does not exist in the original environment; reading it raises an error — no confirming poke after forage (2026-07-31T01:58:53)
+- target_items.json does not exist in the original environment; attempting to read it raises a file-not-found error — no confirming poke after forage (2026-07-31T01:58:53)
+- target_items.json does not exist in the original environment; reading it is blocked (errors) — no confirming poke after forage (2026-07-31T01:58:53)

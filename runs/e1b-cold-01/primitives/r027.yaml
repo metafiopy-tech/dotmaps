@@ -1,0 +1,12 @@
+statement: source_items.json third item's body field is exactly 'Green reading focus.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Green reading focus.
+id: r027
+confirmed_by_poke: 34
+spiral: 1
+banked_at: '2026-07-31T01:52:42'

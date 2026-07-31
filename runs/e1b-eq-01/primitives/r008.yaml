@@ -1,0 +1,14 @@
+statement: migration.json's required_fields field contains exactly the array ["title","price","date"]
+  with no fourth field
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: "\"required_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n \
+    \ ],"
+id: r008
+confirmed_by_poke: 59
+spiral: 0
+banked_at: '2026-07-31T02:04:47'

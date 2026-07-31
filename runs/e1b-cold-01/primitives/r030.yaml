@@ -1,0 +1,14 @@
+statement: migration.json's required_fields array is formatted as title, price, date
+  (3 entries) in that exact order
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: "\"required_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n \
+    \ ],"
+id: r030
+confirmed_by_poke: 39
+spiral: 1
+banked_at: '2026-07-31T01:53:12'

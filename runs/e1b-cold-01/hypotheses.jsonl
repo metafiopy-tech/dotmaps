@@ -1,0 +1,88 @@
+{"t": "2026-07-31T01:49:58", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 5 items", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 5}, "id": "r001"}}
+{"t": "2026-07-31T01:49:58", "event": "banked", "rule_id": "r001"}
+{"t": "2026-07-31T01:50:05", "event": "proposed", "rule": {"statement": "migration.json required_fields has exactly 3 entries", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "json_item_count", "value": 3}, "id": "r002"}}
+{"t": "2026-07-31T01:50:12", "event": "proposed", "rule": {"statement": "migration.json required_fields is exactly [\"title\", \"price\", \"date\"] (3 entries)", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"required_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n  ]"}, "id": "r003"}}
+{"t": "2026-07-31T01:50:12", "event": "banked", "rule_id": "r003"}
+{"t": "2026-07-31T01:50:20", "event": "proposed", "rule": {"statement": "migration.json hash_fields is exactly [\"title\", \"price\", \"date\"]", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"hash_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n  ]"}, "id": "r004"}}
+{"t": "2026-07-31T01:50:20", "event": "banked", "rule_id": "r004"}
+{"t": "2026-07-31T01:50:23", "event": "proposed", "rule": {"statement": "migration.json spot_hash_sample equals 3", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"spot_hash_sample\": 3"}, "id": "r005"}}
+{"t": "2026-07-31T01:50:23", "event": "banked", "rule_id": "r005"}
+{"t": "2026-07-31T01:50:26", "event": "proposed", "rule": {"statement": "migration.json links_field equals 'body'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"links_field\": \"body\""}, "id": "r006"}}
+{"t": "2026-07-31T01:50:26", "event": "banked", "rule_id": "r006"}
+{"t": "2026-07-31T01:50:29", "event": "proposed", "rule": {"statement": "migration.json internal_link_base is null", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"internal_link_base\": null"}, "id": "r007"}}
+{"t": "2026-07-31T01:50:29", "event": "banked", "rule_id": "r007"}
+{"t": "2026-07-31T01:50:52", "event": "proposed", "rule": {"statement": "source_items.json stores price values as quoted strings, e.g. the first item's price is the string \"45\"", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"price\": \"45\""}, "id": "r008"}}
+{"t": "2026-07-31T01:50:52", "event": "banked", "rule_id": "r008"}
+{"t": "2026-07-31T01:50:55", "event": "proposed", "rule": {"statement": "source_items.json first item's body field contains a link to '/summer-scoring-camp'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "/summer-scoring-camp"}, "id": "r009"}}
+{"t": "2026-07-31T01:50:55", "event": "banked", "rule_id": "r009"}
+{"t": "2026-07-31T01:50:59", "event": "proposed", "rule": {"statement": "migration.json required_fields has exactly 3 entries", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "json_item_count", "value": 3}, "id": "r010"}}
+{"t": "2026-07-31T01:51:05", "event": "proposed", "rule": {"statement": "migration.json slug_field equals 'slug'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"slug_field\": \"slug\""}, "id": "r011"}}
+{"t": "2026-07-31T01:51:05", "event": "banked", "rule_id": "r011"}
+{"t": "2026-07-31T01:51:11", "event": "proposed", "rule": {"statement": "source_items.json second item has slug 'summer-scoring-camp' and price '60'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"summer-scoring-camp\",    \"title\": \"Summer Scoring Camp\",    \"price\": \"60\""}, "id": "r012"}}
+{"t": "2026-07-31T01:51:11", "event": "banked", "rule_id": "r012"}
+{"t": "2026-07-31T01:51:15", "event": "proposed", "rule": {"statement": "source_items.json third item has slug 'putting-intensive' and price '35'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"putting-intensive\",   \"title\": \"Putting Intensive\",   \"price\": \"35\""}, "id": "r013"}}
+{"t": "2026-07-31T01:51:22", "event": "proposed", "rule": {"statement": "source_items.json third item has slug 'putting-intensive' and price '35'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"putting-intensive\",      \"title\": \"Putting Intensive\",      \"price\": \"35\""}, "id": "r014"}}
+{"t": "2026-07-31T01:51:22", "event": "banked", "rule_id": "r014"}
+{"t": "2026-07-31T01:51:28", "event": "proposed", "rule": {"statement": "source_items.json fourth item has slug 'fall-tune-up' and price '40'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"fall-tune-up\",           \"title\": \"Fall Tune-Up\",           \"price\": \"40\""}, "id": "r015"}}
+{"t": "2026-07-31T01:51:28", "event": "banked", "rule_id": "r015"}
+{"t": "2026-07-31T01:51:36", "event": "proposed", "rule": {"statement": "source_items.json fifth item has slug 'holiday-mini-camp' and price '30'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"holiday-mini-camp\",      \"title\": \"Holiday Mini Camp\",      \"price\": \"30\""}, "id": "r016"}}
+{"t": "2026-07-31T01:51:36", "event": "banked", "rule_id": "r016"}
+{"t": "2026-07-31T01:51:43", "event": "proposed", "rule": {"statement": "source_items.json third item has title 'Putting Intensive' and date '2026-05-03'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"date\": \"2026-05-03\""}, "id": "r017"}}
+{"t": "2026-07-31T01:51:43", "event": "banked", "rule_id": "r017"}
+{"t": "2026-07-31T01:51:49", "event": "proposed", "rule": {"statement": "source_items.json first item has title 'Spring Junior Clinic' and date '2026-04-12'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"title\": \"Spring Junior Clinic\",   \"price\": \"45\", \"date\": \"2026-04-12\""}, "id": "r018"}}
+{"t": "2026-07-31T01:51:49", "event": "banked", "rule_id": "r018"}
+{"t": "2026-07-31T01:51:58", "event": "proposed", "rule": {"statement": "migration.json source_sha256 equals '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac"}, "id": "r019"}}
+{"t": "2026-07-31T01:51:58", "event": "banked", "rule_id": "r019"}
+{"t": "2026-07-31T01:52:01", "event": "proposed", "rule": {"statement": "migration.json target field equals 'target_items.json'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"target\": \"target_items.json\""}, "id": "r020"}}
+{"t": "2026-07-31T01:52:01", "event": "banked", "rule_id": "r020"}
+{"t": "2026-07-31T01:52:06", "event": "proposed", "rule": {"statement": "source_items.json fourth item has title 'Fall Tune-Up' and body 'Pre-season sharpening.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"title\": \"Fall Tune-Up\",         \"price\": \"40\", \"date\": \"2026-09-14\", \"body\": \"Pre-season sharpening.\""}, "id": "r021"}}
+{"t": "2026-07-31T01:52:12", "event": "proposed", "rule": {"statement": "source_items.json fourth item has title 'Fall Tune-Up' and body 'Pre-season sharpening.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"title\": \"Fall Tune-Up\",   \"price\": \"40\", \"date\": \"2026-09-14\", \"body\": \"Pre-season sharpening.\""}, "id": "r022"}}
+{"t": "2026-07-31T01:52:23", "event": "proposed", "rule": {"statement": "source_items.json fourth item's body field is exactly 'Pre-season sharpening.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Pre-season sharpening."}, "id": "r023"}}
+{"t": "2026-07-31T01:52:23", "event": "banked", "rule_id": "r023"}
+{"t": "2026-07-31T01:52:26", "event": "proposed", "rule": {"statement": "source_items.json fifth item's body field is exactly 'Two-day fundamentals.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Two-day fundamentals."}, "id": "r024"}}
+{"t": "2026-07-31T01:52:26", "event": "banked", "rule_id": "r024"}
+{"t": "2026-07-31T01:52:31", "event": "proposed", "rule": {"statement": "source_items.json fourth item has title 'Fall Tune-Up'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Fall Tune-Up"}, "id": "r025"}}
+{"t": "2026-07-31T01:52:31", "event": "banked", "rule_id": "r025"}
+{"t": "2026-07-31T01:52:35", "event": "proposed", "rule": {"statement": "source_items.json second item's body field is exactly 'Advanced short game.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Advanced short game."}, "id": "r026"}}
+{"t": "2026-07-31T01:52:35", "event": "banked", "rule_id": "r026"}
+{"t": "2026-07-31T01:52:42", "event": "proposed", "rule": {"statement": "source_items.json third item's body field is exactly 'Green reading focus.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Green reading focus."}, "id": "r027"}}
+{"t": "2026-07-31T01:52:42", "event": "banked", "rule_id": "r027"}
+{"t": "2026-07-31T01:52:46", "event": "proposed", "rule": {"statement": "source_items.json second item has title 'Summer Scoring Camp'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"title\": \"Summer Scoring Camp\""}, "id": "r028"}}
+{"t": "2026-07-31T01:52:46", "event": "banked", "rule_id": "r028"}
+{"t": "2026-07-31T01:52:54", "event": "proposed", "rule": {"statement": "source_items.json first item's body field is exactly 'See also <a href=\"/summer-scoring-camp\">summer camp</a>.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "See also <a href=\"/summer-scoring-camp\">summer camp</a>."}, "id": "r029"}}
+{"t": "2026-07-31T01:53:12", "event": "proposed", "rule": {"statement": "migration.json's required_fields array is formatted as title, price, date (3 entries) in that exact order", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"required_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n  ],"}, "id": "r030"}}
+{"t": "2026-07-31T01:53:12", "event": "banked", "rule_id": "r030"}
+{"t": "2026-07-31T01:53:21", "event": "proposed", "rule": {"statement": "source_items.json first item's body field contains exactly 'See also <a href=\"/summer-scoring-camp\">summer camp</a>.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "See also <a href=\"/summer-scoring-camp\">summer camp</a>."}, "id": "r031"}}
+{"t": "2026-07-31T01:53:26", "event": "proposed", "rule": {"statement": "source_items.json first item's body field contains the substring 'href=\"/summer-scoring-camp\"'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "href=\"/summer-scoring-camp\""}, "id": "r032"}}
+{"t": "2026-07-31T01:53:58", "event": "banked", "rule_id": "r002"}
+{"t": "2026-07-31T01:54:08", "event": "duplicate", "rule_id": "r010"}
+{"t": "2026-07-31T01:54:23", "event": "fogged", "rule_id": "r010"}
+{"t": "2026-07-31T01:54:29", "event": "duplicate", "rule_id": "r013"}
+{"t": "2026-07-31T01:54:33", "event": "banked", "rule_id": "r013"}
+{"t": "2026-07-31T01:54:38", "event": "banked", "rule_id": "r021"}
+{"t": "2026-07-31T01:54:48", "event": "banked", "rule_id": "r022"}
+{"t": "2026-07-31T01:55:17", "event": "fogged", "rule_id": "r029"}
+{"t": "2026-07-31T01:55:23", "event": "banked", "rule_id": "r031"}
+{"t": "2026-07-31T01:55:36", "event": "banked", "rule_id": "r032"}
+{"t": "2026-07-31T01:55:45", "event": "proposed", "rule": {"statement": "target_items.json currently contains an empty JSON array (0 items)", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "json_item_count", "value": 0}, "id": "r033"}}
+{"t": "2026-07-31T01:55:58", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the original (unmodified) environment", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r034"}}
+{"t": "2026-07-31T01:56:05", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the original (unmodified) environment", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r035"}}
+{"t": "2026-07-31T01:56:09", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the original environment (reading it fails)", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r036"}}
+{"t": "2026-07-31T01:56:14", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the original (unmodified) environment; attempting to read it fails", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r037"}}
+{"t": "2026-07-31T01:56:24", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the original (unmodified) environment", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r038"}}
+{"t": "2026-07-31T01:56:35", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the original (unmodified) environment; reading it fails", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r039"}}
+{"t": "2026-07-31T01:56:52", "event": "proposed", "rule": {"statement": "target_items.json does not exist; reading it raises an error", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r040"}}
+{"t": "2026-07-31T01:57:00", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the original environment; reading it raises an error", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r041"}}
+{"t": "2026-07-31T01:57:11", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the original environment; attempting to read it raises a file-not-found error", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r042"}}
+{"t": "2026-07-31T01:57:15", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the original environment; reading it is blocked (errors)", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r043"}}
+{"t": "2026-07-31T01:57:27", "event": "fogged", "rule_id": "r033"}
+{"t": "2026-07-31T01:57:48", "event": "fogged", "rule_id": "r034"}
+{"t": "2026-07-31T01:58:00", "event": "fogged", "rule_id": "r035"}
+{"t": "2026-07-31T01:58:16", "event": "fogged", "rule_id": "r036"}
+{"t": "2026-07-31T01:58:29", "event": "fogged", "rule_id": "r037"}
+{"t": "2026-07-31T01:58:47", "event": "fogged", "rule_id": "r038"}
+{"t": "2026-07-31T01:58:53", "event": "fogged", "rule_id": "r039"}
+{"t": "2026-07-31T01:58:53", "event": "fogged", "rule_id": "r040"}
+{"t": "2026-07-31T01:58:53", "event": "fogged", "rule_id": "r041"}
+{"t": "2026-07-31T01:58:53", "event": "fogged", "rule_id": "r042"}
+{"t": "2026-07-31T01:58:53", "event": "fogged", "rule_id": "r043"}

@@ -1,0 +1,13 @@
+statement: source_items.json first item has title 'Spring Junior Clinic' and date
+  '2026-04-12'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"title": "Spring Junior Clinic",   "price": "45", "date": "2026-04-12"'
+id: r018
+confirmed_by_poke: 23
+spiral: 1
+banked_at: '2026-07-31T01:51:49'
