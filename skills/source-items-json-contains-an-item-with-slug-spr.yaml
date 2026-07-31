@@ -1,0 +1,30 @@
+name: source-items-json-contains-an-item-with-slug-spr
+trigger:
+- source_items.json::contains::cfa05d48
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 5dcb1be53d43
+check:
+  predicate: contains
+  value: '"price": "45"'
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: grow-005
+  rule_id: r001
+  banked_at: '2026-07-15T08:53:15'
+  confirmed_by_poke: 2
+certificate:
+  status: candidate
+  theta: null
+  wilson: null
+  n: 0
+  oracle_gate: null
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

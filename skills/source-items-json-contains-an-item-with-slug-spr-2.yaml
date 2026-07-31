@@ -1,0 +1,30 @@
+name: source-items-json-contains-an-item-with-slug-spr-2
+trigger:
+- source_items.json::contains::afade72f
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 6540862db2d9
+check:
+  predicate: contains
+  value: '2026-04-12'
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: grow-005
+  rule_id: r002
+  banked_at: '2026-07-15T08:54:08'
+  confirmed_by_poke: 5
+certificate:
+  status: candidate
+  theta: null
+  wilson: null
+  n: 0
+  oracle_gate: null
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

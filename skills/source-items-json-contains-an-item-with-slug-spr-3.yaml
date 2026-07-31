@@ -1,0 +1,30 @@
+name: source-items-json-contains-an-item-with-slug-spr-3
+trigger:
+- source_items.json::contains::5a9a9e52
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 6188d8307718
+check:
+  predicate: contains
+  value: '"title": "Spring Junior Clinic"'
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: grow-005
+  rule_id: r004
+  banked_at: '2026-07-15T08:55:23'
+  confirmed_by_poke: 21
+certificate:
+  status: candidate
+  theta: null
+  wilson: null
+  n: 0
+  oracle_gate: null
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

@@ -1,0 +1,98 @@
+name: the-workspace-contains-a-file-named-source-items
+trigger:
+- source_items.json::json_parses::any
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 4d2cd6c3899e
+check:
+  predicate: json_parses
+  value: true
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: grow-001
+  rule_id: r001
+  banked_at: '2026-07-14T14:09:33'
+  confirmed_by_poke: 1
+- banked_from: grow-001
+  rule_id: r002
+  banked_at: '2026-07-14T14:09:39'
+  confirmed_by_poke: 2
+- banked_from: grow-001
+  rule_id: r004
+  banked_at: '2026-07-14T14:09:52'
+  confirmed_by_poke: 4
+- banked_from: grow-001
+  rule_id: r011
+  banked_at: '2026-07-14T14:10:50'
+  confirmed_by_poke: 11
+- banked_from: grow-001
+  rule_id: r021
+  banked_at: '2026-07-14T14:12:33'
+  confirmed_by_poke: 21
+- banked_from: grow-001
+  rule_id: r032
+  banked_at: '2026-07-14T14:14:48'
+  confirmed_by_poke: 32
+- banked_from: grow-001
+  rule_id: r042
+  banked_at: '2026-07-14T14:16:59'
+  confirmed_by_poke: 42
+- banked_from: grow-001
+  rule_id: r044
+  banked_at: '2026-07-14T14:17:26'
+  confirmed_by_poke: 44
+- banked_from: grow-001
+  rule_id: r045
+  banked_at: '2026-07-14T14:17:40'
+  confirmed_by_poke: 45
+- banked_from: grow-001
+  rule_id: r049
+  banked_at: '2026-07-14T14:18:31'
+  confirmed_by_poke: 49
+- banked_from: grow-001
+  rule_id: r058
+  banked_at: '2026-07-14T14:20:37'
+  confirmed_by_poke: 58
+- banked_from: grow-001
+  rule_id: r083
+  banked_at: '2026-07-14T14:30:51'
+  confirmed_by_poke: 95
+- banked_from: grow-001
+  rule_id: r084
+  banked_at: '2026-07-14T14:31:06'
+  confirmed_by_poke: 96
+- banked_from: grow-001
+  rule_id: r085
+  banked_at: '2026-07-14T14:31:32'
+  confirmed_by_poke: 98
+- banked_from: grow-001
+  rule_id: r086
+  banked_at: '2026-07-14T14:31:48'
+  confirmed_by_poke: 99
+- banked_from: grow-001
+  rule_id: r087
+  banked_at: '2026-07-14T14:32:06'
+  confirmed_by_poke: 100
+- banked_from: grow-001
+  rule_id: r089
+  banked_at: '2026-07-14T14:32:37'
+  confirmed_by_poke: 102
+- banked_from: grow-001
+  rule_id: r100
+  banked_at: '2026-07-14T14:35:27'
+  confirmed_by_poke: 113
+certificate:
+  status: candidate
+  theta: null
+  wilson: null
+  n: 0
+  oracle_gate: null
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

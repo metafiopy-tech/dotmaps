@@ -1,0 +1,96 @@
+{
+  "skills": [
+    {
+      "name": "the-workspace-contains-a-file-named-source-items",
+      "trigger": [
+        "source_items.json::json_parses::any"
+      ],
+      "certificate": {
+        "status": "candidate",
+        "theta": null,
+        "wilson": null,
+        "n": 0,
+        "oracle_gate": null
+      }
+    },
+    {
+      "name": "the-source-items-json-file-contains-items-with-a",
+      "trigger": [
+        "source_items.json::contains::be1a7e65"
+      ],
+      "certificate": {
+        "status": "candidate",
+        "theta": null,
+        "wilson": null,
+        "n": 0,
+        "oracle_gate": null
+      }
+    },
+    {
+      "name": "source-items-json-contains-an-item-with-slug-spr",
+      "trigger": [
+        "source_items.json::contains::cfa05d48"
+      ],
+      "certificate": {
+        "status": "candidate",
+        "theta": null,
+        "wilson": null,
+        "n": 0,
+        "oracle_gate": null
+      }
+    },
+    {
+      "name": "source-items-json-contains-an-item-with-slug-spr-2",
+      "trigger": [
+        "source_items.json::contains::afade72f"
+      ],
+      "certificate": {
+        "status": "candidate",
+        "theta": null,
+        "wilson": null,
+        "n": 0,
+        "oracle_gate": null
+      }
+    },
+    {
+      "name": "source-items-json-contains-an-item-with-slug-spr-3",
+      "trigger": [
+        "source_items.json::contains::5a9a9e52"
+      ],
+      "certificate": {
+        "status": "candidate",
+        "theta": null,
+        "wilson": null,
+        "n": 0,
+        "oracle_gate": null
+      }
+    },
+    {
+      "name": "source-items-json-contains-a-json-array-starts-w",
+      "trigger": [
+        "source_items.json::contains::f167415b"
+      ],
+      "certificate": {
+        "status": "candidate",
+        "theta": null,
+        "wilson": null,
+        "n": 0,
+        "oracle_gate": null
+      }
+    }
+  ],
+  "coverage": {},
+  "frontier": [
+    "source_items.json::contains::5a9a9e52",
+    "source_items.json::contains::afade72f",
+    "source_items.json::contains::be1a7e65",
+    "source_items.json::contains::cfa05d48",
+    "source_items.json::contains::f167415b",
+    "source_items.json::json_parses::any"
+  ],
+  "counts": {
+    "skills": 6,
+    "provenance_entries": 23,
+    "dedup_merges": 17
+  }
+}

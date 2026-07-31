@@ -1,0 +1,30 @@
+name: the-source-items-json-file-contains-items-with-a
+trigger:
+- source_items.json::contains::be1a7e65
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: d7f9eb794e23
+check:
+  predicate: contains
+  value: '"body":'
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: grow-001
+  rule_id: r078
+  banked_at: '2026-07-14T14:29:45'
+  confirmed_by_poke: 90
+certificate:
+  status: candidate
+  theta: null
+  wilson: null
+  n: 0
+  oracle_gate: null
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null
