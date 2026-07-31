@@ -1,0 +1,13 @@
+statement: source_items.json raw content contains the escaped anchor href \"/summer-scoring-camp\"
+  for spring-junior-clinic
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: href=\"/summer-scoring-camp\"
+id: r018
+confirmed_by_poke: 19
+spiral: 0
+banked_at: '2026-07-31T01:37:12'
