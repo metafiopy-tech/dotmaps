@@ -57,10 +57,10 @@ def preequip(store) -> int:
         rule = {"id": f"inherited-{n:03d}",
                 "statement": s["statement"],
                 "steps": s["method"]["steps"],
-                "expect": s["check"]}
-        store.bank_primitive(rule, journal_ref=0,
-                             meta={"inherited_from": s["name"],
-                                   "wilson": s["certificate"]["wilson"]})
+                "expect": s["check"],
+                "inherited_from": s["name"],
+                "inherited_wilson": s["certificate"]["wilson"]}
+        store.bank_primitive(rule, journal_ref=0, spiral=0)
         n += 1
     return n
 
