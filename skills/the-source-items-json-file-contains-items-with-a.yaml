@@ -19,11 +19,14 @@ provenance:
   banked_at: '2026-07-14T14:29:45'
   confirmed_by_poke: 90
 certificate:
-  status: candidate
-  theta: null
-  wilson: null
-  n: 0
-  oracle_gate: null
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
 decay:
   last_used: null
   stability: null

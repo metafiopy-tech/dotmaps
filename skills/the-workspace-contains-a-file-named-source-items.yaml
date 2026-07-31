@@ -87,11 +87,11 @@ provenance:
   banked_at: '2026-07-14T14:35:27'
   confirmed_by_poke: 113
 certificate:
-  status: candidate
+  status: convicted
   theta: null
   wilson: null
   n: 0
-  oracle_gate: null
+  oracle_gate: 'NON-DISCRIMINATING: check also passes on a broken environment'
 decay:
   last_used: null
   stability: null

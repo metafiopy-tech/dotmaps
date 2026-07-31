@@ -6,11 +6,11 @@
         "source_items.json::json_parses::any"
       ],
       "certificate": {
-        "status": "candidate",
+        "status": "convicted",
         "theta": null,
         "wilson": null,
         "n": 0,
-        "oracle_gate": null
+        "oracle_gate": "NON-DISCRIMINATING: check also passes on a broken environment"
       }
     },
     {
@@ -19,11 +19,15 @@
         "source_items.json::contains::be1a7e65"
       ],
       "certificate": {
-        "status": "candidate",
-        "theta": null,
-        "wilson": null,
-        "n": 0,
-        "oracle_gate": null
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
       }
     },
     {
@@ -32,11 +36,15 @@
         "source_items.json::contains::cfa05d48"
       ],
       "certificate": {
-        "status": "candidate",
-        "theta": null,
-        "wilson": null,
-        "n": 0,
-        "oracle_gate": null
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
       }
     },
     {
@@ -45,11 +53,15 @@
         "source_items.json::contains::afade72f"
       ],
       "certificate": {
-        "status": "candidate",
-        "theta": null,
-        "wilson": null,
-        "n": 0,
-        "oracle_gate": null
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
       }
     },
     {
@@ -58,11 +70,15 @@
         "source_items.json::contains::5a9a9e52"
       ],
       "certificate": {
-        "status": "candidate",
-        "theta": null,
-        "wilson": null,
-        "n": 0,
-        "oracle_gate": null
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
       }
     },
     {
@@ -71,26 +87,32 @@
         "source_items.json::contains::f167415b"
       ],
       "certificate": {
-        "status": "candidate",
-        "theta": null,
-        "wilson": null,
-        "n": 0,
-        "oracle_gate": null
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
       }
     }
   ],
-  "coverage": {},
+  "coverage": {
+    "source_items.json::contains::f167415b": "source-items-json-contains-a-json-array-starts-w",
+    "source_items.json::contains::afade72f": "source-items-json-contains-an-item-with-slug-spr-2",
+    "source_items.json::contains::5a9a9e52": "source-items-json-contains-an-item-with-slug-spr-3",
+    "source_items.json::contains::cfa05d48": "source-items-json-contains-an-item-with-slug-spr",
+    "source_items.json::contains::be1a7e65": "the-source-items-json-file-contains-items-with-a"
+  },
   "frontier": [
-    "source_items.json::contains::5a9a9e52",
-    "source_items.json::contains::afade72f",
-    "source_items.json::contains::be1a7e65",
-    "source_items.json::contains::cfa05d48",
-    "source_items.json::contains::f167415b",
     "source_items.json::json_parses::any"
   ],
   "counts": {
     "skills": 6,
     "provenance_entries": 23,
-    "dedup_merges": 17
+    "dedup_merges": 17,
+    "certified": 5
   }
 }
