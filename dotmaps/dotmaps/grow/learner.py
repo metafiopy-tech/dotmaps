@@ -117,19 +117,19 @@ class AnthropicLearner:
         import time as _time
         import urllib.error
         resp = None
-        for attempt in range(6):
+        for attempt in range(8):
             try:
                 with urllib.request.urlopen(req, timeout=300) as r:
                     resp = _json.loads(r.read())
                 break
             except urllib.error.HTTPError as e:
-                if e.code in (429, 500, 502, 503, 529) and attempt < 5:
-                    _time.sleep(min(2 ** attempt * 2, 60))
+                if e.code in (429, 500, 502, 503, 529) and attempt < 7:
+                    _time.sleep(min(2 ** attempt * 2, 120))
                     continue
                 raise
             except urllib.error.URLError:
-                if attempt < 5:
-                    _time.sleep(min(2 ** attempt * 2, 60))
+                if attempt < 7:
+                    _time.sleep(min(2 ** attempt * 2, 120))
                     continue
                 raise
         usage = resp.get("usage", {})
