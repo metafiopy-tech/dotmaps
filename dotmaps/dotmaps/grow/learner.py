@@ -127,7 +127,7 @@ class AnthropicLearner:
                     _time.sleep(min(2 ** attempt * 2, 120))
                     continue
                 raise
-            except urllib.error.URLError:
+            except (OSError, TimeoutError):
                 if attempt < 7:
                     _time.sleep(min(2 ** attempt * 2, 120))
                     continue
