@@ -1,0 +1,13 @@
+statement: The first item in source_items.json has slug 'spring-junior-clinic' and
+  its body links to '/summer-scoring-camp'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: summer-scoring-camp
+id: r010
+confirmed_by_poke: 16
+spiral: 1
+banked_at: '2026-07-31T01:09:07'

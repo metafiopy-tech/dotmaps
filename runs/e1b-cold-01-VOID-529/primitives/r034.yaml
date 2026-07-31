@@ -1,0 +1,18 @@
+statement: After writing a single-item array with slug spring-junior-clinic to target_items.json,
+  reading it back returns that exact JSON content
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "spring-junior-clinic", "title": "Spring Junior Clinic", "price":
+      "45", "date": "2026-04-12"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: spring-junior-clinic
+id: r034
+confirmed_by_poke: 49
+spiral: 1
+banked_at: '2026-07-31T01:13:38'

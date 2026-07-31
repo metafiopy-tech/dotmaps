@@ -1,0 +1,16 @@
+statement: Writing '[]' to target_items.json produces a file with 0 JSON items
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 0
+id: r028
+confirmed_by_poke: 40
+spiral: 1
+banked_at: '2026-07-31T01:11:39'
