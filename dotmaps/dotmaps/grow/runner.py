@@ -29,6 +29,7 @@ def load_directive() -> str:
 
 def board_context(directive: str, store: GrowStore, clock: PhaseClock,
                   phase: str, workspace: Path) -> str:
+    obs_w = clock.cfg.obs_window
     """Rule-2 context: board + tail, never the full journal."""
     lines = [directive, ""]
     listing = sorted(p.name for p in workspace.iterdir()
@@ -46,7 +47,7 @@ def board_context(directive: str, store: GrowStore, clock: PhaseClock,
     for rec in store.journal_tail(8):
         act = rec["action"]
         lines.append(f"  {act.get('tool')}({act.get('args')}) -> "
-                     f"{rec['observation'][:120]}")
+                     f"{rec['observation'][:obs_w]}")
     lines.append(f"\nPhase: {phase}. Pokes used: {clock.pokes}/"
                  f"{clock.cfg.max_pokes}. Rules banked: {clock.banked}.")
     return "\n".join(lines)

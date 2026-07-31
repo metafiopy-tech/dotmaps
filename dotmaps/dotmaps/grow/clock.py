@@ -18,6 +18,12 @@ class ClockConfig:
     max_pokes: int = 150    # hard budget per spiral
     max_fetches: int = 20
     max_spirals: int = 3
+    obs_window: int = 1200  # chars of each observation shown on the board.
+                            # E0 (EQUIP spec): the old hardcoded 120 was the
+                            # bottleneck ladder's third rung — the learner
+                            # couldn't see what the store had faithfully kept
+                            # (store caps at 2000). Board discipline (tail-only,
+                            # never the full journal) is unchanged.
 
 
 class PhaseClock:
