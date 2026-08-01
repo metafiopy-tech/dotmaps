@@ -114,6 +114,18 @@ def break_copy(seed_dir: Path, dst: Path) -> None:
             p.write_text("")
 
 
+def already_fogged(rule: dict[str, Any], fogged: list[str]) -> bool:
+    """E1b finding F-E1b-1: mechanical gates beat informational surfacing.
+    M2 failed (5/10 runs) because fog on the board is advice the learner can
+    ignore mid-burst; this gates re-proposals of fogged statements at the
+    action site, exactly where already_banked went 10/10. Identity =
+    normalized statement (the metric M2 was graded on)."""
+    import re as _re
+    norm = lambda t: _re.sub(r"\s+", " ", (t or "").strip().lower())
+    target = norm(rule.get("statement"))
+    return bool(target) and target in {norm(f) for f in fogged}
+
+
 def already_banked(rule: dict[str, Any], existing: list[dict]) -> str | None:
     """E1 finding F-E1a: duplicates ate up to a third of a run's output.
     Identity = steps + expect (same rule as the BANK extractor). Returns the

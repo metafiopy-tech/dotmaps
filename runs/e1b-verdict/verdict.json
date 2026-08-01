@@ -1,0 +1,37 @@
+{
+  "registration": "experiments/e1b_registration.md (frozen before any run)",
+  "mechanism_1": {
+    "gate": "dups<=2/run",
+    "violations": 0,
+    "runs": 10,
+    "verdict": "PASS \u2014 0/10; bank-time mechanical gate confirmed vs E1 baseline up to 33/run"
+  },
+  "mechanism_2": {
+    "gate": "refog<=5/run",
+    "violations": 5,
+    "detail": {
+      "e1b-eq-01": 6,
+      "e1b-cold-02": 6,
+      "e1b-eq-03": 7,
+      "e1b-cold-04": 13,
+      "e1b-eq-04": 10
+    },
+    "verdict": "FAIL \u2014 median run 0-2 (vs E1 10-40 every run) but frozen gate is <=5"
+  },
+  "formal_verdict": "MECHANISM GATE FAILED (M2). Headline NOT GRADED per registration. Efficiency claim neither met nor killed \u2014 returns after autopsy.",
+  "exploratory_headline_labeled": {
+    "cold": "183u/$6.69=$0.0366/u",
+    "equipped": "197u/$7.89=$0.0400/u",
+    "uniques": "+7.7% (bar 15)",
+    "cost": "+9.6% (bar 0)",
+    "note": "red both, ungated; variance dominates (cold 23-58/run)"
+  },
+  "autopsy": "Burst-mode: near-identical proposals within one forage batch outrun board refresh. Info-on-board loses to burst dynamics; M1 won by gating mechanically at the action site.",
+  "findings": [
+    "mechanical gates >> informational surfacing (10/10 vs 5/10)",
+    "boundary-probing is a stochastic mode both arms enter; inheritance shifts timing not existence",
+    "variance dominates at n=5",
+    "all 10 maps R1-clean, zero circular"
+  ],
+  "next": "E1c: already_fogged gate at proposal time; fresh registration before any run."
+}
