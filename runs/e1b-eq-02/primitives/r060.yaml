@@ -1,0 +1,17 @@
+statement: target_items.json write accepts a numeric (non-string) date value like
+  20261111 and stores it as-is without coercion to string
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"date-number","title":"Date Number","price":15,"date":20261111}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: '"date":20261111'
+id: r060
+confirmed_by_poke: 101
+spiral: 2
+banked_at: '2026-07-31T23:10:50'

@@ -1,0 +1,17 @@
+statement: target_items.json write accepts a null price value and stores it as-is
+  without coercion
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"null-price","title":"Null Price","price":null,"date":"2026-09-09"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: '"price":null'
+id: r055
+confirmed_by_poke: 86
+spiral: 2
+banked_at: '2026-07-31T23:10:06'

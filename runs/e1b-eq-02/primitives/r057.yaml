@@ -1,0 +1,17 @@
+statement: target_items.json write accepts an object price value like {"amount":50}
+  and stores it as-is without coercion
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"object-price","title":"Object Price","price":{"amount":50},"date":"2026-11-11"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: '"amount":50'
+id: r057
+confirmed_by_poke: 92
+spiral: 2
+banked_at: '2026-07-31T23:10:22'

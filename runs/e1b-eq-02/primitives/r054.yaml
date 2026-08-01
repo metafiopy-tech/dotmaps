@@ -1,0 +1,17 @@
+statement: target_items.json write accepts a boolean price value (true) and stores
+  it as-is without coercion to string or number
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"bool-price","title":"Bool Price","price":true,"date":"2026-08-08"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: '"price":true'
+id: r054
+confirmed_by_poke: 83
+spiral: 2
+banked_at: '2026-07-31T23:09:59'

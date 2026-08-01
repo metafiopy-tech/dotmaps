@@ -1,0 +1,18 @@
+statement: target_items.json can be written with a single item object containing slug,
+  title, price, date and read back correctly
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "spring-junior-clinic", "title": "Spring Junior Clinic", "price":
+      "45", "date": "2026-04-12"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 1
+id: r042
+confirmed_by_poke: 55
+spiral: 2
+banked_at: '2026-07-31T23:08:00'

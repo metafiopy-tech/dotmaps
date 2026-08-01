@@ -1,0 +1,17 @@
+statement: 'target_items.json can be overwritten with an arbitrary non-array JSON
+  object like {"foo": "bar"} and read back exactly, showing no schema/array enforcement'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '{"foo": "bar"}'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '{"foo": "bar"}'
+id: r047
+confirmed_by_poke: 65
+spiral: 2
+banked_at: '2026-07-31T23:08:52'

@@ -1,0 +1,17 @@
+statement: target_items.json write allows duplicate slugs; writing two items with
+  the same slug 'dup' stores both without deduplication or blocking
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"dup","title":"A","price":10,"date":"2026-01-01"},{"slug":"dup","title":"B","price":20,"date":"2026-02-02"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 2
+id: r059
+confirmed_by_poke: 98
+spiral: 2
+banked_at: '2026-07-31T23:10:41'

@@ -1,0 +1,17 @@
+statement: target_items.json can be written with an empty array '[]' and read back
+  as a JSON array with 0 items
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 0
+id: r048
+confirmed_by_poke: 66
+spiral: 2
+banked_at: '2026-07-31T23:08:54'

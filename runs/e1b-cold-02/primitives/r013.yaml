@@ -1,0 +1,17 @@
+statement: filesystem.write_file creates a file that can then be read back with the
+  same content
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[]'
+id: r013
+confirmed_by_poke: 18
+spiral: 1
+banked_at: '2026-07-31T22:57:37'

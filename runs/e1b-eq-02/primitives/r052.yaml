@@ -1,0 +1,17 @@
+statement: target_items.json write accepts a numeric (non-string) price value and
+  stores it as-is without coercing to string
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"num-price","title":"Num Price","price":99,"date":"2026-03-03"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: '"price":99'
+id: r052
+confirmed_by_poke: 77
+spiral: 2
+banked_at: '2026-07-31T23:09:35'

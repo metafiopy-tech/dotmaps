@@ -1,0 +1,20 @@
+statement: target_items.json write is not validated against required_fields; an item
+  missing 'price' is stored as written, without the field being auto-filled or the
+  write being blocked
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "spring-junior-clinic", "title": "Spring Junior Clinic", "date":
+      "2026-04-12"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug": "spring-junior-clinic", "title": "Spring Junior Clinic", "date":
+    "2026-04-12"}]'
+id: r045
+confirmed_by_poke: 61
+spiral: 2
+banked_at: '2026-07-31T23:08:40'

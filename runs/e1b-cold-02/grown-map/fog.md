@@ -1,0 +1,17 @@
+# Fog — declared honestly by the grow loop
+
+- target_items.json does not exist yet (migration has not been run) — no confirming poke after forage (2026-07-31T22:59:22)
+- target_items.json does not exist yet (migration has not been run) — no confirming poke after forage (2026-07-31T22:59:33)
+- target_items.json does not exist in the workspace — no confirming poke after forage (2026-07-31T22:59:56)
+- target_items.json does not exist in the workspace (read attempt fails) — no confirming poke after forage (2026-07-31T23:00:10)
+- target_items.json does not exist in the workspace — no confirming poke after forage (2026-07-31T23:00:39)
+- target_items.json does not exist in the workspace (read fails) — no confirming poke after forage (2026-07-31T23:01:06)
+- target_items.json does not exist in the workspace (read fails) — no confirming poke after forage (2026-07-31T23:01:34)
+- target_items.json does not exist in the workspace (read attempt errors) — no confirming poke after forage (2026-07-31T23:01:34)
+- target_items.json does not exist in the workspace (read attempt fails) — no confirming poke after forage (2026-07-31T23:01:34)
+- target_items.json does not exist in the workspace (read attempt fails) — no confirming poke after forage (2026-07-31T23:01:34)
+- target_items.json does not exist in the workspace (read fails) — no confirming poke after forage (2026-07-31T23:01:34)
+- target_items.json does not exist in the workspace (read attempt fails with FileNotFoundError) — no confirming poke after forage (2026-07-31T23:01:34)
+- target_items.json does not exist in the workspace (read attempt is blocked) — no confirming poke after forage (2026-07-31T23:01:34)
+- After writing '[]' to target_items.json, reading it back returns exactly '[]' — no confirming poke after forage (2026-07-31T23:01:34)
+- target_items.json does not exist in a fresh copy of the workspace — no confirming poke after forage (2026-07-31T23:01:34)

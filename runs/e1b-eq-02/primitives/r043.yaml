@@ -1,0 +1,23 @@
+statement: target_items.json can hold all 5 migrated items with title, price, date,
+  slug and be read back with count 5
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "spring-junior-clinic", "title": "Spring Junior Clinic", "price":
+      "45", "date": "2026-04-12"}, {"slug": "summer-scoring-camp", "title": "Summer
+      Scoring Camp", "price": "60", "date": "2026-06-20"}, {"slug": "putting-intensive",
+      "title": "Putting Intensive", "price": "35", "date": "2026-05-03"}, {"slug":
+      "fall-tune-up", "title": "Fall Tune-Up", "price": "40", "date": "2026-09-14"},
+      {"slug": "holiday-mini-camp", "title": "Holiday Mini Camp", "price": "30", "date":
+      "2026-12-27"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 5
+id: r043
+confirmed_by_poke: 57
+spiral: 2
+banked_at: '2026-07-31T23:08:08'

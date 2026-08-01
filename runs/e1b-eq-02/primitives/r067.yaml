@@ -1,0 +1,17 @@
+statement: migration.json is not read-only; writing arbitrary text 'hello-migration'
+  to it and reading back returns 'hello-migration'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: hello-migration
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: hello-migration
+id: r067
+confirmed_by_poke: 117
+spiral: 2
+banked_at: '2026-07-31T23:11:46'

@@ -1,0 +1,17 @@
+statement: migration.json writes persist correctly; writing 'persisted-check-123'
+  and reading back returns exactly that text
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: persisted-check-123
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: persisted-check-123
+id: r071
+confirmed_by_poke: 124
+spiral: 2
+banked_at: '2026-07-31T23:12:11'

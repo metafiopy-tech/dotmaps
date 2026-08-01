@@ -1,0 +1,18 @@
+statement: target_items.json write is not validated against required 'slug' field
+  either; an item missing 'slug' is stored as written without being auto-filled or
+  blocked
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"title":"No Slug","price":20,"date":"2026-12-01"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: No Slug
+id: r058
+confirmed_by_poke: 95
+spiral: 2
+banked_at: '2026-07-31T23:10:32'

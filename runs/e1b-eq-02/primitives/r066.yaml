@@ -1,0 +1,17 @@
+statement: migration.json write persists arbitrary text 'clobber-test-999' and is
+  readable back exactly, confirming writes are NOT reverted
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: clobber-test-999
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: clobber-test-999
+id: r066
+confirmed_by_poke: 133
+spiral: 0
+banked_at: '2026-07-31T23:13:51'

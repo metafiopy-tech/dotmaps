@@ -1,0 +1,17 @@
+statement: target_items.json write is not validated against required_fields; writing
+  an item missing 'price' still succeeds and is stored without it
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"no-price-item","title":"No Price","date":"2026-02-02"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: no-price-item
+id: r050
+confirmed_by_poke: 74
+spiral: 2
+banked_at: '2026-07-31T23:09:24'

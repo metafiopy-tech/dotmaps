@@ -1,0 +1,17 @@
+statement: target_items.json write accepts a JSON array containing non-object elements
+  (string, number, null) and stores them as-is without requiring objects
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '["just a string", 42, null]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 3
+id: r061
+confirmed_by_poke: 103
+spiral: 2
+banked_at: '2026-07-31T23:10:56'

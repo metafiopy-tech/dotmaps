@@ -1,0 +1,14 @@
+statement: source_items.json is protected against writes even with valid JSON content,
+  not just plain text
+steps:
+- tool: filesystem.write_file
+  args:
+    path: source_items.json
+    content: '[]'
+expect:
+  predicate: blocked
+  value: true
+id: r074
+confirmed_by_poke: 132
+spiral: 2
+banked_at: '2026-07-31T23:13:01'

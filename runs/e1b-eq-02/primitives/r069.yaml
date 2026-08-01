@@ -1,0 +1,17 @@
+statement: migration.json is not protected like source_items.json; it can be overwritten
+  with arbitrary non-JSON text like 'test' and read back exactly
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: test
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: test
+id: r069
+confirmed_by_poke: 119
+spiral: 2
+banked_at: '2026-07-31T23:11:52'

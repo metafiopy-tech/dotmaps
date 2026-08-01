@@ -1,0 +1,14 @@
+statement: source_items.json item with slug 'spring-junior-clinic' has body field
+  containing escaped-quote text 'See also <a href=\"/summer-scoring-camp\">summer
+  camp</a>.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: See also <a href=\"/summer-scoring-camp\">summer camp</a>.
+id: r033
+confirmed_by_poke: 45
+spiral: 0
+banked_at: '2026-07-31T23:06:28'
