@@ -151,3 +151,39 @@ def _extract_move(content: str) -> dict[str, Any] | None:
                 {"poke", "propose", "revise", "rest"} & obj.keys()):
             return obj
     return None
+
+
+class ClaudeCodeLearner:
+    """Subscription-billed learner: shells to `claude -p` (headless mode),
+    which draws from the Claude subscription's usage limits instead of
+    metered API. A DIFFERENT learner than AnthropicLearner (Claude Code
+    wraps the model in its own system prompt and agent loop) — results are
+    NOT comparable across drivers; a registration must name ONE driver for
+    ALL its runs. Tools disabled, one turn, JSON out. Unsets
+    ANTHROPIC_API_KEY for the subprocess: in -p mode a present key is
+    always preferred over the subscription credential."""
+
+    def __init__(self, model: str = "claude-sonnet-5"):
+        self.model = model
+        self.usd_estimate = 0.0   # reported total_cost_usd (0 on subscription)
+
+    def next_move(self, board: str):
+        import json as _json
+        import os
+        import subprocess
+        env = {k: v for k, v in os.environ.items() if k != "ANTHROPIC_API_KEY"}
+        prompt = board + "\n\n" + MOVE_FORMAT
+        try:
+            out = subprocess.run(
+                ["claude", "-p", "--output-format", "json",
+                 "--model", self.model, "--max-turns", "1",
+                 "--disallowedTools", "Bash,Edit,Write,Read,Grep,Glob,WebSearch"],
+                input=prompt, capture_output=True, text=True,
+                timeout=300, env=env)
+            data = _json.loads(out.stdout)
+            self.usd_estimate += float(data.get("total_cost_usd") or 0)
+            content = data.get("result", "")
+        except Exception:
+            return {"rest": True}
+        move = _extract_move(content)
+        return move if move else {"rest": True}

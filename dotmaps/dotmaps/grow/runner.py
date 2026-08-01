@@ -10,7 +10,7 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-from .banking import confirm, already_banked, already_fogged, dot_eligible, run_steps, validate_rule
+from .banking import confirm, already_banked, blocked_statement, dot_eligible, run_steps, validate_rule
 from .clock import ClockConfig, PhaseClock
 from .metabolize import grow_map
 from .store import GrowStore
@@ -126,11 +126,13 @@ def grow(seed_dir: str | Path, run_dir: str | Path, learner,
                                                 "args": {"id": rule["id"]}},
                                        f"REJECTED: {problem}")
                     continue
-                if already_fogged(rule, store.fogged_statements()):
+                why = blocked_statement(rule, store.fogged_statements(),
+                                        store.open_hypotheses())
+                if why:
                     store.journal_poke(spiral, {"tool": "propose",
                                                 "args": {"id": rule["id"]}},
-                                       "FOG-BLOCKED: statement already fogged — not re-proposed")
-                    say(f"  FOG-BLOCKED [{rule['id']}]")
+                                       f"BLOCKED ({why}) — not re-proposed")
+                    say(f"  BLOCKED [{rule['id']}] {why}")
                     continue
                 dup = already_banked(rule, store.primitives())
                 if dup:
@@ -209,7 +211,8 @@ def _forage(store: GrowStore, clock: PhaseClock, learner, directive: str,
             rule = {**revised, "id": hyp["id"]}
             if validate_rule(rule):
                 continue
-            if already_fogged(rule, store.fogged_statements()):
+            if blocked_statement(rule, store.fogged_statements(),
+                                 store.open_hypotheses()):
                 store.resolve_hypothesis(rule["id"], "fog-blocked")
                 continue
             if already_banked(rule, store.primitives()):

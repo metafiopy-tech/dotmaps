@@ -114,6 +114,26 @@ def break_copy(seed_dir: Path, dst: Path) -> None:
             p.write_text("")
 
 
+def blocked_statement(rule: dict[str, Any], fogged: list[str],
+                      open_hyps: list[dict]) -> str | None:
+    """E1c verdict: the fog-only gate fired 0/10 runs while refogs continued —
+    in-flight race confirmed by elimination. The blocking set must include
+    OPEN hypotheses (proposed, not yet resolved), because burst re-proposals
+    happen before the first copy reaches fog. Self-excluded by rule id so the
+    revise path can't block its own hypothesis. Returns the reason or None."""
+    import re as _re
+    norm = lambda t: _re.sub(r"\s+", " ", (t or "").strip().lower())
+    target = norm(rule.get("statement"))
+    if not target:
+        return None
+    if target in {norm(f) for f in fogged}:
+        return "already-fogged"
+    for h in open_hyps:
+        if h.get("id") != rule.get("id") and norm(h.get("statement")) == target:
+            return f"in-flight duplicate of open [{h.get('id')}]"
+    return None
+
+
 def already_fogged(rule: dict[str, Any], fogged: list[str]) -> bool:
     """E1b finding F-E1b-1: mechanical gates beat informational surfacing.
     M2 failed (5/10 runs) because fog on the board is advice the learner can

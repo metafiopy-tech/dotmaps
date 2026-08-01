@@ -1,0 +1,12 @@
+{
+  "m1": "PASS \u2014 0 violations; 20/20 runs clean across E1b+E1c; certified mechanism",
+  "m2prime": "FAIL \u2014 4 violations (cold 4,3,4 + eq 4); gate 0 activations/10 runs; in-flight race confirmed by elimination",
+  "formal": "Headline NOT GRADED (2nd consecutive mechanism gate). Variance clause FIRES: +14.4% uniques (bar 15) and -5.5% cost (bar 0) inside the \u00b110% band -> n=5 insufficient.",
+  "exploratory": {
+    "cold": "153u/$5.97",
+    "eq": "175u/$6.45",
+    "pair_wins": "eq 4/5",
+    "pooled_e1b_e1c": "+10.7% uniques, -2.1% cost across 10 pairs"
+  },
+  "next": "E1d final trial: in-flight gate, n=8, no third technicality."
+}

@@ -103,7 +103,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--arm", choices=["cold", "equipped"])
     ap.add_argument("--run-dir")
-    ap.add_argument("--driver", choices=["anthropic", "ollama"],
+    ap.add_argument("--driver", choices=["anthropic", "ollama", "claude-code"],
                     default="anthropic")
     ap.add_argument("--model", default="claude-sonnet-5")
     ap.add_argument("--report", nargs="*")
@@ -115,10 +115,11 @@ if __name__ == "__main__":
         if not (args.arm and args.run_dir):
             raise SystemExit("need --arm and --run-dir (or --report)")
         # identical wiring to `dotmaps grow` (cli.py) — run-005's lineage
-        from dotmaps.grow.learner import AnthropicLearner, OllamaLearner
-        learner = (AnthropicLearner(model=args.model)
-                   if args.driver == "anthropic"
-                   else OllamaLearner(model=args.model))
+        from dotmaps.grow.learner import (AnthropicLearner, OllamaLearner,
+                                          ClaudeCodeLearner)
+        learner = {"anthropic": AnthropicLearner,
+                   "ollama": OllamaLearner,
+                   "claude-code": ClaudeCodeLearner}[args.driver](model=args.model)
         result = run_arm(args.arm, Path(args.run_dir), learner)
         if hasattr(learner, "usd_estimate"):
             result["learner_usd_estimate"] = round(learner.usd_estimate, 4)
