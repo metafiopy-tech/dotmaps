@@ -1,0 +1,17 @@
+statement: target_items.json allows duplicate slug values without deduplication or
+  error
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"a","title":"A"},{"slug":"a","title":"A2"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 2
+id: r038
+confirmed_by_poke: 64
+spiral: 2
+banked_at: '2026-08-01T14:50:32'

@@ -1,0 +1,13 @@
+statement: The 'fall-tune-up' item's price field equals '40'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"slug": "fall-tune-up",           "title": "Fall Tune-Up",           "price":
+    "40"'
+id: r017
+confirmed_by_poke: 23
+spiral: 1
+banked_at: '2026-08-01T14:46:54'

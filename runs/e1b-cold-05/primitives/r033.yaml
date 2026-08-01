@@ -1,0 +1,17 @@
+statement: target_items.json can store objects with arbitrary fields not present in
+  source_items.json (schema is not enforced)
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"z","foo":123}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: foo
+id: r033
+confirmed_by_poke: 48
+spiral: 2
+banked_at: '2026-08-01T14:49:38'

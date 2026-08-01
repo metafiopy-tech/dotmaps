@@ -1,0 +1,17 @@
+statement: target_items.json accepts a mixed-type JSON array [1, "two", {"three":3},
+  null, true] and reads it back verbatim
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[1, "two", {"three":3}, null, true]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[1, "two", {"three":3}, null, true]'
+id: r043
+confirmed_by_poke: 73
+spiral: 2
+banked_at: '2026-08-01T14:51:02'

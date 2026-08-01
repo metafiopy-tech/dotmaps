@@ -1,0 +1,12 @@
+statement: The 'holiday-mini-camp' item's date field equals '2026-12-27'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '2026-12-27'
+id: r014
+confirmed_by_poke: 19
+spiral: 1
+banked_at: '2026-08-01T14:46:41'

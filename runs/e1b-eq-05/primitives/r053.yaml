@@ -1,0 +1,25 @@
+statement: After writing the full 5-item source array to target_items.json, the summer-scoring-camp
+  item's date field reads back as '2026-06-20'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "spring-junior-clinic", "title": "Spring Junior Clinic", "price":
+      "45", "date": "2026-04-12", "body": "See also <a href=\"/summer-scoring-camp\">summer
+      camp</a>."}, {"slug": "summer-scoring-camp", "title": "Summer Scoring Camp",
+      "price": "60", "date": "2026-06-20", "body": "Advanced short game."}, {"slug":
+      "putting-intensive", "title": "Putting Intensive", "price": "35", "date": "2026-05-03",
+      "body": "Green reading focus."}, {"slug": "fall-tune-up", "title": "Fall Tune-Up",
+      "price": "40", "date": "2026-09-14", "body": "Pre-season sharpening."}, {"slug":
+      "holiday-mini-camp", "title": "Holiday Mini Camp", "price": "30", "date": "2026-12-27",
+      "body": "Two-day fundamentals."}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: '"date": "2026-06-20"'
+id: r053
+confirmed_by_poke: 66
+spiral: 2
+banked_at: '2026-08-01T14:59:07'

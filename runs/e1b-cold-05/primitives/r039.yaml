@@ -1,0 +1,17 @@
+statement: target_items.json accepts a plain JSON number (not wrapped in object/array)
+  as valid content and reads back verbatim
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '12345'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '12345'
+id: r039
+confirmed_by_poke: 66
+spiral: 2
+banked_at: '2026-08-01T14:50:37'

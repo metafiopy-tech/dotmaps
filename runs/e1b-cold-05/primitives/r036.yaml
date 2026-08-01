@@ -1,0 +1,17 @@
+statement: filesystem.write_file to target_items.json does not validate JSON syntax;
+  invalid JSON content is written and read back verbatim
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '{invalid json'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '{invalid json'
+id: r036
+confirmed_by_poke: 58
+spiral: 2
+banked_at: '2026-08-01T14:50:06'

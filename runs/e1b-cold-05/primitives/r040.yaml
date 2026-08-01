@@ -1,0 +1,17 @@
+statement: target_items.json accepts an empty JSON object '{}' as valid content and
+  reads back verbatim
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '{}'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '{}'
+id: r040
+confirmed_by_poke: 67
+spiral: 2
+banked_at: '2026-08-01T14:50:40'

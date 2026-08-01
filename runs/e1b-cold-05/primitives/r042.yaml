@@ -1,0 +1,17 @@
+statement: target_items.json accepts arbitrary non-JSON plain text (e.g. 'short')
+  as valid content and reads back verbatim
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: short
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: short
+id: r042
+confirmed_by_poke: 71
+spiral: 2
+banked_at: '2026-08-01T14:50:57'
