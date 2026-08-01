@@ -1,0 +1,17 @@
+id: inherited-001
+statement: source_items.json contains an item with slug 'spring-junior-clinic' dated
+  '2026-04-12'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '2026-04-12'
+inherited_from: source-items-json-contains-an-item-with-slug-spr-2
+inherited_wilson:
+- 0.839
+- 1.0
+confirmed_by_poke: 0
+spiral: 0
+banked_at: '2026-08-01T16:23:26'

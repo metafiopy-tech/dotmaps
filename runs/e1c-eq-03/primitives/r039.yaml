@@ -1,0 +1,17 @@
+statement: migration.json is writable (not read-only) and overwriting it returns the
+  exact written content
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: test-overwrite
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: test-overwrite
+id: r039
+confirmed_by_poke: 56
+spiral: 2
+banked_at: '2026-08-01T16:27:12'

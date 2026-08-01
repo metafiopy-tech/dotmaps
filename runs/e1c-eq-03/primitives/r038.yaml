@@ -1,0 +1,18 @@
+statement: target_items.json write fully overwrites previous content (no append) -
+  after writing a short array it no longer contains the previously written empty array
+  or other data
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"test-item"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"test-item"}]'
+id: r038
+confirmed_by_poke: 53
+spiral: 2
+banked_at: '2026-08-01T16:27:04'

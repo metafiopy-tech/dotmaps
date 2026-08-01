@@ -1,0 +1,14 @@
+statement: source_items.json is protected for all write attempts, including writing
+  an empty string
+steps:
+- tool: filesystem.write_file
+  args:
+    path: source_items.json
+    content: ''
+expect:
+  predicate: blocked
+  value: true
+id: r041
+confirmed_by_poke: 58
+spiral: 2
+banked_at: '2026-08-01T16:27:26'

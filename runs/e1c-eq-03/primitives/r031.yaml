@@ -1,0 +1,17 @@
+statement: target_items.json can store a specific migrated array and reading it back
+  returns that exact JSON
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"holiday-mini-camp","title":"Holiday Mini Camp","price":"30","date":"2026-12-27"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"holiday-mini-camp","title":"Holiday Mini Camp","price":"30","date":"2026-12-27"}]'
+id: r031
+confirmed_by_poke: 41
+spiral: 2
+banked_at: '2026-08-01T16:26:16'
