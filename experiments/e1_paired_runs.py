@@ -79,6 +79,8 @@ def run_arm(arm: str, run_dir: Path, learner) -> dict:
 
     result = {"arm": arm, "run_dir": str(run_dir), "inherited": inherited,
               "wall_clock_s": round(dt, 1), "summary": summary}
+    if hasattr(learner, "usd_estimate"):
+        result["learner_usd_estimate"] = round(learner.usd_estimate, 4)
     (Path(run_dir) / "e1_arm.json").write_text(json.dumps(result, indent=2))
     return result
 
