@@ -1,0 +1,17 @@
+statement: target_items.json write/read preserves a bare JSON null literal as-is (not
+  coerced to [] or {})
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: 'null'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: 'null'
+id: r074
+confirmed_by_poke: 105
+spiral: 2
+banked_at: '2026-08-01T11:17:19'

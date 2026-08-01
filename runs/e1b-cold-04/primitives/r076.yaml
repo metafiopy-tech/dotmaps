@@ -1,0 +1,17 @@
+statement: target_items.json write/read preserves a bare JSON numeric literal (42)
+  as a number, not a string
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '42'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: 42
+id: r076
+confirmed_by_poke: 111
+spiral: 2
+banked_at: '2026-08-01T11:17:42'

@@ -1,0 +1,18 @@
+statement: Writing the full migrated array (including body fields) to target_items.json
+  preserves the link in spring-junior-clinic's body
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"spring-junior-clinic","title":"Spring Junior Clinic","price":"45","date":"2026-04-12","body":"See
+      also <a href=\"/summer-scoring-camp\">summer camp</a>."}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: /summer-scoring-camp
+id: r061
+confirmed_by_poke: 80
+spiral: 2
+banked_at: '2026-08-01T11:15:23'

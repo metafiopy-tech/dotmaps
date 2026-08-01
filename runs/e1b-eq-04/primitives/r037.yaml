@@ -1,0 +1,12 @@
+statement: source_items.json's holiday-mini-camp item has body 'Two-day fundamentals.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Two-day fundamentals.
+id: r037
+confirmed_by_poke: 42
+spiral: 2
+banked_at: '2026-08-01T11:22:46'

@@ -1,0 +1,13 @@
+statement: source_items.json's spring-junior-clinic item body field is exactly 'See
+  also <a href="/summer-scoring-camp">summer camp</a>.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"body": "See also <a href=\"/summer-scoring-camp\">summer camp</a>."}'
+id: r055
+confirmed_by_poke: 67
+spiral: 2
+banked_at: '2026-08-01T11:24:46'

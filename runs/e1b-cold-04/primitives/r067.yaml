@@ -1,0 +1,17 @@
+statement: target_items.json write/read preserves array order exactly as written,
+  without sorting or reordering
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"zzz-last"},{"slug":"aaa-first"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: zzz-last"},{"slug":"aaa-first
+id: r067
+confirmed_by_poke: 89
+spiral: 2
+banked_at: '2026-08-01T11:16:17'

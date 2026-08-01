@@ -1,0 +1,17 @@
+statement: target_items.json write/read preserves a bare JSON boolean literal (true)
+  verbatim as the text 'true'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: 'true'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: 'true'
+id: r082
+confirmed_by_poke: 134
+spiral: 0
+banked_at: '2026-08-01T11:19:48'

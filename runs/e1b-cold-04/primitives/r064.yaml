@@ -1,0 +1,17 @@
+statement: Writing an item with an extra unexpected field to target_items.json preserves
+  that field as-is on read-back
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"spring-junior-clinic","title":"Spring Junior Clinic","price":"45","date":"2026-04-12","extra_field":"xyz123"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: xyz123
+id: r064
+confirmed_by_poke: 85
+spiral: 2
+banked_at: '2026-08-01T11:15:54'

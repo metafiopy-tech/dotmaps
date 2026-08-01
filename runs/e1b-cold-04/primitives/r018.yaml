@@ -1,0 +1,12 @@
+statement: source_items.json's fourth item has slug 'fall-tune-up'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: fall-tune-up
+id: r018
+confirmed_by_poke: 24
+spiral: 1
+banked_at: '2026-08-01T11:10:00'

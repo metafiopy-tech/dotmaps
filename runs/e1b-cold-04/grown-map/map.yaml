@@ -1,0 +1,508 @@
+name: grown-seed-ws
+version: 0.0.1
+domain: grown
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+budget:
+  max_cycles: 30
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+dots:
+- id: r001
+  statement: source_items.json contains exactly 5 items
+  verifier: verifiers/r001.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 3
+    kind: invariant
+- id: r002
+  statement: migration.json specifies spot_hash_sample of 3
+  verifier: verifiers/r002.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 4
+    kind: invariant
+- id: r003
+  statement: migration.json's internal_link_base field is null
+  verifier: verifiers/r003.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 6
+    kind: invariant
+- id: r007
+  statement: source_items.json's first item has slug 'spring-junior-clinic'
+  verifier: verifiers/r007.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 11
+    kind: invariant
+- id: r008
+  statement: migration.json's required_fields array contains exactly 3 fields
+  verifier: verifiers/r008.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 13
+    kind: invariant
+- id: r010
+  statement: migration.json's slug_field is 'slug'
+  verifier: verifiers/r010.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 15
+    kind: invariant
+- id: r012
+  statement: migration.json's links_field is 'body'
+  verifier: verifiers/r012.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 17
+    kind: invariant
+- id: r013
+  statement: source_items.json's first item body contains a link to '/summer-scoring-camp'
+  verifier: verifiers/r013.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 49
+    kind: invariant
+- id: r014
+  statement: migration.json's source field is 'source_items.json'
+  verifier: verifiers/r014.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 19
+    kind: invariant
+- id: r016
+  statement: source_items.json's third item has slug 'putting-intensive'
+  verifier: verifiers/r016.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 22
+    kind: invariant
+- id: r017
+  statement: source_items.json's second item has slug 'summer-scoring-camp'
+  verifier: verifiers/r017.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 23
+    kind: invariant
+- id: r018
+  statement: source_items.json's fourth item has slug 'fall-tune-up'
+  verifier: verifiers/r018.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 24
+    kind: invariant
+- id: r019
+  statement: source_items.json's fifth item has slug 'holiday-mini-camp'
+  verifier: verifiers/r019.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 25
+    kind: invariant
+- id: r020
+  statement: migration.json's hash_fields array is ['title','price','date']
+  verifier: verifiers/r020.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 26
+    kind: invariant
+- id: r030
+  statement: migration.json's source_sha256 field equals '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'
+  verifier: verifiers/r030.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 37
+    kind: invariant
+- id: r039
+  statement: source_items.json's second item (summer-scoring-camp) has price '60'
+  verifier: verifiers/r039.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 51
+    kind: invariant
+- id: r040
+  statement: source_items.json's third item (putting-intensive) has price '35'
+  verifier: verifiers/r040.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 52
+    kind: invariant
+- id: r041
+  statement: source_items.json's first item (spring-junior-clinic) has price '45'
+  verifier: verifiers/r041.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 53
+    kind: invariant
+- id: r042
+  statement: source_items.json's fourth item (fall-tune-up) has price '40'
+  verifier: verifiers/r042.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 54
+    kind: invariant
+- id: r043
+  statement: source_items.json's fifth item (holiday-mini-camp) has price '30'
+  verifier: verifiers/r043.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 55
+    kind: invariant
+- id: r044
+  statement: source_items.json's third item (putting-intensive) has date '2026-05-03'
+  verifier: verifiers/r044.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 57
+    kind: invariant
+- id: r045
+  statement: source_items.json's first item (spring-junior-clinic) has date '2026-04-12'
+  verifier: verifiers/r045.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 58
+    kind: invariant
+- id: r046
+  statement: source_items.json's second item (summer-scoring-camp) has date '2026-06-20'
+  verifier: verifiers/r046.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 59
+    kind: invariant
+- id: r047
+  statement: source_items.json's fourth item (fall-tune-up) has date '2026-09-14'
+  verifier: verifiers/r047.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 61
+    kind: invariant
+- id: r048
+  statement: source_items.json's fifth item (holiday-mini-camp) has date '2026-12-27'
+  verifier: verifiers/r048.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 62
+    kind: invariant
+- id: r049
+  statement: source_items.json's fourth item (fall-tune-up) has body 'Pre-season sharpening.'
+  verifier: verifiers/r049.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 63
+    kind: invariant
+- id: r050
+  statement: source_items.json's third item (putting-intensive) has body 'Green reading
+    focus.'
+  verifier: verifiers/r050.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 64
+    kind: invariant
+- id: r051
+  statement: source_items.json's fifth item (holiday-mini-camp) has body 'Two-day
+    fundamentals.'
+  verifier: verifiers/r051.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 66
+    kind: invariant
+- id: r052
+  statement: source_items.json's second item (summer-scoring-camp) has body 'Advanced
+    short game.'
+  verifier: verifiers/r052.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 67
+    kind: invariant
+- id: r053
+  statement: source_items.json's first item (spring-junior-clinic) has title 'Spring
+    Junior Clinic'
+  verifier: verifiers/r053.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 68
+    kind: invariant
+- id: r054
+  statement: source_items.json's second item (summer-scoring-camp) has title 'Summer
+    Scoring Camp'
+  verifier: verifiers/r054.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 69
+    kind: invariant
+- id: r055
+  statement: source_items.json's third item (putting-intensive) has title 'Putting
+    Intensive'
+  verifier: verifiers/r055.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 70
+    kind: invariant
+- id: r057
+  statement: source_items.json's fourth item (fall-tune-up) has title 'Fall Tune-Up'
+  verifier: verifiers/r057.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 72
+    kind: invariant
+- id: r058
+  statement: source_items.json's fifth item (holiday-mini-camp) has title 'Holiday
+    Mini Camp'
+  verifier: verifiers/r058.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 75
+    kind: invariant
+- id: r006
+  statement: Writing '[]' to target_items.json creates the file and it can then be
+    read back as an empty array
+  verifier: verifiers/r006.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 48
+    kind: mutation
+- id: r009
+  statement: After writing '[]' to target_items.json, reading it back returns an empty
+    array
+  verifier: verifiers/r009.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 14
+    kind: mutation
+- id: r059
+  statement: After writing a single-item array to target_items.json, reading it back
+    returns exactly 1 item
+  verifier: verifiers/r059.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 77
+    kind: mutation
+- id: r060
+  statement: After writing all 5 migrated items to target_items.json, reading it back
+    returns exactly 5 items
+  verifier: verifiers/r060.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 79
+    kind: mutation
+- id: r061
+  statement: Writing the full migrated array (including body fields) to target_items.json
+    preserves the link in spring-junior-clinic's body
+  verifier: verifiers/r061.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 80
+    kind: mutation
+- id: r062
+  statement: target_items.json write/read preserves a bare empty JSON string literal
+    ('""') verbatim, not as an empty array
+  verifier: verifiers/r062.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 133
+    kind: mutation
+- id: r063
+  statement: target_items.json write/read has no schema validation; omitting the required
+    'price' field still succeeds and is readable as written
+  verifier: verifiers/r063.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 83
+    kind: mutation
+- id: r064
+  statement: Writing an item with an extra unexpected field to target_items.json preserves
+    that field as-is on read-back
+  verifier: verifiers/r064.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 85
+    kind: mutation
+- id: r065
+  statement: target_items.json write/read does not coerce types - a numeric price
+    value (45) is preserved as a number, not converted to string
+  verifier: verifiers/r065.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 87
+    kind: mutation
+- id: r066
+  statement: Writing to target_items.json overwrites the previous content rather than
+    appending
+  verifier: verifiers/r066.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 88
+    kind: mutation
+- id: r067
+  statement: target_items.json write/read preserves array order exactly as written,
+    without sorting or reordering
+  verifier: verifiers/r067.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 89
+    kind: mutation
+- id: r068
+  statement: target_items.json write/read has no schema validation; omitting the required
+    'price' field succeeds and the item is stored without a price key
+  verifier: verifiers/r068.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 90
+    kind: mutation
+- id: r069
+  statement: target_items.json write/read has no schema validation; omitting the required
+    'price' field still succeeds and is readable as-is
+  verifier: verifiers/r069.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 92
+    kind: mutation
+- id: r070
+  statement: target_items.json write/read has no schema validation; omitting the required
+    'price' field still succeeds and is readable as-is
+  verifier: verifiers/r070.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 95
+    kind: mutation
+- id: r071
+  statement: target_items.json write/read accepts a JSON object (not just arrays)
+    - writing '{}' is preserved as an empty object on read-back
+  verifier: verifiers/r071.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 98
+    kind: mutation
+- id: r072
+  statement: target_items.json write/read has no schema validation; omitting the required
+    'price' field still succeeds and is readable as-is
+  verifier: verifiers/r072.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 99
+    kind: mutation
+- id: r073
+  statement: target_items.json write/read has no JSON validation on write - writing
+    invalid JSON text 'not valid json' succeeds and reads back verbatim
+  verifier: verifiers/r073.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 102
+    kind: mutation
+- id: r074
+  statement: target_items.json write/read preserves a bare JSON null literal as-is
+    (not coerced to [] or {})
+  verifier: verifiers/r074.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 105
+    kind: mutation
+- id: r075
+  statement: target_items.json write/read has no schema validation; omitting the required
+    'price' field still succeeds and is readable as-is
+  verifier: verifiers/r075.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 107
+    kind: mutation
+- id: r076
+  statement: target_items.json write/read preserves a bare JSON numeric literal (42)
+    as a number, not a string
+  verifier: verifiers/r076.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 111
+    kind: mutation
+- id: r077
+  statement: target_items.json write/read has no schema validation; omitting the required
+    'price' field still succeeds and is readable as-is
+  verifier: verifiers/r077.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 114
+    kind: mutation
+- id: r081
+  statement: target_items.json write/read preserves a bare JSON string literal ('hello')
+    verbatim, including quotes, not wrapped in an array
+  verifier: verifiers/r081.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 120
+    kind: mutation
+- id: r082
+  statement: target_items.json write/read preserves a bare JSON boolean literal (true)
+    verbatim as the text 'true'
+  verifier: verifiers/r082.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 134
+    kind: mutation
+- id: r088
+  statement: target_items.json write/read preserves a bare JSON boolean literal (true)
+    verbatim as text
+  verifier: verifiers/r088.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 129
+    kind: mutation

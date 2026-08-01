@@ -1,0 +1,12 @@
+statement: source_items.json's fifth item (holiday-mini-camp) has price '30'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"holiday-mini-camp",      "title": "Holiday Mini Camp",      "price": "30"'
+id: r043
+confirmed_by_poke: 55
+spiral: 2
+banked_at: '2026-08-01T11:13:49'

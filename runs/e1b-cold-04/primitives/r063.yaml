@@ -1,0 +1,17 @@
+statement: target_items.json write/read has no schema validation; omitting the required
+  'price' field still succeeds and is readable as written
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"spring-junior-clinic","title":"Spring Junior Clinic","date":"2026-04-12"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"spring-junior-clinic","title":"Spring Junior Clinic","date":"2026-04-12"}]'
+id: r063
+confirmed_by_poke: 83
+spiral: 2
+banked_at: '2026-08-01T11:15:44'
