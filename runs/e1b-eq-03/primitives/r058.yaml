@@ -1,0 +1,14 @@
+statement: source_items.json is read-only regardless of content attempted, not just
+  for empty array writes
+steps:
+- tool: filesystem.write_file
+  args:
+    path: source_items.json
+    content: '{"marker":"test999"}'
+expect:
+  predicate: blocked
+  value: source_items.json
+id: r058
+confirmed_by_poke: 92
+spiral: 2
+banked_at: '2026-08-01T10:59:22'

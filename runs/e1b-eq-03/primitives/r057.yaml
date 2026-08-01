@@ -1,0 +1,17 @@
+statement: migration.json is writable (not read-only) and can be overwritten with
+  arbitrary content
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: '{"marker":"test123"}'
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: test123
+id: r057
+confirmed_by_poke: 90
+spiral: 2
+banked_at: '2026-08-01T10:59:04'

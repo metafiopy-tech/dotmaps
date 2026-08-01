@@ -1,0 +1,17 @@
+statement: target_items.json can be written with a single migrated item object containing
+  slug 'spring-junior-clinic' and read back with that exact slug
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"spring-junior-clinic","title":"Spring Junior Clinic","price":"45","date":"2026-04-12"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: spring-junior-clinic
+id: r054
+confirmed_by_poke: 82
+spiral: 2
+banked_at: '2026-08-01T10:58:22'

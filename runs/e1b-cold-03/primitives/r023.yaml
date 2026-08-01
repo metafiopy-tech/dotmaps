@@ -1,0 +1,12 @@
+statement: migration.json's links_field equals 'body'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: '"links_field": "body"'
+id: r023
+confirmed_by_poke: 37
+spiral: 2
+banked_at: '2026-08-01T10:49:12'

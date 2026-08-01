@@ -1,0 +1,17 @@
+statement: target_items.json can be written with a single item and read back containing
+  that item
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "test-item", "title": "Test"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: test-item
+id: r047
+confirmed_by_poke: 70
+spiral: 2
+banked_at: '2026-08-01T10:57:22'

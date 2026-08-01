@@ -1,0 +1,15 @@
+# Fog — undecidable by this agent
+
+- migration.json's required_fields array contains exactly 3 entries — no confirming poke after forage (2026-08-01T10:54:29)
+- migration.json's required_fields array contains exactly 3 entries — no confirming poke after forage (2026-08-01T10:54:40)
+- source_items.json contains exactly 1 item — no confirming poke after forage (2026-08-01T10:54:52)
+- migration.json's required_fields array contains exactly 3 entries — no confirming poke after forage (2026-08-01T10:55:12)
+- target_items.json does not exist yet (migration has not been run) — no confirming poke after forage (2026-08-01T10:55:30)
+- target_items.json does not exist yet (migration has not been run) — no confirming poke after forage (2026-08-01T10:55:41)
+- The 'spring-junior-clinic' item's body contains the exact HTML anchor tag '<a href="/summer-scoring-camp">summer camp</a>' — no confirming poke after forage (2026-08-01T10:56:02)
+- The 'spring-junior-clinic' item's body contains the exact HTML anchor tag '<a href="/summer-scoring-camp">summer camp</a>' — no confirming poke after forage (2026-08-01T10:56:02)
+- The 'spring-junior-clinic' item's body contains the exact HTML anchor tag '<a href="/summer-scoring-camp">summer camp</a>' — no confirming poke after forage (2026-08-01T10:56:02)
+- The 'spring-junior-clinic' item's body contains the exact HTML anchor tag '<a href="/summer-scoring-camp">summer camp</a>' — no confirming poke after forage (2026-08-01T10:56:02)
+- The 'spring-junior-clinic' item's body contains the exact HTML anchor tag '<a href="/summer-scoring-camp">summer camp</a>' — no confirming poke after forage (2026-08-01T10:56:02)
+- The 'spring-junior-clinic' item's body contains the substring 'href=\"/summer-scoring-camp\"' — no confirming poke after forage (2026-08-01T10:56:02)
+- target_items.json's single migrated item has date '2026-04-12' — no confirming poke after forage (2026-08-01T11:00:40)

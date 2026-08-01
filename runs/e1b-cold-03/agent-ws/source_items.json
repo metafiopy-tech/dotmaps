@@ -1,0 +1,7 @@
+[
+  {"slug": "spring-junior-clinic",   "title": "Spring Junior Clinic",   "price": "45", "date": "2026-04-12", "body": "See also <a href=\"/summer-scoring-camp\">summer camp</a>."},
+  {"slug": "summer-scoring-camp",    "title": "Summer Scoring Camp",    "price": "60", "date": "2026-06-20", "body": "Advanced short game."},
+  {"slug": "putting-intensive",      "title": "Putting Intensive",      "price": "35", "date": "2026-05-03", "body": "Green reading focus."},
+  {"slug": "fall-tune-up",           "title": "Fall Tune-Up",           "price": "40", "date": "2026-09-14", "body": "Pre-season sharpening."},
+  {"slug": "holiday-mini-camp",      "title": "Holiday Mini Camp",      "price": "30", "date": "2026-12-27", "body": "Two-day fundamentals."}
+]

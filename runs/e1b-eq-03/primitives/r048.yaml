@@ -1,0 +1,17 @@
+statement: target_items.json can be written with 2 items and read back containing
+  both
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "a"}, {"slug": "b"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 2
+id: r048
+confirmed_by_poke: 71
+spiral: 2
+banked_at: '2026-08-01T10:57:25'
