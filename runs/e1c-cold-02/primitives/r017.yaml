@@ -1,0 +1,12 @@
+statement: source_items.json's fourth item (fall-tune-up) has date '2026-09-14'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '2026-09-14'
+id: r017
+confirmed_by_poke: 23
+spiral: 2
+banked_at: '2026-08-01T15:50:44'

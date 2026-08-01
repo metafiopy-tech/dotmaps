@@ -1,0 +1,17 @@
+statement: Writing an empty string to target_items.json persists and reads back as
+  an empty string (not an error, not '[]')
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: ''
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: ''
+id: r050
+confirmed_by_poke: 63
+spiral: 1
+banked_at: '2026-08-01T16:00:53'

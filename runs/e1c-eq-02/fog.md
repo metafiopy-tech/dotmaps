@@ -1,0 +1,17 @@
+# Fog — undecidable by this agent
+
+- migration.json contains exactly 10 top-level keys — no confirming poke after forage (2026-08-01T16:01:35)
+- Reading target_items.json fails because the file does not exist — no confirming poke after forage (2026-08-01T16:02:12)
+- Reading target_items.json fails because the file does not exist in this workspace — no confirming poke after forage (2026-08-01T16:02:41)
+- target_items.json does not exist in the workspace initially (reading it fails since fresh copy has no prior write) — no confirming poke after forage (2026-08-01T16:03:18)
+- target_items.json does not exist in a fresh copy of the workspace (reading it fails) — no confirming poke after forage (2026-08-01T16:03:48)
+- target_items.json does not exist in a fresh copy of the workspace; reading it fails with an error — no confirming poke after forage (2026-08-01T16:04:13)
+- target_items.json does not exist in a fresh copy of the workspace; reading it raises a file-not-found error — no confirming poke after forage (2026-08-01T16:04:13)
+- target_items.json does not exist in a fresh copy of the workspace (reading it fails) — no confirming poke after forage (2026-08-01T16:04:13)
+- In a fresh copy of the workspace, reading target_items.json fails because the file does not exist — no confirming poke after forage (2026-08-01T16:04:13)
+- target_items.json does not exist in a fresh workspace copy; reading it raises a No such file or directory error — no confirming poke after forage (2026-08-01T16:04:13)
+- In a fresh workspace copy, target_items.json does not exist; attempting to read it results in a blocked/error outcome — no confirming poke after forage (2026-08-01T16:04:13)
+- In a fresh workspace copy, target_items.json does not exist; reading it is blocked (errors out) — no confirming poke after forage (2026-08-01T16:04:13)
+- In a fresh copy of the workspace, target_items.json does not exist; reading it is blocked with an error — no confirming poke after forage (2026-08-01T16:04:13)
+- In a fresh copy of the workspace, target_items.json does not exist; reading it is blocked (errors out) — no confirming poke after forage (2026-08-01T16:04:13)
+- Writing a JSON array with a unicode escape (\u00e9) in a field to target_items.json persists and reads back with the escape decoded to the actual character (é) — no confirming poke after forage (2026-08-01T16:05:37)

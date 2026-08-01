@@ -1,0 +1,17 @@
+statement: After writing 'not-json-content' to target_items.json, reading it back
+  returns exactly 'not-json-content'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: not-json-content
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: not-json-content
+id: r046
+confirmed_by_poke: 56
+spiral: 1
+banked_at: '2026-08-01T16:00:17'

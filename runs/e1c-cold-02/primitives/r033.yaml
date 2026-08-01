@@ -1,0 +1,17 @@
+statement: target_items.json can be overwritten with a 2-item array and read back
+  with that exact count
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"a"},{"slug":"b"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 2
+id: r033
+confirmed_by_poke: 67
+spiral: 0
+banked_at: '2026-08-01T15:56:32'

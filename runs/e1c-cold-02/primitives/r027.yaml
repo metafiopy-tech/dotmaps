@@ -1,0 +1,16 @@
+statement: Writing to target_items.json overwrites previous content rather than appending
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"only-item"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"only-item"}]'
+id: r027
+confirmed_by_poke: 66
+spiral: 0
+banked_at: '2026-08-01T15:55:16'

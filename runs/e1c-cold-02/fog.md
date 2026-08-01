@@ -1,0 +1,17 @@
+# Fog — undecidable by this agent
+
+- target_items.json does not exist in the workspace (migration has not been run yet) — no confirming poke after forage (2026-08-01T15:54:55)
+- target_items.json does not exist in the workspace (read attempt fails) — no confirming poke after forage (2026-08-01T15:55:37)
+- target_items.json does not exist in the workspace (reading it raises an error) — no confirming poke after forage (2026-08-01T15:55:53)
+- target_items.json does not exist in the workspace (reading it fails) — no confirming poke after forage (2026-08-01T15:56:20)
+- source_items.json's first item body field equals 'See also <a href="/summer-scoring-camp">summer camp</a>.' — no confirming poke after forage (2026-08-01T15:56:38)
+- source_items.json's first item (spring-junior-clinic) body field equals 'See also <a href="/summer-scoring-camp">summer camp</a>.' — no confirming poke after forage (2026-08-01T15:56:38)
+- source_items.json's first item (spring-junior-clinic) body field equals 'See also <a href="/summer-scoring-camp">summer camp</a>.' — no confirming poke after forage (2026-08-01T15:56:38)
+- source_items.json's first item (spring-junior-clinic) body field contains the exact HTML link 'See also <a href="/summer-scoring-camp">summer camp</a>.' — no confirming poke after forage (2026-08-01T15:56:38)
+- source_items.json's first item body field equals 'See also <a href="/summer-scoring-camp">summer camp</a>.' — no confirming poke after forage (2026-08-01T15:56:38)
+- target_items.json does not exist in the workspace (reading it raises an error) — no confirming poke after forage (2026-08-01T15:56:38)
+- source_items.json's first item (spring-junior-clinic) body field is exactly 'See also <a href="/summer-scoring-camp">summer camp</a>.' — no confirming poke after forage (2026-08-01T15:56:38)
+- target_items.json now contains an empty JSON array after write — no confirming poke after forage (2026-08-01T15:56:38)
+- target_items.json does not exist in the workspace initially; reading it raises a FileNotFoundError mentioning target_items.json — no confirming poke after forage (2026-08-01T15:56:38)
+- source_items.json's first item (spring-junior-clinic) body field is exactly 'See also <a href="/summer-scoring-camp">summer camp</a>.' — no confirming poke after forage (2026-08-01T15:56:38)
+- source_items.json's first item (spring-junior-clinic) body field contains the exact substring 'See also <a href="/summer-scoring-camp">summer camp</a>.' — no confirming poke after forage (2026-08-01T15:56:38)

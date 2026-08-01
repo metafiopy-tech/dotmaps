@@ -1,0 +1,17 @@
+statement: Writing a 2-item JSON array with specific slug/title/price/date fields
+  to target_items.json persists and reads back exactly as written
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"a","title":"A","price":"1","date":"2026-01-01"},{"slug":"b","title":"B","price":"2","date":"2026-02-02"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"a","title":"A","price":"1","date":"2026-01-01"},{"slug":"b","title":"B","price":"2","date":"2026-02-02"}]'
+id: r037
+confirmed_by_poke: 67
+spiral: 0
+banked_at: '2026-08-01T16:02:45'

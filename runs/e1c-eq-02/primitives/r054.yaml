@@ -1,0 +1,17 @@
+statement: Writing a JSON array with an escaped double-quote in a title field to target_items.json
+  persists and reads back with the same escaped quote sequence intact
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"test","title":"He said \"hi\"","price":"99","date":"2026-01-01"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"test","title":"He said \"hi\"","price":"99","date":"2026-01-01"}]'
+id: r054
+confirmed_by_poke: 73
+spiral: 2
+banked_at: '2026-08-01T16:04:42'

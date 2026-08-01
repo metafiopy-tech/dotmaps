@@ -1,0 +1,12 @@
+statement: fall-tune-up item's body field equals 'Pre-season sharpening.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Pre-season sharpening.
+id: r026
+confirmed_by_poke: 27
+spiral: 1
+banked_at: '2026-08-01T15:57:55'

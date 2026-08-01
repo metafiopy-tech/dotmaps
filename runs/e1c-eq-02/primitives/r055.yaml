@@ -1,0 +1,17 @@
+statement: Writing a JSON array with an escaped newline (\n) in a field to target_items.json
+  persists and reads back with the escaped newline sequence intact
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"x","title":"Line1\nLine2","price":"5","date":"2026-03-03"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: Line1\nLine2
+id: r055
+confirmed_by_poke: 75
+spiral: 2
+banked_at: '2026-08-01T16:04:49'

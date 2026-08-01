@@ -1,0 +1,17 @@
+statement: After writing a 2-item JSON array to target_items.json, reading it back
+  returns a JSON array with exactly 2 items
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"a","title":"A","price":"1","date":"2026-01-01"},{"slug":"b","title":"B","price":"2","date":"2026-02-02"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 2
+id: r036
+confirmed_by_poke: 43
+spiral: 1
+banked_at: '2026-08-01T15:59:14'

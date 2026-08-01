@@ -1,0 +1,14 @@
+statement: source_items.json's first item body field contains the raw substring 'See
+  also <a href=\"/summer-scoring-camp\">summer camp</a>.' (with escaped quotes as
+  stored in file)
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: See also <a href=\"/summer-scoring-camp\">summer camp</a>.
+id: r024
+confirmed_by_poke: 64
+spiral: 0
+banked_at: '2026-08-01T15:54:24'
