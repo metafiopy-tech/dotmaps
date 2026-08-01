@@ -1,0 +1,12 @@
+statement: The 3rd item in source_items.json (putting-intensive) has date '2026-05-03'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '2026-05-03'
+id: r034
+confirmed_by_poke: 60
+spiral: 2
+banked_at: '2026-08-01T18:39:14'

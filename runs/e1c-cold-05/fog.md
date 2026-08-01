@@ -1,0 +1,15 @@
+# Fog — undecidable by this agent
+
+- target_items.json does not exist yet (migration has not been run) — no confirming poke after forage (2026-08-01T18:37:28)
+- target_items.json does not exist yet in the workspace (migration has not been run) — no confirming poke after forage (2026-08-01T18:37:46)
+- target_items.json does not exist in the workspace (reading it fails) — no confirming poke after forage (2026-08-01T18:38:05)
+- target_items.json does not exist in the workspace (reading it fails) — no confirming poke after forage (2026-08-01T18:38:25)
+- target_items.json does not exist in the workspace (reading it is blocked) — no confirming poke after forage (2026-08-01T18:38:45)
+- target_items.json does not exist in the workspace (reading it fails) — no confirming poke after forage (2026-08-01T18:38:50)
+- target_items.json does not exist in the workspace (reading it fails) — no confirming poke after forage (2026-08-01T18:38:50)
+- target_items.json does not exist in the workspace prior to migration — no confirming poke after forage (2026-08-01T18:38:50)
+- target_items.json does not exist in the workspace (migration has not been run) — no confirming poke after forage (2026-08-01T18:38:50)
+- target_items.json does not exist in the workspace prior to migration — no confirming poke after forage (2026-08-01T18:38:50)
+- target_items.json does not exist in the workspace before migration is run — no confirming poke after forage (2026-08-01T18:38:50)
+- target_items.json does not exist before migration is run; reading it is blocked — no confirming poke after forage (2026-08-01T18:38:50)
+- target_items.json currently exists and is an empty array before migration — no confirming poke after forage (2026-08-01T18:40:19)

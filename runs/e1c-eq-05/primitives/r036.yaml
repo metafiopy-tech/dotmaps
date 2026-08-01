@@ -1,0 +1,17 @@
+statement: target_items.json can be written with content '{"unique":"xyz123"}' and
+  read back exactly matching that content
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '{"unique":"xyz123"}'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '{"unique":"xyz123"}'
+id: r036
+confirmed_by_poke: 73
+spiral: 0
+banked_at: '2026-08-01T18:46:52'

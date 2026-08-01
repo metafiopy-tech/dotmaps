@@ -1,0 +1,17 @@
+statement: target_items.json can be written and then read back with the exact content
+  written
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[]'
+id: r037
+confirmed_by_poke: 54
+spiral: 2
+banked_at: '2026-08-01T18:45:13'

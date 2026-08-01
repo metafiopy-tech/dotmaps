@@ -1,0 +1,17 @@
+statement: Writing to target_items.json is possible and the write is immediately readable
+  with exact content preserved
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[]'
+id: r015
+confirmed_by_poke: 50
+spiral: 0
+banked_at: '2026-08-01T18:37:54'

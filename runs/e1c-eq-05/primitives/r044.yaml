@@ -1,0 +1,17 @@
+statement: migration.json can be overwritten and read back exactly, confirming write_file
+  works on files other than target_items.json
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: hello-world-123
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: hello-world-123
+id: r044
+confirmed_by_poke: 67
+spiral: 2
+banked_at: '2026-08-01T18:46:08'

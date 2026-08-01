@@ -1,0 +1,19 @@
+statement: target_items.json read_file returns the exact raw bytes written, including
+  JSON escape sequences like \u00e9 and \" unmodified (not re-serialized)
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: "{\"unicode\": \"caf\xE9 \\u00e9\\u00e8\", \"quote\": \"she said \\\"\
+      hi\\\"\"}"
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: "{\"unicode\": \"caf\xE9 \\u00e9\\u00e8\", \"quote\": \"she said \\\"hi\\\
+    \"\"}"
+id: r039
+confirmed_by_poke: 57
+spiral: 2
+banked_at: '2026-08-01T18:45:30'
