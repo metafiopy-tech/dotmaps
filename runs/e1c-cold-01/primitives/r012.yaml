@@ -1,0 +1,17 @@
+statement: Writing '[]' to target_items.json then reading it returns an empty JSON
+  array
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 0
+id: r012
+confirmed_by_poke: 33
+spiral: 0
+banked_at: '2026-08-01T15:25:08'

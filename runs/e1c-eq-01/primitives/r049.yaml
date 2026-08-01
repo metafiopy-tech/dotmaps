@@ -1,0 +1,17 @@
+statement: target_items.json accepts non-array JSON content (a single object) and
+  reads it back exactly
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '{"slug": "single-object", "value": 42}'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '{"slug": "single-object", "value": 42}'
+id: r049
+confirmed_by_poke: 61
+spiral: 2
+banked_at: '2026-08-01T15:38:52'

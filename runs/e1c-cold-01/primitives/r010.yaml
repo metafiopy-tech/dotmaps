@@ -1,0 +1,12 @@
+statement: The fifth item in source_items.json has slug 'holiday-mini-camp'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: holiday-mini-camp
+id: r010
+confirmed_by_poke: 16
+spiral: 1
+banked_at: '2026-08-01T15:23:14'

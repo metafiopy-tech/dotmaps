@@ -1,0 +1,20 @@
+statement: Writing a JSON array with slug 'spring-junior-clinic' and body 'See also
+  <a href=\"/summer-scoring-camp\">summer camp</a>.' to target_items.json, then reading
+  it back, yields that exact JSON text
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"spring-junior-clinic","body":"See also <a href=\"/summer-scoring-camp\">summer
+      camp</a>."}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"spring-junior-clinic","body":"See also <a href=\"/summer-scoring-camp\">summer
+    camp</a>."}]'
+id: r037
+confirmed_by_poke: 86
+spiral: 0
+banked_at: '2026-08-01T15:41:08'

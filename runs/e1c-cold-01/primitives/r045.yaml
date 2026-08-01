@@ -1,0 +1,17 @@
+statement: After writing a single test item to target_items.json, reading it back
+  returns exactly 1 JSON item
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"test-item","title":"Test","price":"10","date":"2026-01-01"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 1
+id: r045
+confirmed_by_poke: 66
+spiral: 2
+banked_at: '2026-08-01T15:29:06'

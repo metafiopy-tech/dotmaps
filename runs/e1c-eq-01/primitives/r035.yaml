@@ -1,0 +1,13 @@
+statement: source_items.json's putting-intensive item body field equals 'Green reading
+  focus.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Green reading focus.
+id: r035
+confirmed_by_poke: 40
+spiral: 2
+banked_at: '2026-08-01T15:37:01'

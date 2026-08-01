@@ -1,0 +1,17 @@
+statement: Writing a JSON array with 5 objects (mirroring all source items) to target_items.json
+  preserves item count of 5 when read back
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"spring-junior-clinic"},{"slug":"summer-scoring-camp"},{"slug":"putting-intensive"},{"slug":"fall-tune-up"},{"slug":"holiday-mini-camp"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 5
+id: r054
+confirmed_by_poke: 74
+spiral: 2
+banked_at: '2026-08-01T15:39:46'

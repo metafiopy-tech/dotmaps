@@ -1,0 +1,19 @@
+statement: Writing a JSON array containing an object with an href attribute using
+  escaped quotes to target_items.json preserves the exact JSON-escaped string 'href=\"/summer-scoring-camp\"'
+  when read back
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "test-link2", "body": "See also <a href=\"/summer-scoring-camp\">summer
+      camp</a>."}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: contains
+  value: href=\"/summer-scoring-camp\"
+id: r045
+confirmed_by_poke: 88
+spiral: 0
+banked_at: '2026-08-01T15:41:35'
