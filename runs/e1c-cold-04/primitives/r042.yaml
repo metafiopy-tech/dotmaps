@@ -1,0 +1,13 @@
+statement: source_items.json's price fields are stored as JSON strings (quoted), not
+  numbers
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"price": "45"'
+id: r042
+confirmed_by_poke: 58
+spiral: 2
+banked_at: '2026-08-01T18:22:44'

@@ -1,0 +1,23 @@
+{
+  "arm": "cold",
+  "run_dir": "runs/e1c-cold-04",
+  "inherited": 0,
+  "wall_clock_s": 465.7,
+  "summary": {
+    "spirals": [
+      {
+        "spiral": 1,
+        "pokes": 47,
+        "banked_total": 24
+      },
+      {
+        "spiral": 2,
+        "pokes": 16,
+        "banked_total": 35
+      }
+    ],
+    "grown_map": "runs/e1c-cold-04/grown-map",
+    "primitives": 35
+  },
+  "learner_usd_estimate": 1.1868
+}

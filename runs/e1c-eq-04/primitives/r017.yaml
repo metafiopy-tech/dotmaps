@@ -1,0 +1,12 @@
+statement: migration.json's target field equals 'target_items.json'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: '"target": "target_items.json"'
+id: r017
+confirmed_by_poke: 14
+spiral: 1
+banked_at: '2026-08-01T18:24:15'

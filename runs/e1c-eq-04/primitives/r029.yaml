@@ -1,0 +1,17 @@
+statement: Writing JSON content to target_items.json persists exactly and can be read
+  back verbatim
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "test-item", "title": "Test", "price": "10", "date": "2026-01-01"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug": "test-item", "title": "Test", "price": "10", "date": "2026-01-01"}]'
+id: r029
+confirmed_by_poke: 55
+spiral: 0
+banked_at: '2026-08-01T18:27:38'
