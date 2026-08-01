@@ -5,7 +5,7 @@ Fix active in BOTH arms: in-flight gate (blocked_statement = fog +
 open-hypothesis set, self-excluded, mechanical, at both proposal sites).
 
 ## Learner declaration (fill BEFORE run 1; identical for ALL 16 runs)
-LEARNER: ____________________  (AnthropicLearner/claude-sonnet-5 = comparable
+LEARNER: AnthropicLearner/claude-sonnet-5 (declared before run 1; ClaudeCodeLearner failed smoke — RESULT None, errors in payload — parked for post-trial repair)
 to E1b/E1c baselines; ClaudeCodeLearner = subscription-billed, NOT
 comparable across trials, internally valid only)
 
