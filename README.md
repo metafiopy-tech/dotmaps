@@ -77,6 +77,52 @@ judged by the same gates as hand-made maps.
   integrity only — it never discovered the write side); and this is n=1 on
   one environment. It is a real first step, reported at its real size.
 
+
+## The EQUIP campaign: one week, five experiments, 52 paired runs, ~$60
+
+The follow-up question — *does certified knowledge compound?* — got a full
+pre-registered experimental campaign (spec: [EQUIP_v1_spec.md](EQUIP_v1_spec.md)).
+Every kill criterion was written before the code ran; every verdict is
+graded against the frozen registration and committed under `runs/`.
+
+**What held up:**
+
+- **Pay once, free forever.** A frontier model's $0.50 lesson replays at
+  $0.00 via certificates — an equipped traversal completed a learned map
+  4/4 with zero model calls (`skills/`, gate G3 commit).
+- **Certification discriminates.** 4/4 planted-flaw skills convicted blind;
+  a vacuous skill convicted unprompted by the oracle gate
+  ([runs/e2-certification-discriminates/](runs/e2-certification-discriminates/report.json)).
+- **Inheritance is a frontier-depth instrument, 12× measured.** Equipped
+  agents produced 63 mutation/boundary-probing rules vs cold's 5 in the
+  final trial; frontier reach held in 12 of 13 equipped arms across three
+  trials ([runs/e1d-verdict/](runs/e1d-verdict/verdict.json)).
+- **Mechanical gates beat informational surfacing.** Bank-time dedup:
+  36/36 runs clean. The in-flight proposal gate eliminated retry churn
+  entirely (0 re-fogs in all 16 final runs, 99 blocks) after two trials of
+  board-surfacing only half-worked.
+
+**What died — published at the same size:**
+
+- **The efficiency claim is dead, permanently, by its own pre-registered
+  final-trial clause.** Four trials, 26 pairs: inheritance never made
+  agents cheaper per unit of knowledge, and in the cleanest instrument it
+  was 16% more expensive
+  ([runs/e1-verdict/](runs/e1-verdict/verdict.json) →
+  [e1b](runs/e1b-verdict/verdict.json) →
+  [e1c](runs/e1c-verdict/verdict.json) →
+  [e1d](runs/e1d-verdict/verdict.json)).
+- The apparent early discount was churn-avoidance in disguise: eliminate
+  churn for every arm and the savings evaporate.
+- Per-run variance (17–58 unique rules under identical conditions) dwarfs
+  the inheritance effect at small n.
+
+All 46+ grown maps across the program passed validity gates with **zero
+circular checks, ever**. Interactive demo of the instrument:
+[try it — your words become the test](https://metafiopy-tech.github.io/dotmaps/try.html) ·
+[the instrument & paper skeleton](https://metafiopy-tech.github.io/dotmaps/instrument.html) ·
+[case study: four rounds to certification](docs/case-study-closing-procedure.md).
+
 ## What's in the box
 
 | path | contents |
@@ -86,7 +132,9 @@ judged by the same gates as hand-made maps.
 | `runs/` | bundled convictions and milestones — replay offline |
 | `corpus/` | the experiment layer: variant generator, frozen registrations, pilot reports with raw stats |
 | `grow/` | the POKE loop's frozen directive, run log, and cold seed |
-| `docs/` | the full write-up and launch page |
+| `docs/` | the full write-up, launch page, live demo pages |
+| `skills/` | the first certified skill cards + manifest (EQUIP gates G1–G2) |
+| `experiments/` | EQUIP registrations (E1b/c/d) and the paired-run harness |
 | `STATUS.md` | the project ledger, kept as it was written |
 
 The full story — every experiment, every pre-registered verdict, every
