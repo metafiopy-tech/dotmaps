@@ -1,0 +1,18 @@
+{
+  "registration": "experiments/e1d_registration.md (final trial, frozen before any run; learner AnthropicLearner/claude-sonnet-5 declared before run 1)",
+  "m1": "PASS \u2014 0/16 violations; 36/36 lifetime. Certified.",
+  "m2doubleprime": "PASS \u2014 refog=0 in ALL 16 runs; 99 in-flight blocks; churn ELIMINATED. Race hypothesis confirmed then killed by the fix it predicted.",
+  "headline": {
+    "uniques": "+8.1% vs bar >=15 \u2014 FAIL (inside \u00b110 variance band: indistinguishable from bar at n=8)",
+    "cost_per_unique": "+16.2% vs bar <=0 \u2014 FAIL DECISIVELY (outside band)",
+    "totals": {
+      "cold": "234u/$7.15=$0.0305/u",
+      "equipped": "253u/$8.98=$0.0355/u"
+    }
+  },
+  "final_trial_clause_executed": "BANK's EFFICIENCY CLAIM DIES PERMANENTLY. Four trials, 26 pairs, 52 runs; never cleared once; decisively negative in the cleanest instrument.",
+  "meta_finding": "Inheritance's apparent efficiency was substantially churn-avoidance: eliminate churn for all arms (mechanical gates) and the discount evaporates.",
+  "repositioned_claim": "Certified inheritance is a FRONTIER-DEPTH instrument: E1d mutation rules equipped 63 vs cold 5 (12x); mutation-frontier reach 12/13 equipped arms across E1b-E1d. This is the surviving, publishable claim.",
+  "certified_stack": "Bank-time dedup 36/36; in-flight gate refog 0/16; 46+ grown maps program-wide, zero circular checks ever; oracle gate; per-skill Wilson certification; $0 certified traversal.",
+  "program_closed": "Experimental campaign complete. Next: the writeup."
+}
