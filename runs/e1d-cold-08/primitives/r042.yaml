@@ -1,0 +1,13 @@
+statement: The first item in source_items.json has body 'See also <a href=\"/summer-scoring-camp\">summer
+  camp</a>.' (as raw JSON text with escaped quotes)
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: See also <a href=\"/summer-scoring-camp\">summer camp</a>.
+id: r042
+confirmed_by_poke: 64
+spiral: 0
+banked_at: '2026-08-01T20:53:42'

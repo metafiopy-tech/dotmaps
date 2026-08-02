@@ -1,0 +1,309 @@
+name: grown-seed-ws
+version: 0.0.1
+domain: grown
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+budget:
+  max_cycles: 30
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+dots:
+- id: inherited-000
+  statement: source_items.json contains a JSON array (starts with '[') holding item(s)
+    with slug 'spring-junior-clinic'
+  verifier: verifiers/inherited-000.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-001
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' dated
+    '2026-04-12'
+  verifier: verifiers/inherited-001.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-002
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' titled
+    'Spring Junior Clinic'
+  verifier: verifiers/inherited-002.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-003
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' priced
+    '45'
+  verifier: verifiers/inherited-003.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-004
+  statement: The 'source_items.json' file contains items with a 'body' attribute.
+  verifier: verifiers/inherited-004.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: r006
+  statement: migration.json specifies spot_hash_sample as 3
+  verifier: verifiers/r006.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 2
+    kind: invariant
+- id: r007
+  statement: migration.json required_fields is exactly ['title','price','date'] (3
+    fields)
+  verifier: verifiers/r007.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 3
+    kind: invariant
+- id: r008
+  statement: migration.json specifies source_sha256 as '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'
+  verifier: verifiers/r008.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 4
+    kind: invariant
+- id: r009
+  statement: migration.json specifies target as 'target_items.json'
+  verifier: verifiers/r009.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 5
+    kind: invariant
+- id: r010
+  statement: migration.json specifies slug_field as 'slug'
+  verifier: verifiers/r010.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 6
+    kind: invariant
+- id: r011
+  statement: migration.json specifies hash_fields as ['title','price','date']
+  verifier: verifiers/r011.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 7
+    kind: invariant
+- id: r012
+  statement: migration.json specifies links_field as 'body'
+  verifier: verifiers/r012.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 8
+    kind: invariant
+- id: r013
+  statement: source_items.json contains exactly 5 items
+  verifier: verifiers/r013.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 10
+    kind: invariant
+- id: r014
+  statement: source_items.json item with slug 'summer-scoring-camp' has body 'Advanced
+    short game.'
+  verifier: verifiers/r014.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 11
+    kind: invariant
+- id: r015
+  statement: source_items.json item with slug 'putting-intensive' has price '35'
+  verifier: verifiers/r015.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 12
+    kind: invariant
+- id: r016
+  statement: source_items.json item with slug 'fall-tune-up' has price '40' and date
+    '2026-09-14'
+  verifier: verifiers/r016.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 13
+    kind: invariant
+- id: r017
+  statement: source_items.json item with slug 'holiday-mini-camp' has price '30' and
+    date '2026-12-27'
+  verifier: verifiers/r017.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 14
+    kind: invariant
+- id: r018
+  statement: migration.json specifies internal_link_base as null
+  verifier: verifiers/r018.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 15
+    kind: invariant
+- id: r019
+  statement: source_items.json item with slug 'spring-junior-clinic' has body containing
+    a link to '/summer-scoring-camp'
+  verifier: verifiers/r019.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 16
+    kind: invariant
+- id: r020
+  statement: source_items.json item with slug 'putting-intensive' has date '2026-05-03'
+  verifier: verifiers/r020.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 20
+    kind: invariant
+- id: r026
+  statement: source_items.json item with slug 'summer-scoring-camp' has price '60'
+    and date '2026-06-20'
+  verifier: verifiers/r026.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 32
+    kind: invariant
+- id: r027
+  statement: source_items.json item with slug 'fall-tune-up' has body 'Pre-season
+    sharpening.'
+  verifier: verifiers/r027.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 33
+    kind: invariant
+- id: r028
+  statement: source_items.json item with slug 'putting-intensive' has body 'Green
+    reading focus.'
+  verifier: verifiers/r028.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 34
+    kind: invariant
+- id: r029
+  statement: source_items.json item with slug 'holiday-mini-camp' has body 'Two-day
+    fundamentals.'
+  verifier: verifiers/r029.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 35
+    kind: invariant
+- id: r023
+  statement: After writing '[]' to target_items.json, reading it back returns exactly
+    '[]'
+  verifier: verifiers/r023.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 24
+    kind: mutation
+- id: r024
+  statement: Writing a single-item JSON array to target_items.json and reading it
+    back yields exactly 1 item
+  verifier: verifiers/r024.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 29
+    kind: mutation
+- id: r025
+  statement: Writing a two-item JSON array to target_items.json and reading it back
+    yields exactly 2 items
+  verifier: verifiers/r025.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 27
+    kind: mutation
+- id: r030
+  statement: Writing a JSON array with one item having slug 'migrated-test', title
+    'Migrated Test', price '99', date '2027-01-01' to target_items.json and reading
+    it back returns exactly that item
+  verifier: verifiers/r030.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 37
+    kind: mutation
+- id: r031
+  statement: Writing a JSON array with slug 'body-link-v2' and body 'See <a href="/other">other</a>.'
+    to target_items.json preserves that exact file content on read-back
+  verifier: verifiers/r031.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 51
+    kind: mutation
+- id: r032
+  statement: target_items.json write/read does not validate JSON; writing the literal
+    text 'not valid json' and reading it back returns that exact string unchanged
+  verifier: verifiers/r032.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 41
+    kind: mutation
+- id: r033
+  statement: Writing a JSON array with slug 'echo-final' and body 'Test <a href="/y">y</a>
+    link.' to target_items.json preserves that exact file content on read-back
+  verifier: verifiers/r033.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 52
+    kind: mutation
+- id: r034
+  statement: Writing a JSON array with slug 'link-test' and body 'See <a href="/other">other</a>.'
+    to target_items.json preserves that exact file content on read-back
+  verifier: verifiers/r034.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 53
+    kind: mutation
+- id: r036
+  statement: Writing a JSON array with slug 'linktest3' and body 'See <a href="/other">other</a>.'
+    to target_items.json preserves the exact full file content on read-back
+  verifier: verifiers/r036.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 56
+    kind: mutation
+- id: r037
+  statement: Writing a JSON array with slug 'echo-test' and body 'See <a href="/x">x</a>.'
+    to target_items.json preserves that exact file content on read-back
+  verifier: verifiers/r037.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 57
+    kind: mutation

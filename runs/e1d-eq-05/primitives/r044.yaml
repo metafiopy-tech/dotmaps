@@ -1,0 +1,18 @@
+statement: 'target_items.json can store a non-array JSON object (e.g. {"note": "test-object"})
+  and reading it back returns that exact object, showing the file isn''t restricted
+  to arrays'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '{"note": "test-object"}'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '{"note": "test-object"}'
+id: r044
+confirmed_by_poke: 65
+spiral: 2
+banked_at: '2026-08-01T20:20:03'

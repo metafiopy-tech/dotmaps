@@ -1,0 +1,20 @@
+statement: Writing to target_items.json overwrites previous content rather than appending
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: first-value
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: second-value
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: second-value
+id: r080
+confirmed_by_poke: 138
+spiral: 2
+banked_at: '2026-08-01T20:46:53'

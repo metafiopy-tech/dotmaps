@@ -1,0 +1,374 @@
+name: grown-seed-ws
+version: 0.0.1
+domain: grown
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+budget:
+  max_cycles: 30
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+dots:
+- id: inherited-000
+  statement: source_items.json contains a JSON array (starts with '[') holding item(s)
+    with slug 'spring-junior-clinic'
+  verifier: verifiers/inherited-000.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-001
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' dated
+    '2026-04-12'
+  verifier: verifiers/inherited-001.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-002
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' titled
+    'Spring Junior Clinic'
+  verifier: verifiers/inherited-002.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-003
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' priced
+    '45'
+  verifier: verifiers/inherited-003.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-004
+  statement: The 'source_items.json' file contains items with a 'body' attribute.
+  verifier: verifiers/inherited-004.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: r006
+  statement: migration.json specifies spot_hash_sample as 3
+  verifier: verifiers/r006.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 2
+    kind: invariant
+- id: r007
+  statement: migration.json specifies required_fields as ['title','price','date']
+  verifier: verifiers/r007.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 3
+    kind: invariant
+- id: r008
+  statement: migration.json specifies target as 'target_items.json'
+  verifier: verifiers/r008.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 4
+    kind: invariant
+- id: r009
+  statement: migration.json specifies links_field as 'body'
+  verifier: verifiers/r009.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 5
+    kind: invariant
+- id: r010
+  statement: migration.json specifies hash_fields as ['title','price','date']
+  verifier: verifiers/r010.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 6
+    kind: invariant
+- id: r011
+  statement: migration.json specifies slug_field as 'slug'
+  verifier: verifiers/r011.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 40
+    kind: invariant
+- id: r013
+  statement: migration.json specifies source_sha256 as '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'
+  verifier: verifiers/r013.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 11
+    kind: invariant
+- id: r014
+  statement: migration.json specifies internal_link_base as null
+  verifier: verifiers/r014.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 12
+    kind: invariant
+- id: r015
+  statement: source_items.json contains exactly 5 items
+  verifier: verifiers/r015.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 14
+    kind: invariant
+- id: r016
+  statement: source_items.json contains an item with slug 'summer-scoring-camp' priced
+    '60'
+  verifier: verifiers/r016.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 15
+    kind: invariant
+- id: r017
+  statement: source_items.json contains an item with slug 'putting-intensive' priced
+    '35'
+  verifier: verifiers/r017.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 16
+    kind: invariant
+- id: r018
+  statement: source_items.json contains an item with slug 'fall-tune-up' priced '40'
+  verifier: verifiers/r018.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 17
+    kind: invariant
+- id: r021
+  statement: source_items.json contains an item with slug 'holiday-mini-camp' priced
+    '30'
+  verifier: verifiers/r021.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 23
+    kind: invariant
+- id: r022
+  statement: source_items.json contains an item with slug 'putting-intensive' dated
+    '2026-05-03'
+  verifier: verifiers/r022.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 24
+    kind: invariant
+- id: r023
+  statement: source_items.json contains an item with slug 'fall-tune-up' dated '2026-09-14'
+  verifier: verifiers/r023.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 25
+    kind: invariant
+- id: r024
+  statement: source_items.json contains an item with slug 'summer-scoring-camp' dated
+    '2026-06-20'
+  verifier: verifiers/r024.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 26
+    kind: invariant
+- id: r026
+  statement: The spring-junior-clinic item's body field contains the substring '/summer-scoring-camp'
+  verifier: verifiers/r026.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 28
+    kind: invariant
+- id: r029
+  statement: source_items.json contains an item with slug 'summer-scoring-camp' titled
+    'Summer Scoring Camp'
+  verifier: verifiers/r029.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 46
+    kind: invariant
+- id: r031
+  statement: source_items.json contains an item with slug 'putting-intensive' titled
+    'Putting Intensive'
+  verifier: verifiers/r031.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 48
+    kind: invariant
+- id: r032
+  statement: source_items.json contains an item with slug 'holiday-mini-camp' whose
+    body is 'Two-day fundamentals.'
+  verifier: verifiers/r032.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 35
+    kind: invariant
+- id: r035
+  statement: source_items.json contains an item with slug 'fall-tune-up' whose body
+    is 'Pre-season sharpening.'
+  verifier: verifiers/r035.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 51
+    kind: invariant
+- id: r036
+  statement: source_items.json contains an item with slug 'holiday-mini-camp' dated
+    '2026-12-27'
+  verifier: verifiers/r036.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 52
+    kind: invariant
+- id: r037
+  statement: source_items.json contains an item with slug 'putting-intensive' whose
+    body is 'Green reading focus.'
+  verifier: verifiers/r037.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 53
+    kind: invariant
+- id: r038
+  statement: source_items.json contains an item with slug 'fall-tune-up' titled 'Fall
+    Tune-Up'
+  verifier: verifiers/r038.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 54
+    kind: invariant
+- id: r039
+  statement: source_items.json contains an item with slug 'summer-scoring-camp' whose
+    body is 'Advanced short game.'
+  verifier: verifiers/r039.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 55
+    kind: invariant
+- id: r033
+  statement: Writing content to target_items.json and reading it back returns exactly
+    what was written (file is writable and persists within a session)
+  verifier: verifiers/r033.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 38
+    kind: mutation
+- id: r034
+  statement: Writing a 5-item JSON array to target_items.json persists and reading
+    it back yields exactly 5 items
+  verifier: verifiers/r034.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 39
+    kind: mutation
+- id: r040
+  statement: Writing to target_items.json does not affect source_items.json, which
+    still contains its original 5 items
+  verifier: verifiers/r040.py
+  depends_on:
+  - inherited-000
+  - inherited-001
+  - inherited-002
+  - inherited-003
+  - inherited-004
+  - r015
+  - r016
+  - r017
+  - r018
+  - r021
+  - r022
+  - r023
+  - r024
+  - r026
+  - r029
+  - r031
+  - r032
+  - r035
+  - r036
+  - r037
+  - r038
+  - r039
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 77
+    kind: mutation
+- id: r041
+  statement: Writing a 1-item JSON array to target_items.json persists and reading
+    it back yields exactly 1 item
+  verifier: verifiers/r041.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 59
+    kind: mutation
+- id: r042
+  statement: Writing a 2-item JSON array to target_items.json persists and reading
+    it back yields exactly 2 items
+  verifier: verifiers/r042.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 60
+    kind: mutation
+- id: r043
+  statement: Writing an empty JSON array to target_items.json persists and reading
+    it back yields exactly 0 items
+  verifier: verifiers/r043.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 62
+    kind: mutation
+- id: r044
+  statement: 'target_items.json can store a non-array JSON object (e.g. {"note": "test-object"})
+    and reading it back returns that exact object, showing the file isn''t restricted
+    to arrays'
+  verifier: verifiers/r044.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 65
+    kind: mutation
+- id: r045
+  statement: target_items.json is not validated as JSON on write; invalid JSON content
+    persists and reads back verbatim
+  verifier: verifiers/r045.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 68
+    kind: mutation
+- id: r046
+  statement: Writing a JSON array containing an object with slug 'putting-intensive'
+    to target_items.json persists and reading it back contains that slug
+  verifier: verifiers/r046.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 69
+    kind: mutation

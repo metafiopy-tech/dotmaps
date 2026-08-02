@@ -1,0 +1,18 @@
+statement: Writing a 1-item JSON array to target_items.json persists and reading it
+  back yields exactly 1 item
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "spring-junior-clinic", "title": "Spring Junior Clinic", "price":
+      "45", "date": "2026-04-12"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 1
+id: r041
+confirmed_by_poke: 59
+spiral: 2
+banked_at: '2026-08-01T20:19:40'

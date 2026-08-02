@@ -1,0 +1,19 @@
+statement: Writing a JSON array with slug 'echo-final' and body 'Test <a href="/y">y</a>
+  link.' to target_items.json preserves that exact file content on read-back
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"echo-final","title":"Echo Final","price":"7","date":"2027-06-06","body":"Test
+      <a href=\"/y\">y</a> link."}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"echo-final","title":"Echo Final","price":"7","date":"2027-06-06","body":"Test
+    <a href=\"/y\">y</a> link."}]'
+id: r033
+confirmed_by_poke: 52
+spiral: 0
+banked_at: '2026-08-01T20:30:21'

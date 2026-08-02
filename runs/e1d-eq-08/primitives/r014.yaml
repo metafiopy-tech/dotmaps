@@ -1,0 +1,13 @@
+statement: migration.json's hash_fields array contains exactly title, price, date
+  (same as required_fields)
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: "\"hash_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n  ]"
+id: r014
+confirmed_by_poke: 11
+spiral: 1
+banked_at: '2026-08-01T20:54:17'

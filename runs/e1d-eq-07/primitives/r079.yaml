@@ -1,0 +1,17 @@
+statement: Writing 'triple-nested-test' to backup/backup/backup/target_items.json
+  results in reading back exactly 'triple-nested-test'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: backup/backup/backup/target_items.json
+    content: triple-nested-test
+- tool: filesystem.read_file
+  args:
+    path: backup/backup/backup/target_items.json
+expect:
+  predicate: equals
+  value: triple-nested-test
+id: r079
+confirmed_by_poke: 137
+spiral: 2
+banked_at: '2026-08-01T20:46:48'

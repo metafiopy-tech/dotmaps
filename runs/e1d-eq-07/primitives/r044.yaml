@@ -1,0 +1,17 @@
+statement: Writing to target_items.json with content 'demo-123' results in reading
+  back exactly 'demo-123'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: demo-123
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: demo-123
+id: r044
+confirmed_by_poke: 57
+spiral: 1
+banked_at: '2026-08-01T20:40:09'

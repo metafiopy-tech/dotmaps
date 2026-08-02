@@ -1,0 +1,17 @@
+statement: Writing content to target_items.json and reading it back returns exactly
+  what was written (file is writable and persists within a session)
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[]'
+id: r033
+confirmed_by_poke: 38
+spiral: 1
+banked_at: '2026-08-01T20:16:42'

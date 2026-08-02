@@ -1,0 +1,17 @@
+statement: target_items.json is not validated as JSON on write; invalid JSON content
+  persists and reads back verbatim
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: not valid json {{{
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: not valid json {{{
+id: r045
+confirmed_by_poke: 68
+spiral: 2
+banked_at: '2026-08-01T20:20:13'

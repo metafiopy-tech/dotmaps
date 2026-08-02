@@ -1,0 +1,53 @@
+{"t": "2026-08-01T20:30:59", "event": "proposed", "rule": {"statement": "source_items.json contains 5 items", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 5}, "id": "r001"}}
+{"t": "2026-08-01T20:30:59", "event": "banked", "rule_id": "r001"}
+{"t": "2026-08-01T20:31:05", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the workspace", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r002"}}
+{"t": "2026-08-01T20:31:25", "event": "proposed", "rule": {"statement": "migration.json's required_fields list has 3 entries", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "json_item_count", "value": 3}, "id": "r004"}}
+{"t": "2026-08-01T20:31:51", "event": "banked", "rule_id": "r002"}
+{"t": "2026-08-01T20:31:58", "event": "banked", "rule_id": "r004"}
+{"t": "2026-08-01T20:32:02", "event": "proposed", "rule": {"statement": "migration.json's spot_hash_sample is 3", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"spot_hash_sample\": 3"}, "id": "r005"}}
+{"t": "2026-08-01T20:32:02", "event": "banked", "rule_id": "r005"}
+{"t": "2026-08-01T20:32:05", "event": "proposed", "rule": {"statement": "migration.json's slug_field is \"slug\"", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"slug_field\": \"slug\""}, "id": "r006"}}
+{"t": "2026-08-01T20:32:05", "event": "banked", "rule_id": "r006"}
+{"t": "2026-08-01T20:32:09", "event": "proposed", "rule": {"statement": "migration.json's links_field is \"body\"", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"links_field\": \"body\""}, "id": "r007"}}
+{"t": "2026-08-01T20:32:09", "event": "banked", "rule_id": "r007"}
+{"t": "2026-08-01T20:32:14", "event": "proposed", "rule": {"statement": "migration.json's source_sha256 field is '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac"}, "id": "r008"}}
+{"t": "2026-08-01T20:32:14", "event": "banked", "rule_id": "r008"}
+{"t": "2026-08-01T20:32:18", "event": "proposed", "rule": {"statement": "target_items.json is currently empty (0 items)", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "json_item_count", "value": 0}, "id": "r009"}}
+{"t": "2026-08-01T20:32:20", "event": "proposed", "rule": {"statement": "target_items.json is currently an empty array (0 items)", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "json_item_count", "value": 0}, "id": "r010"}}
+{"t": "2026-08-01T20:32:26", "event": "proposed", "rule": {"statement": "target_items.json currently contains 0 items", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "json_item_count", "value": 0}, "id": "r011"}}
+{"t": "2026-08-01T20:32:38", "event": "proposed", "rule": {"statement": "target_items.json is an empty JSON array (0 items)", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "json_item_count", "value": 0}, "id": "r012"}}
+{"t": "2026-08-01T20:32:43", "event": "proposed", "rule": {"statement": "target_items.json is an empty JSON array with 0 items", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "json_item_count", "value": 0}, "id": "r014"}}
+{"t": "2026-08-01T20:32:53", "event": "proposed", "rule": {"statement": "target_items.json does not exist in this workspace (reading it errors with 'No such file or directory')", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "contains", "value": "No such file or directory"}, "id": "r015"}}
+{"t": "2026-08-01T20:32:59", "event": "proposed", "rule": {"statement": "target_items.json now exists as an empty JSON array with 0 items after writing '[]'", "steps": [{"tool": "filesystem.write_file", "args": {"path": "target_items.json", "content": "[]"}}, {"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "json_item_count", "value": 0}, "id": "r016"}}
+{"t": "2026-08-01T20:32:59", "event": "banked", "rule_id": "r016"}
+{"t": "2026-08-01T20:33:03", "event": "proposed", "rule": {"statement": "migration.json's hash_fields list is exactly [\"title\", \"price\", \"date\"]", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"hash_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n  ]"}, "id": "r017"}}
+{"t": "2026-08-01T20:33:03", "event": "banked", "rule_id": "r017"}
+{"t": "2026-08-01T20:33:15", "event": "proposed", "rule": {"statement": "source_items.json's third item has slug 'putting-intensive' with price '35'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"putting-intensive\",      \"title\": \"Putting Intensive\",      \"price\": \"35\""}, "id": "r019"}}
+{"t": "2026-08-01T20:33:15", "event": "banked", "rule_id": "r019"}
+{"t": "2026-08-01T20:33:18", "event": "proposed", "rule": {"statement": "source_items.json's second item has slug 'summer-scoring-camp' with price '60'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"summer-scoring-camp\",    \"title\": \"Summer Scoring Camp\",    \"price\": \"60\""}, "id": "r020"}}
+{"t": "2026-08-01T20:33:18", "event": "banked", "rule_id": "r020"}
+{"t": "2026-08-01T20:33:24", "event": "proposed", "rule": {"statement": "source_items.json's fourth item has slug 'fall-tune-up' with price '40'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"fall-tune-up\",           \"title\": \"Fall Tune-Up\",           \"price\": \"40\""}, "id": "r021"}}
+{"t": "2026-08-01T20:33:24", "event": "banked", "rule_id": "r021"}
+{"t": "2026-08-01T20:33:26", "event": "proposed", "rule": {"statement": "source_items.json's fifth item has slug 'holiday-mini-camp' with price '30'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"holiday-mini-camp\",      \"title\": \"Holiday Mini Camp\",      \"price\": \"30\""}, "id": "r022"}}
+{"t": "2026-08-01T20:33:26", "event": "banked", "rule_id": "r022"}
+{"t": "2026-08-01T20:33:43", "event": "proposed", "rule": {"statement": "source_items.json's first item has slug 'spring-junior-clinic' with price '45'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"spring-junior-clinic\",   \"title\": \"Spring Junior Clinic\",   \"price\": \"45\""}, "id": "r026"}}
+{"t": "2026-08-01T20:33:43", "event": "banked", "rule_id": "r026"}
+{"t": "2026-08-01T20:33:49", "event": "proposed", "rule": {"statement": "migration.json's internal_link_base field is null", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"internal_link_base\": null"}, "id": "r027"}}
+{"t": "2026-08-01T20:33:49", "event": "banked", "rule_id": "r027"}
+{"t": "2026-08-01T20:34:04", "event": "proposed", "rule": {"statement": "source_items.json's second item body is 'Advanced short game.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Advanced short game."}, "id": "r029"}}
+{"t": "2026-08-01T20:34:04", "event": "banked", "rule_id": "r029"}
+{"t": "2026-08-01T20:34:06", "event": "proposed", "rule": {"statement": "target_items.json is currently an empty JSON array with 0 items", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "json_item_count", "value": 0}, "id": "r030"}}
+{"t": "2026-08-01T20:34:12", "event": "proposed", "rule": {"statement": "source_items.json's fourth item body is 'Pre-season sharpening.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Pre-season sharpening."}, "id": "r031"}}
+{"t": "2026-08-01T20:34:12", "event": "banked", "rule_id": "r031"}
+{"t": "2026-08-01T20:34:23", "event": "proposed", "rule": {"statement": "In a fresh copy of the workspace, target_items.json does not exist (reading it errors with 'No such file or directory')", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": "No such file or directory"}, "id": "r033"}}
+{"t": "2026-08-01T20:34:48", "event": "duplicate", "rule_id": "r009"}
+{"t": "2026-08-01T20:35:11", "event": "fogged", "rule_id": "r009"}
+{"t": "2026-08-01T20:35:35", "event": "fog-blocked", "rule_id": "r010"}
+{"t": "2026-08-01T20:35:35", "event": "fogged", "rule_id": "r010"}
+{"t": "2026-08-01T20:35:53", "event": "fogged", "rule_id": "r011"}
+{"t": "2026-08-01T20:36:14", "event": "fogged", "rule_id": "r012"}
+{"t": "2026-08-01T20:36:27", "event": "duplicate", "rule_id": "r014"}
+{"t": "2026-08-01T20:36:27", "event": "fogged", "rule_id": "r014"}
+{"t": "2026-08-01T20:36:39", "event": "fogged", "rule_id": "r015"}
+{"t": "2026-08-01T20:36:48", "event": "fogged", "rule_id": "r030"}
+{"t": "2026-08-01T20:36:48", "event": "fogged", "rule_id": "r033"}

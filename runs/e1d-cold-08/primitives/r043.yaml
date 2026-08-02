@@ -1,0 +1,13 @@
+statement: The first item's body field in source_items.json contains the substring
+  'summer camp</a>.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: summer camp</a>.
+id: r043
+confirmed_by_poke: 61
+spiral: 2
+banked_at: '2026-08-01T20:53:11'

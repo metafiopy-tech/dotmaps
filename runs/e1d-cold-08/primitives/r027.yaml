@@ -1,0 +1,12 @@
+statement: migration.json sets hash_fields to [title, price, date]
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: "\"hash_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n  ]"
+id: r027
+confirmed_by_poke: 41
+spiral: 2
+banked_at: '2026-08-01T20:52:07'

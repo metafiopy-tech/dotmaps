@@ -1,0 +1,13 @@
+statement: The first item in source_items.json (spring-junior-clinic) has body ending
+  with 'summer camp</a>.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: summer camp</a>.
+id: r039
+confirmed_by_poke: 61
+spiral: 0
+banked_at: '2026-08-01T20:25:12'

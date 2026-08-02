@@ -1,0 +1,19 @@
+statement: Writing a 2-item JSON array to target_items.json persists and reading it
+  back yields exactly 2 items
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug": "putting-intensive", "title": "Putting Intensive", "price":
+      "35", "date": "2026-05-03"}, {"slug": "fall-tune-up", "title": "Fall Tune-Up",
+      "price": "40", "date": "2026-09-14"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 2
+id: r042
+confirmed_by_poke: 60
+spiral: 2
+banked_at: '2026-08-01T20:19:47'

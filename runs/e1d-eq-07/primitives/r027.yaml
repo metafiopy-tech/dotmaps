@@ -1,0 +1,17 @@
+statement: filesystem.write_file creates target_items.json with the exact content
+  written
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: test-write-check
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: test-write-check
+id: r027
+confirmed_by_poke: 43
+spiral: 0
+banked_at: '2026-08-01T20:39:03'

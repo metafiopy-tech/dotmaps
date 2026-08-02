@@ -1,0 +1,19 @@
+statement: Writing a JSON array with slug 'link-test' and body 'See <a href="/other">other</a>.'
+  to target_items.json preserves that exact file content on read-back
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"link-test","title":"Link Test","price":"10","date":"2027-02-02","body":"See
+      <a href=\"/other\">other</a>."}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"link-test","title":"Link Test","price":"10","date":"2027-02-02","body":"See
+    <a href=\"/other\">other</a>."}]'
+id: r034
+confirmed_by_poke: 53
+spiral: 0
+banked_at: '2026-08-01T20:30:25'

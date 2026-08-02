@@ -1,0 +1,17 @@
+statement: Writing 'double-nested-notes-v2' to backup/backup/notes.txt results in
+  reading back exactly 'double-nested-notes-v2'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: backup/backup/notes.txt
+    content: double-nested-notes-v2
+- tool: filesystem.read_file
+  args:
+    path: backup/backup/notes.txt
+expect:
+  predicate: contains
+  value: double-nested-notes-v2
+id: r084
+confirmed_by_poke: 154
+spiral: 0
+banked_at: '2026-08-01T20:48:07'

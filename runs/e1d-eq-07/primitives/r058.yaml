@@ -1,0 +1,17 @@
+statement: Writing 'backup-source-test' to backup/source_items.json results in reading
+  back exactly 'backup-source-test'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: backup/source_items.json
+    content: backup-source-test
+- tool: filesystem.read_file
+  args:
+    path: backup/source_items.json
+expect:
+  predicate: equals
+  value: backup-source-test
+id: r058
+confirmed_by_poke: 94
+spiral: 1
+banked_at: '2026-08-01T20:42:49'

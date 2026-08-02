@@ -1,0 +1,12 @@
+statement: 'migration.json specifies exactly 3 hash_fields: title, price, date'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: '"hash_fields"'
+id: r014
+confirmed_by_poke: 20
+spiral: 1
+banked_at: '2026-08-01T20:11:23'

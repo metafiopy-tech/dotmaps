@@ -1,0 +1,12 @@
+statement: migration.json specifies source_sha256 as '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: 85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac
+id: r013
+confirmed_by_poke: 11
+spiral: 1
+banked_at: '2026-08-01T20:14:59'

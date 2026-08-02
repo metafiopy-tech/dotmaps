@@ -1,0 +1,13 @@
+statement: source_items.json contains an item with slug 'putting-intensive' titled
+  'Putting Intensive'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Putting Intensive
+id: r031
+confirmed_by_poke: 48
+spiral: 0
+banked_at: '2026-08-01T20:18:52'

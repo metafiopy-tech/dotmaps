@@ -1,0 +1,17 @@
+statement: Writing 'reset-marker-42' to target_items.json results in reading back
+  exactly 'reset-marker-42'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: reset-marker-42
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: reset-marker-42
+id: r057
+confirmed_by_poke: 88
+spiral: 1
+banked_at: '2026-08-01T20:42:30'

@@ -1,0 +1,17 @@
+statement: Writing 'quad-nested-test' to backup/backup/backup/backup/target_items.json
+  results in reading back exactly 'quad-nested-test'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: backup/backup/backup/backup/target_items.json
+    content: quad-nested-test
+- tool: filesystem.read_file
+  args:
+    path: backup/backup/backup/backup/target_items.json
+expect:
+  predicate: contains
+  value: quad-nested-test
+id: r082
+confirmed_by_poke: 143
+spiral: 2
+banked_at: '2026-08-01T20:47:13'

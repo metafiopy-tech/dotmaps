@@ -1,0 +1,17 @@
+statement: Writing 'backup-notes-test' to backup/notes.txt results in reading back
+  exactly 'backup-notes-test'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: backup/notes.txt
+    content: backup-notes-test
+- tool: filesystem.read_file
+  args:
+    path: backup/notes.txt
+expect:
+  predicate: equals
+  value: backup-notes-test
+id: r083
+confirmed_by_poke: 145
+spiral: 2
+banked_at: '2026-08-01T20:47:19'

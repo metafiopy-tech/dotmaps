@@ -1,0 +1,462 @@
+name: grown-seed-ws
+version: 0.0.1
+domain: grown
+mcp_required:
+- filesystem.read_file
+- filesystem.write_file
+budget:
+  max_cycles: 30
+traveler:
+  driver: ollama
+  model: qwen2.5-coder:7b
+  temperature: 0.0
+dots:
+- id: inherited-000
+  statement: source_items.json contains a JSON array (starts with '[') holding item(s)
+    with slug 'spring-junior-clinic'
+  verifier: verifiers/inherited-000.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-001
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' dated
+    '2026-04-12'
+  verifier: verifiers/inherited-001.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-002
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' titled
+    'Spring Junior Clinic'
+  verifier: verifiers/inherited-002.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-003
+  statement: source_items.json contains an item with slug 'spring-junior-clinic' priced
+    '45'
+  verifier: verifiers/inherited-003.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: inherited-004
+  statement: The 'source_items.json' file contains items with a 'body' attribute.
+  verifier: verifiers/inherited-004.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 0
+    kind: invariant
+- id: r006
+  statement: migration.json specifies required_fields as ["title", "price", "date"]
+  verifier: verifiers/r006.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 2
+    kind: invariant
+- id: r007
+  statement: migration.json specifies source_sha256 as '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'
+  verifier: verifiers/r007.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 3
+    kind: invariant
+- id: r008
+  statement: migration.json specifies spot_hash_sample as 3
+  verifier: verifiers/r008.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 4
+    kind: invariant
+- id: r009
+  statement: source_items.json contains exactly 5 items
+  verifier: verifiers/r009.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 6
+    kind: invariant
+- id: r010
+  statement: source_items.json item with slug 'spring-junior-clinic' has a body containing
+    a link to '/summer-scoring-camp'
+  verifier: verifiers/r010.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 7
+    kind: invariant
+- id: r011
+  statement: migration.json specifies links_field as 'body'
+  verifier: verifiers/r011.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 8
+    kind: invariant
+- id: r012
+  statement: source_items.json contains an item with slug 'putting-intensive' priced
+    '35'
+  verifier: verifiers/r012.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 9
+    kind: invariant
+- id: r013
+  statement: migration.json specifies target as 'target_items.json'
+  verifier: verifiers/r013.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 10
+    kind: invariant
+- id: r014
+  statement: migration.json specifies hash_fields as ["title", "price", "date"]
+  verifier: verifiers/r014.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 12
+    kind: invariant
+- id: r015
+  statement: migration.json specifies internal_link_base as null
+  verifier: verifiers/r015.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 13
+    kind: invariant
+- id: r016
+  statement: source_items.json item with slug 'fall-tune-up' has date '2026-09-14'
+  verifier: verifiers/r016.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 15
+    kind: invariant
+- id: r017
+  statement: source_items.json item with slug 'summer-scoring-camp' has price '60'
+  verifier: verifiers/r017.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 16
+    kind: invariant
+- id: r018
+  statement: source_items.json item with slug 'holiday-mini-camp' has price '30'
+  verifier: verifiers/r018.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 17
+    kind: invariant
+- id: r019
+  statement: source_items.json item with slug 'putting-intensive' has date '2026-05-03'
+  verifier: verifiers/r019.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 18
+    kind: invariant
+- id: r020
+  statement: source_items.json item with slug 'fall-tune-up' has price '40'
+  verifier: verifiers/r020.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 19
+    kind: invariant
+- id: r021
+  statement: migration.json specifies slug_field as 'slug'
+  verifier: verifiers/r021.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 20
+    kind: invariant
+- id: r022
+  statement: source_items.json item with slug 'holiday-mini-camp' has date '2026-12-27'
+  verifier: verifiers/r022.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 21
+    kind: invariant
+- id: r023
+  statement: source_items.json item with slug 'summer-scoring-camp' has body 'Advanced
+    short game.'
+  verifier: verifiers/r023.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 24
+    kind: invariant
+- id: r024
+  statement: source_items.json item with slug 'putting-intensive' has body 'Green
+    reading focus.'
+  verifier: verifiers/r024.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 25
+    kind: invariant
+- id: r025
+  statement: source_items.json item with slug 'fall-tune-up' has body 'Pre-season
+    sharpening.'
+  verifier: verifiers/r025.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 26
+    kind: invariant
+- id: r026
+  statement: source_items.json item with slug 'holiday-mini-camp' has body 'Two-day
+    fundamentals.'
+  verifier: verifiers/r026.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 27
+    kind: invariant
+- id: r036
+  statement: source_items.json item with slug 'summer-scoring-camp' has date '2026-06-20'
+  verifier: verifiers/r036.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 46
+    kind: invariant
+- id: r037
+  statement: source_items.json item with slug 'fall-tune-up' has title 'Fall Tune-Up'
+  verifier: verifiers/r037.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 47
+    kind: invariant
+- id: r038
+  statement: source_items.json item with slug 'putting-intensive' has title 'Putting
+    Intensive'
+  verifier: verifiers/r038.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 48
+    kind: invariant
+- id: r039
+  statement: 'source_items.json raw text contains the line: "body": "See also <a href=\"/summer-scoring-camp\">summer
+    camp</a>."'
+  verifier: verifiers/r039.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 73
+    kind: invariant
+- id: r041
+  statement: source_items.json item with slug 'spring-junior-clinic' has body containing
+    the exact text 'summer camp</a>.'
+  verifier: verifiers/r041.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 51
+    kind: invariant
+- id: r055
+  statement: migration.json specifies source as 'source_items.json'
+  verifier: verifiers/r055.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 82
+    kind: invariant
+- id: r027
+  statement: filesystem.write_file creates target_items.json with the exact content
+    written
+  verifier: verifiers/r027.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 43
+    kind: mutation
+- id: r044
+  statement: Writing to target_items.json with content 'demo-123' results in reading
+    back exactly 'demo-123'
+  verifier: verifiers/r044.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 57
+    kind: mutation
+- id: r053
+  statement: Writing a JSON array of 2 objects to target_items.json results in reading
+    back exactly 2 items
+  verifier: verifiers/r053.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 76
+    kind: mutation
+- id: r056
+  statement: Writing 'backup-write-test' to backup/target_items.json results in reading
+    back exactly 'backup-write-test'
+  verifier: verifiers/r056.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 86
+    kind: mutation
+- id: r057
+  statement: Writing 'reset-marker-42' to target_items.json results in reading back
+    exactly 'reset-marker-42'
+  verifier: verifiers/r057.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 88
+    kind: mutation
+- id: r058
+  statement: Writing 'backup-source-test' to backup/source_items.json results in reading
+    back exactly 'backup-source-test'
+  verifier: verifiers/r058.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 94
+    kind: mutation
+- id: r059
+  statement: Writing a JSON array of 3 objects to backup/target_items.json results
+    in reading back exactly 3 items
+  verifier: verifiers/r059.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 98
+    kind: mutation
+- id: r064
+  statement: Writing a JSON array of 4 objects to backup/source_items.json results
+    in reading back exactly 4 items
+  verifier: verifiers/r064.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 108
+    kind: mutation
+- id: r065
+  statement: Writing 'migration-test-99' to migration.json results in reading back
+    exactly 'migration-test-99'
+  verifier: verifiers/r065.py
+  depends_on:
+  - r006
+  - r007
+  - r008
+  - r011
+  - r013
+  - r014
+  - r015
+  - r021
+  - r055
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 110
+    kind: mutation
+- id: r076
+  statement: Writing 'nested-dir-test' to backup/backup/target_items.json results
+    in reading back exactly 'nested-dir-test'
+  verifier: verifiers/r076.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 130
+    kind: mutation
+- id: r077
+  statement: Writing 'backup-migration-test' to backup/migration.json results in reading
+    back exactly 'backup-migration-test'
+  verifier: verifiers/r077.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 133
+    kind: mutation
+- id: r078
+  statement: Writing 'nested-source-test' to backup/backup/source_items.json results
+    in reading back exactly 'nested-source-test'
+  verifier: verifiers/r078.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 135
+    kind: mutation
+- id: r079
+  statement: Writing 'triple-nested-test' to backup/backup/backup/target_items.json
+    results in reading back exactly 'triple-nested-test'
+  verifier: verifiers/r079.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 137
+    kind: mutation
+- id: r080
+  statement: Writing to target_items.json overwrites previous content rather than
+    appending
+  verifier: verifiers/r080.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 138
+    kind: mutation
+- id: r081
+  statement: Writing 'hello-world-1' to notes.txt results in reading back exactly
+    'hello-world-1'
+  verifier: verifiers/r081.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 141
+    kind: mutation
+- id: r082
+  statement: Writing 'quad-nested-test' to backup/backup/backup/backup/target_items.json
+    results in reading back exactly 'quad-nested-test'
+  verifier: verifiers/r082.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 143
+    kind: mutation
+- id: r083
+  statement: Writing 'backup-notes-test' to backup/notes.txt results in reading back
+    exactly 'backup-notes-test'
+  verifier: verifiers/r083.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 145
+    kind: mutation
+- id: r084
+  statement: Writing 'double-nested-notes-v2' to backup/backup/notes.txt results in
+    reading back exactly 'double-nested-notes-v2'
+  verifier: verifiers/r084.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 154
+    kind: mutation
+- id: r085
+  statement: Writing 'nested-notes-test' to backup/backup/notes.txt results in reading
+    back exactly 'nested-notes-test'
+  verifier: verifiers/r085.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 153
+    kind: mutation

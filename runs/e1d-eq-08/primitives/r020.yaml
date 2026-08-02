@@ -1,0 +1,13 @@
+statement: source_items.json's sha256 hash matches migration.json's source_sha256
+  field '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: spring-junior-clinic
+id: r020
+confirmed_by_poke: 36
+spiral: 0
+banked_at: '2026-08-01T20:55:53'

@@ -1,0 +1,17 @@
+statement: target_items.json now exists as an empty JSON array with 0 items after
+  writing '[]'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 0
+id: r016
+confirmed_by_poke: 27
+spiral: 2
+banked_at: '2026-08-01T20:32:59'

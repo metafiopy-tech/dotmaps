@@ -1,0 +1,17 @@
+statement: Writing 'migration-test-99' to migration.json results in reading back exactly
+  'migration-test-99'
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: migration-test-99
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: migration-test-99
+id: r065
+confirmed_by_poke: 110
+spiral: 1
+banked_at: '2026-08-01T20:44:05'
