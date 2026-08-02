@@ -1,0 +1,12 @@
+statement: The fifth item in source_items.json has price '30'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"price": "30"'
+id: r021
+confirmed_by_poke: 30
+spiral: 2
+banked_at: '2026-08-01T18:59:43'

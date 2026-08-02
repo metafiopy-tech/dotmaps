@@ -1,0 +1,12 @@
+statement: The first item's body field contains a link to '/summer-scoring-camp'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: /summer-scoring-camp
+id: r016
+confirmed_by_poke: 24
+spiral: 2
+banked_at: '2026-08-01T18:59:25'

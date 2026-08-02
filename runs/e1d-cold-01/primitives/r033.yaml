@@ -1,0 +1,12 @@
+statement: The first item in source_items.json has title 'Spring Junior Clinic'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Spring Junior Clinic
+id: r033
+confirmed_by_poke: 47
+spiral: 2
+banked_at: '2026-08-01T19:00:36'

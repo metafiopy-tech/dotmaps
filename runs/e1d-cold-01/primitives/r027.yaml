@@ -1,0 +1,12 @@
+statement: The second item's body field equals 'Advanced short game.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Advanced short game.
+id: r027
+confirmed_by_poke: 38
+spiral: 2
+banked_at: '2026-08-01T19:00:03'

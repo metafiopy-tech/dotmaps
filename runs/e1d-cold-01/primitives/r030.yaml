@@ -1,0 +1,12 @@
+statement: The fifth item's body field equals 'Two-day fundamentals.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Two-day fundamentals.
+id: r030
+confirmed_by_poke: 42
+spiral: 2
+banked_at: '2026-08-01T19:00:15'
