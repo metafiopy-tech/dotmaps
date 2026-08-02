@@ -1,0 +1,17 @@
+statement: target_items.json can store a bare JSON null value; writing 'null' and
+  reading it back returns 'null' unchanged
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: 'null'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: 'null'
+id: r048
+confirmed_by_poke: 72
+spiral: 2
+banked_at: '2026-08-01T20:04:19'

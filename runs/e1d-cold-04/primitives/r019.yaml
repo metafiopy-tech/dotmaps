@@ -1,0 +1,17 @@
+statement: Writing new content to target_items.json persists and can be read back
+  exactly
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"test-item"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"test-item"}]'
+id: r019
+confirmed_by_poke: 39
+spiral: 0
+banked_at: '2026-08-01T19:57:32'

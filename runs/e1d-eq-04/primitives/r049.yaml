@@ -1,0 +1,20 @@
+statement: migration.json can be overwritten with a modified source_sha256 field and
+  read back exactly with the new value
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: '{"source": "source_items.json", "target": "target_items.json", "slug_field":
+      "slug", "required_fields": ["title","price","date"], "hash_fields": ["title","price","date"],
+      "spot_hash_sample": 3, "links_field": "body", "internal_link_base": null, "source_sha256":
+      "testsha123"}'
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: testsha123
+id: r049
+confirmed_by_poke: 74
+spiral: 2
+banked_at: '2026-08-01T20:04:32'

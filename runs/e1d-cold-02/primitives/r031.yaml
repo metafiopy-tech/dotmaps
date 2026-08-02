@@ -1,0 +1,13 @@
+statement: The fourth item in source_items.json (fall-tune-up) has body 'Pre-season
+  sharpening.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Pre-season sharpening.
+id: r031
+confirmed_by_poke: 48
+spiral: 2
+banked_at: '2026-08-01T19:32:06'

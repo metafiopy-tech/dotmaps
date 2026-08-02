@@ -1,0 +1,16 @@
+id: inherited-004
+statement: The 'source_items.json' file contains items with a 'body' attribute.
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"body":'
+inherited_from: the-source-items-json-file-contains-items-with-a
+inherited_wilson:
+- 0.839
+- 1.0
+confirmed_by_poke: 0
+spiral: 0
+banked_at: '2026-08-01T19:59:00'

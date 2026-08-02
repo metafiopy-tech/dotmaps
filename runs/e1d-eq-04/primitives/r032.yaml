@@ -1,0 +1,13 @@
+statement: source_items.json contains an item with slug 'summer-scoring-camp' whose
+  body field is 'Advanced short game.'
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: Advanced short game.
+id: r032
+confirmed_by_poke: 45
+spiral: 2
+banked_at: '2026-08-01T20:02:06'

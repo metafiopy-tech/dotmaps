@@ -1,0 +1,17 @@
+statement: migration.json accepts arbitrary JSON object overwrite and reads back exactly
+  as written
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: '{"foo": "bar"}'
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: '{"foo": "bar"}'
+id: r052
+confirmed_by_poke: 82
+spiral: 2
+banked_at: '2026-08-01T20:05:01'

@@ -1,0 +1,14 @@
+statement: source_items.json is protected and cannot be overwritten (write attempts
+  are blocked)
+steps:
+- tool: filesystem.write_file
+  args:
+    path: source_items.json
+    content: test
+expect:
+  predicate: blocked
+  value: true
+id: r040
+confirmed_by_poke: 60
+spiral: 2
+banked_at: '2026-08-01T20:03:08'

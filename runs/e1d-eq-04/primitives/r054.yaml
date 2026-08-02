@@ -1,0 +1,17 @@
+statement: migration.json can store a bare JSON number like '99' and reading it back
+  returns '99' unchanged
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: '99'
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: '99'
+id: r054
+confirmed_by_poke: 89
+spiral: 0
+banked_at: '2026-08-01T20:06:49'

@@ -1,0 +1,12 @@
+statement: source_items.json's fourth item (fall-tune-up) has price 40
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"fall-tune-up",           "title": "Fall Tune-Up",           "price": "40"'
+id: r008
+confirmed_by_poke: 13
+spiral: 1
+banked_at: '2026-08-01T19:54:27'

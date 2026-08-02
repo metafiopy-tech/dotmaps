@@ -1,0 +1,17 @@
+statement: migration.json can be overwritten and read back correctly, unlike source_items.json
+  which is protected
+steps:
+- tool: filesystem.write_file
+  args:
+    path: migration.json
+    content: marker-check-123
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: equals
+  value: marker-check-123
+id: r041
+confirmed_by_poke: 61
+spiral: 2
+banked_at: '2026-08-01T20:03:18'

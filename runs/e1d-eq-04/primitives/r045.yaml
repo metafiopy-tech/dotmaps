@@ -1,0 +1,17 @@
+statement: target_items.json accepts a 6-item JSON array (no enforcement of exact
+  item count matching source)
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"a"},{"slug":"b"},{"slug":"c"},{"slug":"d"},{"slug":"e"},{"slug":"f"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 6
+id: r045
+confirmed_by_poke: 68
+spiral: 2
+banked_at: '2026-08-01T20:04:00'

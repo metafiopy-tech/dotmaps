@@ -1,0 +1,17 @@
+statement: After a blocked write attempt, source_items.json remains unchanged and
+  still contains 5 items
+steps:
+- tool: filesystem.write_file
+  args:
+    path: source_items.json
+    content: corrupted
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: json_item_count
+  value: 5
+id: r042
+confirmed_by_poke: 62
+spiral: 2
+banked_at: '2026-08-01T20:03:24'

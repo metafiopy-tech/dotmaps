@@ -1,0 +1,17 @@
+statement: Writing a JSON array with one item to target_items.json then reading it
+  back returns that exact content
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"test-item","title":"Test"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '[{"slug":"test-item","title":"Test"}]'
+id: r035
+confirmed_by_poke: 46
+spiral: 2
+banked_at: '2026-08-01T19:37:19'

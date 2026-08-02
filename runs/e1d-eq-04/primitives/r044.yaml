@@ -1,0 +1,17 @@
+statement: Writing a 2-item JSON array to target_items.json then reading it back yields
+  a JSON array of 2 items
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '[{"slug":"a"},{"slug":"b"}]'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: json_item_count
+  value: 2
+id: r044
+confirmed_by_poke: 66
+spiral: 2
+banked_at: '2026-08-01T20:03:43'

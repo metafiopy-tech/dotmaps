@@ -1,0 +1,17 @@
+statement: target_items.json accepts an empty string write (0 bytes) and reading it
+  back returns an empty string
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: ''
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: ''
+id: r050
+confirmed_by_poke: 77
+spiral: 2
+banked_at: '2026-08-01T20:04:38'

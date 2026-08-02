@@ -1,0 +1,17 @@
+statement: target_items.json can store a bare JSON number like '42' and reading it
+  back returns '42' unchanged
+steps:
+- tool: filesystem.write_file
+  args:
+    path: target_items.json
+    content: '42'
+- tool: filesystem.read_file
+  args:
+    path: target_items.json
+expect:
+  predicate: equals
+  value: '42'
+id: r046
+confirmed_by_poke: 69
+spiral: 2
+banked_at: '2026-08-01T20:04:05'
