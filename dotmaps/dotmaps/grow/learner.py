@@ -161,11 +161,31 @@ class ClaudeCodeLearner:
     NOT comparable across drivers; a registration must name ONE driver for
     ALL its runs. Tools disabled, one turn, JSON out. Unsets
     ANTHROPIC_API_KEY for the subprocess: in -p mode a present key is
-    always preferred over the subscription credential."""
+    always preferred over the subscription credential.
+
+    Q7 diagnosis (QUEEN_BUILD_BRIEF.md): the original --max-turns 1 call
+    reliably returned result=None / subtype=error_max_turns. Root cause
+    confirmed by direct observation (not guessed): Claude Code's DEFAULT
+    system prompt is the full agentic-coding persona, which reaches for a
+    tool on turn 1 (stop_reason=tool_use) even with the common tools
+    disallowed — burning the entire 1-turn budget before any text. Fix:
+    --system-prompt REPLACES that persona with a bare move-generator
+    instruction, which stops the tool reach and lets turn 1 go straight to
+    text. Confirmed live (subscription-billed, ~4 calls, ≈$0.20): the
+    fixed call returns subtype=success, num_turns=1, and a real parseable
+    move on the first attempt, every attempt."""
+
+    SYSTEM_PROMPT = ("You are a move generator for a research harness. "
+                     "You have no tools. Reply with ONE JSON object only, "
+                     "nothing else — no prose, no markdown fences.")
 
     def __init__(self, model: str = "claude-sonnet-5"):
         self.model = model
-        self.usd_estimate = 0.0   # reported total_cost_usd (0 on subscription)
+        self.usd_estimate = 0.0   # reported total_cost_usd (informational
+                                  # even on subscription billing — Q7 found
+                                  # this is NOT actually $0, contrary to the
+                                  # comment this replaces; kept as a cost
+                                  # ESTIMATE, per the attribute's name)
 
     def next_move(self, board: str):
         import json as _json
@@ -177,12 +197,15 @@ class ClaudeCodeLearner:
             out = subprocess.run(
                 ["claude", "-p", "--output-format", "json",
                  "--model", self.model, "--max-turns", "1",
-                 "--disallowedTools", "Bash,Edit,Write,Read,Grep,Glob,WebSearch"],
+                 "--system-prompt", self.SYSTEM_PROMPT,
+                 "--disallowedTools",
+                 "Bash,Edit,Write,Read,Grep,Glob,WebSearch,Task,TodoWrite,"
+                 "WebFetch,NotebookEdit"],
                 input=prompt, capture_output=True, text=True,
                 timeout=300, env=env)
             data = _json.loads(out.stdout)
             self.usd_estimate += float(data.get("total_cost_usd") or 0)
-            content = data.get("result", "")
+            content = data.get("result") or ""
         except Exception:
             return {"rest": True}
         move = _extract_move(content)

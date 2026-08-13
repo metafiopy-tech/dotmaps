@@ -1,0 +1,2 @@
+{"t": "2026-08-12T23:50:02", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 5 items", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 5}, "id": "r001"}}
+{"t": "2026-08-12T23:50:02", "event": "banked", "rule_id": "r001"}
