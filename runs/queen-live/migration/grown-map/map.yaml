@@ -35,3 +35,21 @@ dots:
     spiral: 1
     confirmed_by_poke: 6
     kind: invariant
+- id: r005
+  statement: migration.json's required_fields array is exactly ["title","price","date"]
+    (3 items)
+  verifier: verifiers/r005.py
+  depends_on: []
+  grown_from:
+    spiral: 0
+    confirmed_by_poke: 10
+    kind: invariant
+- id: r004
+  statement: Writing '[]' to target_items.json creates the file, and reading it back
+    returns exactly '[]'
+  verifier: verifiers/r004.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 8
+    kind: mutation
