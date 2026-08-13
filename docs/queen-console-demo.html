@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUEEN — colony console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#10181F; --panel:#161F28; --edge:#243140; --grid:#1B2530;
+    --bone:#DCE6EE; --dim:#7E93A3;
+    --honey:#E8A93D;            /* the queen's voice */
+    --signal:#E8541A;           /* frontier */
+    --verified:#2FBF83; --fail:#D9534F; --blueprint:#5B9BD5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'IBM Plex Sans',sans-serif;background:var(--night);color:var(--bone);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:26px 26px;line-height:1.55;font-size:15px;padding-bottom:70px;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 14px}
+  header{padding:34px 0 18px}
+  .crown{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--honey);text-transform:uppercase}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(38px,8vw,58px);line-height:1;color:var(--bone)}
+  h1 em{font-style:italic;color:var(--honey)}
+  .sub{color:var(--dim);font-size:14px;margin-top:6px;max-width:56ch}
+
+  /* ---- FIO SURFACE ---- */
+  .fio{border:1.5px solid var(--edge);border-left:4px solid var(--verified);background:var(--panel);
+       border-radius:4px;padding:14px 16px;margin:18px 0 10px;transition:border-color .4s}
+  .fio.hot{border-left-color:var(--honey);box-shadow:0 0 0 1px rgba(232,169,61,.35)}
+  .fio-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase}
+  .fio-msg{font-family:'Instrument Serif',serif;font-size:21px;margin-top:3px}
+  .fio-msg.calm{color:var(--dim)}
+  .fio-msg.hot{color:var(--honey)}
+
+  /* ---- TRIP FEED (signature) ---- */
+  .trips{margin:8px 0 22px;border:1.5px dashed var(--edge);border-radius:4px;padding:10px 14px;min-height:64px}
+  .trips-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase;display:flex;justify-content:space-between}
+  .trips-label b{color:var(--honey);font-weight:600}
+  .trip-line{font-family:'IBM Plex Mono',monospace;font-size:12px;margin-top:6px;opacity:0;transform:translateY(3px);transition:opacity .5s,transform .5s}
+  .trip-line.show{opacity:1;transform:none}
+  .trip-line .t-cert{color:var(--verified)} .trip-line .t-fail{color:var(--fail)}
+  .trip-line .t-block{color:var(--blueprint)} .trip-line .t-warn{color:var(--honey)}
+  .silence{color:#3A4A5A;font-family:'IBM Plex Mono',monospace;font-size:11px;margin-top:6px;font-style:italic}
+
+  /* ---- sections ---- */
+  section{margin:20px 0}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+  .sec-code{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;background:var(--edge);color:var(--honey);padding:3px 8px;border-radius:2px}
+  h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:22px}
+  .panel{background:var(--panel);border:1.5px solid var(--edge);border-radius:4px;padding:14px}
+  .note{font-size:12.5px;color:var(--dim);margin-top:8px;max-width:64ch}
+
+  /* intake */
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  button{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;border:1.5px solid var(--edge);
+         background:var(--night);color:var(--bone);padding:9px 13px;border-radius:3px;cursor:pointer}
+  button:hover{border-color:var(--honey);color:var(--honey)}
+  button.primary{background:var(--honey);border-color:var(--honey);color:var(--night)}
+  button.primary:hover{background:#F5BE5C;color:var(--night)}
+  button:disabled{opacity:.35;cursor:not-allowed}
+  button.picked{border-color:var(--honey);color:var(--honey)}
+  .task-line{font-size:14px;color:var(--bone);min-height:22px}
+
+  /* routing */
+  .preds{display:flex;flex-direction:column;gap:7px}
+  .pred{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:12px;
+        border:1px solid var(--edge);border-radius:3px;padding:8px 10px;opacity:0;transform:translateX(-6px);transition:all .4s}
+  .pred.show{opacity:1;transform:none}
+  .pred .pid{color:var(--dim);width:30px}
+  .pred .ptxt{flex:1;color:var(--bone)}
+  .badge{font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 7px;border-radius:2px;white-space:nowrap}
+  .badge.cov{background:rgba(47,191,131,.15);color:var(--verified)}
+  .badge.fro{background:rgba(232,84,26,.15);color:var(--signal)}
+  .badge.done{background:var(--verified);color:var(--night)}
+  .badge.shelf{background:rgba(232,169,61,.15);color:var(--honey)}
+
+  /* dispatch */
+  .insects{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:540px){.insects{grid-template-columns:1fr}}
+  .insect{border:1.5px solid var(--edge);border-radius:4px;padding:11px;background:var(--night);opacity:.25;transition:opacity .4s}
+  .insect.live{opacity:1;border-color:var(--signal)}
+  .insect.done{opacity:1;border-color:var(--verified)}
+  .insect.shelved{opacity:1;border-color:var(--honey)}
+  .in-name{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600}
+  .in-genes{font-size:11px;color:var(--dim);margin-top:4px}
+  .in-status{font-family:'IBM Plex Mono',monospace;font-size:11px;margin-top:6px}
+  .spark{display:flex;gap:2px;margin-top:6px;height:14px;align-items:flex-end}
+  .spark i{width:6px;background:var(--edge);display:block}
+  .spark i.w{background:var(--fail)} .spark i.c{background:var(--dim)} .spark i.d{background:var(--verified)}
+
+  /* governor + persistence */
+  .gov-row{display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:6px 0;border-top:1px solid var(--edge)}
+  .gov-row:first-child{border-top:none}
+  .meter{height:10px;background:var(--edge);border-radius:2px;overflow:hidden;margin-top:6px}
+  .meter i{display:block;height:100%;background:var(--honey);width:100%;transition:width .6s}
+  .meter-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--dim);margin-top:4px}
+
+  /* gatekeeper */
+  .audit{display:flex;flex-direction:column;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:12px}
+  .audit-row{display:flex;justify-content:space-between;border:1px solid var(--edge);border-radius:3px;padding:7px 10px}
+  .a-pend{color:var(--dim)} .a-pass{color:var(--verified)} .a-fail{color:var(--fail)}
+
+  /* homeostasis */
+  .homeo{display:flex;gap:8px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:11px}
+  .h-item{border:1px solid var(--edge);border-radius:3px;padding:6px 9px;color:var(--dim)}
+  .h-item.tick{color:var(--honey);border-color:var(--honey)}
+
+  footer{margin-top:34px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);line-height:1.9}
+  footer b{color:var(--honey)}
+  .controls{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap}
+  a{color:var(--blueprint)}
+  button:focus-visible{outline:2px solid var(--honey);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crown">colony console · night shift</div>
+  <h1>THE <em>QUEEN</em></h1>
+  <p class="sub">She reads, staffs, budgets, and escalates. She never polls, never nags, never advises — every rule is a door. This is a scripted simulation of one task moving through her body, built from the certified parts.</p>
+</header>
+
+<!-- FIO SURFACE -->
+<div class="fio" id="fio">
+  <div class="fio-label">your surface — the only thing she shows you</div>
+  <div class="fio-msg calm" id="fioMsg">Nothing needs you.</div>
+</div>
+
+<!-- TRIP FEED -->
+<div class="trips">
+  <div class="trips-label"><span>what she hears — trips only</span><b id="tripCount">0 signals</b></div>
+  <div id="tripFeed"><div class="silence">…silence. the colony works; she listens for what breaks.</div></div>
+</div>
+
+<!-- 1 INTAKE -->
+<section>
+  <div class="sec-head"><span class="sec-code">READ</span><h2>Intake → compile</h2></div>
+  <div class="panel">
+    <div class="presets">
+      <button data-task="0">Migrate the menu data</button>
+      <button data-task="1">Weekly supplier audit</button>
+      <button data-task="2">Ben's site health check</button>
+    </div>
+    <div class="task-line" id="taskLine">Pick a task. The frozen compiler turns it into checkable predicates.</div>
+  </div>
+</section>
+
+<!-- 2 ROUTE -->
+<section>
+  <div class="sec-head"><span class="sec-code">ROUTE</span><h2>Manifest coverage — nothing else</h2></div>
+  <div class="panel">
+    <div class="preds" id="preds"><div class="note">Predicates appear here after compile. Covered = certified skill runs for $0. Frontier = an equipped insect is dispatched to grow.</div></div>
+  </div>
+</section>
+
+<div class="controls">
+  <button class="primary" id="runBtn" disabled>Run the colony</button>
+  <button id="resetBtn">Reset</button>
+</div>
+
+<!-- 3 DISPATCH -->
+<section>
+  <div class="sec-head"><span class="sec-code">STAFF</span><h2>Dispatch — genes, not bodies</h2></div>
+  <div class="panel">
+    <div class="insects" id="insects">
+      <div class="insect" id="in0"><div class="in-name">insect-α</div><div class="in-genes">awaiting assembly</div><div class="in-status">—</div><div class="spark" id="sp0"></div></div>
+      <div class="insect" id="in1"><div class="in-name">insect-β</div><div class="in-genes">awaiting assembly</div><div class="in-status">—</div><div class="spark" id="sp1"></div></div>
+    </div>
+    <div class="note">Each insect is assembled fresh from certified skills + budget. Its scope is its map; it cannot matter outside its predicates.</div>
+  </div>
+</section>
+
+<!-- 4 GOVERNOR -->
+<section>
+  <div class="sec-head"><span class="sec-code">BUDGET</span><h2>Abort governor + persistence budget</h2></div>
+  <div class="panel">
+    <div class="gov-row"><span>oracle validity (runs first, always)</span><span id="govOracle" class="a-pend">pending</span></div>
+    <div class="gov-row"><span>trajectory verdicts</span><span id="govTraj" class="a-pend">wall · churn · directional</span></div>
+    <div class="gov-row"><span>objective provenance</span><span id="govProv" class="a-pass">inherited from Fio ✓</span></div>
+    <div class="meter"><i id="persist"></i></div>
+    <div class="meter-label">persistence budget — spent independent of returns; the reason three abort criteria don't make a quitting machine</div>
+  </div>
+</section>
+
+<!-- 5 GATEKEEPER -->
+<section>
+  <div class="sec-head"><span class="sec-code">AUDIT</span><h2>Gatekeeper — the Composter's quarterly exam</h2></div>
+  <div class="panel">
+    <div class="audit">
+      <div class="audit-row"><span>state-change: outputs alter what Fio does</span><span class="a-pend" id="au1">pending</span></div>
+      <div class="audit-row"><span>transfer: value shows up outside its own loop</span><span class="a-pend" id="au2">pending</span></div>
+      <div class="audit-row"><span>parasite check: its friction class is shrinking</span><span class="a-pend" id="au3">pending</span></div>
+    </div>
+    <div class="note">Fail any one → demote to candidate and re-earn. A mutualist that can't pass this is an oxpecker keeping the wound open.</div>
+  </div>
+</section>
+
+<!-- 6 HOMEOSTASIS -->
+<section>
+  <div class="sec-head"><span class="sec-code">CARE</span><h2>Homeostasis — the colony's water and sleep</h2></div>
+  <div class="panel">
+    <div class="homeo">
+      <span class="h-item" id="h-water">water · context.refresh</span>
+      <span class="h-item" id="h-snack">snack · self-eval ping</span>
+      <span class="h-item" id="h-hug">hug · anti-spiral</span>
+      <span class="h-item" id="h-sleep">sleep · consolidate</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <b>Her laws, all earned:</b><br>
+  gates, never advice (36/36 vs 5/10) · dispatch for depth, never savings (the claim is dead, 52 runs) ·
+  hear trips, never poll · oracle before verdict · one mutualist at a time · her depth comes from time-in-service<br><br>
+  spec: QUEEN_v0_spec.md · parts: EQUIP gates G0–G4 · this console is a demo of operation, not the product
+</footer>
+
+</div>
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $=function(id){return document.getElementById(id)};
+  var TASKS=[
+    {name:"Migrate the menu data → new POS format",
+     preds:[
+      {t:"source file parses and has expected count",cov:"json-array-check ($0)"},
+      {t:"every item keeps title, price, date",cov:"field-integrity ($0)"},
+      {t:"migrated file written and round-trips",cov:null},
+      {t:"no duplicate slugs in target",cov:null}]},
+    {name:"Weekly supplier audit → flag price drift",
+     preds:[
+      {t:"invoice sheet totals reconcile",cov:"totals-recorded ($0)"},
+      {t:"unit prices within 5% of last week",cov:null},
+      {t:"missing-invoice list generated",cov:null},
+      {t:"flag report saved to closing log",cov:"file-present-check ($0)"}]},
+    {name:"Ben's site health check → certify or convict",
+     preds:[
+      {t:"all pages return 200",cov:"http-status-sweep ($0)"},
+      {t:"booking flow writes a sheet row",cov:"sheets-append ($0)"},
+      {t:"lighthouse perf ≥ 80",cov:null},
+      {t:"no console errors on load",cov:null}]}
+  ];
+  var state=null, timer=null, tripN=0;
+
+  function trip(html,cls){
+    tripN++; $('tripCount').textContent=tripN+' signal'+(tripN>1?'s':'');
+    var feed=$('tripFeed');
+    if(tripN===1) feed.innerHTML='';
+    var d=document.createElement('div');
+    d.className='trip-line'; d.innerHTML='<span class="'+cls+'">▸</span> '+html;
+    feed.appendChild(d);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('show')})});
+  }
+  function fio(msg,hot){
+    $('fio').classList.toggle('hot',!!hot);
+    var m=$('fioMsg'); m.textContent=msg; m.className='fio-msg '+(hot?'hot':'calm');
+  }
+  function homeo(id){
+    var el=$('h-'+id); el.classList.add('tick');
+    setTimeout(function(){el.classList.remove('tick')}, reduced?400:1400);
+  }
+
+  document.querySelectorAll('.presets button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.presets button').forEach(function(x){x.classList.remove('picked')});
+      b.classList.add('picked');
+      compile(+b.dataset.task);
+    });
+  });
+  $('resetBtn').addEventListener('click',reset);
+  $('runBtn').addEventListener('click',run);
+
+  function reset(){
+    if(timer){clearTimeout(timer);timer=null}
+    state=null; tripN=0;
+    $('tripCount').textContent='0 signals';
+    $('tripFeed').innerHTML='<div class="silence">…silence. the colony works; she listens for what breaks.</div>';
+    fio('Nothing needs you.',false);
+    $('taskLine').textContent='Pick a task. The frozen compiler turns it into checkable predicates.';
+    $('preds').innerHTML='<div class="note">Predicates appear here after compile.</div>';
+    ['in0','in1'].forEach(function(id,i){
+      var el=$(id); el.className='insect';
+      el.children[1].textContent='awaiting assembly';
+      el.children[2].textContent='—';
+      $('sp'+i).innerHTML='';
+    });
+    $('govOracle').textContent='pending'; $('govOracle').className='a-pend';
+    $('govTraj').textContent='wall · churn · directional'; $('govTraj').className='a-pend';
+    $('persist').style.width='100%';
+    ['au1','au2','au3'].forEach(function(id){$(id).textContent='pending';$(id).className='a-pend'});
+    document.querySelectorAll('.presets button').forEach(function(x){x.classList.remove('picked')});
+    $('runBtn').disabled=true;
+  }
+
+  function compile(i){
+    reset();
+    document.querySelectorAll('.presets button')[i].classList.add('picked');
+    state={task:TASKS[i],step:0};
+    $('taskLine').textContent='COMPILING (frozen T2 rubric): '+TASKS[i].name;
+    var box=$('preds'); box.innerHTML='';
+    TASKS[i].preds.forEach(function(p,k){
+      var d=document.createElement('div');d.className='pred';
+      d.innerHTML='<span class="pid">P'+(k+1)+'</span><span class="ptxt">'+p.t+'</span>'+
+        (p.cov?'<span class="badge cov">COVERED · '+p.cov+'</span>':'<span class="badge fro">FRONTIER → dispatch</span>');
+      box.appendChild(d);
+      setTimeout(function(){d.classList.add('show')}, reduced?0:220*(k+1));
+    });
+    setTimeout(function(){$('runBtn').disabled=false;
+      $('taskLine').textContent=TASKS[i].name+' — 2 covered ($0), 2 frontier.';
+    }, reduced?50:1100);
+  }
+
+  function spark(id,seq){
+    var el=$('sp'+id); el.innerHTML='';
+    seq.split('').forEach(function(ch,i){
+      var b=document.createElement('i');
+      b.style.height=(4+((i*3)%9))+'px';
+      b.className=ch==='w'?'w':ch==='c'?'c':'d';
+      el.appendChild(b);
+    });
+  }
+
+  function run(){
+    if(!state) return;
+    $('runBtn').disabled=true;
+    var frontier=[]; state.task.preds.forEach(function(p,k){if(!p.cov)frontier.push(k)});
+    var covBadges=document.querySelectorAll('.badge.cov');
+    var froBadges=document.querySelectorAll('.badge.fro');
+    var t=0, step=function(fn,dt){t+=reduced?60:dt; timer=setTimeout(fn,t)};
+
+    // covered predicates execute free, silently — no trips, that's the point
+    step(function(){covBadges.forEach(function(b){b.textContent='PASSED · $0.00 · no model';b.className='badge done'})},600);
+
+    // staff two insects (genes)
+    step(function(){
+      var g=['json-array-check','field-integrity','sheets-append','file-present-check'];
+      ['in0','in1'].forEach(function(id,i){
+        var el=$(id); el.classList.add('live');
+        el.children[0].textContent='insect-'+( i? 'β':'α')+' → P'+(frontier[i]+1);
+        el.children[1].textContent='genes: '+g[i]+', '+g[(i+2)%4]+' · budget: 40 steps';
+        el.children[2].textContent='growing…';
+      });
+      $('govOracle').textContent='verifier passes (shows up · updates · coupled · silence means no)';
+      $('govOracle').className='a-pass';
+    },900);
+
+    // homeostasis ticks + growth
+    step(function(){homeo('water')},1200);
+    step(function(){spark(0,'ddcdd'); $('in0').children[2].textContent='directional — failure mode migrating, keep spending'; $('govTraj').textContent='α: DIRECTIONAL ✓'; $('govTraj').className='a-pass';},1400);
+    step(function(){spark(1,'ccccc'); $('in1').children[2].textContent='churn — variance, no displacement';},1300);
+    step(function(){homeo('snack')},700);
+
+    // trips begin (sparse)
+    step(function(){trip('insect-β · P'+(frontier[1]+1)+' → <span class="t-warn">CHURN verdict (chi-null)</span> — shelved, re-check scheduled t+500','t-warn');
+      $('in1').classList.remove('live'); $('in1').classList.add('shelved');
+      $('in1').children[2].textContent='SHELVED · not a grave — Whittle re-check queued';
+      froBadges[1].textContent='SHELVED · re-check t+500'; froBadges[1].className='badge shelf';
+      $('persist').style.width='72%';
+    },1600);
+    step(function(){homeo('hug')},900);
+    step(function(){trip('insect-α · gate — <span class="t-block">2 in-flight duplicates BLOCKED</span> at the door','t-block')},1500);
+    step(function(){spark(0,'ddcdddd'); $('persist').style.width='58%';},900);
+    step(function(){trip('insect-α · P'+(frontier[0]+1)+' → skill banked → probe 20/20 → <span class="t-cert">CERTIFIED [0.839, 1.00]</span>','t-cert');
+      $('in0').classList.remove('live'); $('in0').classList.add('done');
+      $('in0').children[2].textContent='CERTIFIED — skill enters the manifest; next colony gets it free';
+      froBadges[0].textContent='CERTIFIED · now covered forever'; froBadges[0].className='badge done';
+    },1800);
+
+    // gatekeeper audit
+    step(function(){$('au1').textContent='PASS — briefs changed 3 session-starts';$('au1').className='a-pass'},1400);
+    step(function(){$('au2').textContent='PASS — extraction reused in Ben audit';$('au2').className='a-pass'},900);
+    step(function(){$('au3').textContent='PASS — cold-start friction ↓ 40%';$('au3').className='a-pass';
+      trip('gatekeeper · <span class="t-cert">Composter re-certified mutualist</span> — quarterly','t-cert');
+    },900);
+
+    // escalation — the ONE thing that reaches Fio
+    step(function(){
+      trip('escalation · P'+(frontier[1]+1)+' shelved twice — <span class="t-warn">needs a human decision</span>','t-warn');
+      fio('One thing needs you: "'+state.task.preds[frontier[1]].t+'" shelved twice. Redesign the check, or park it?',true);
+    },1700);
+
+    // sleep
+    step(function(){homeo('sleep');
+      trip('sleep · consolidation — episodic → semantic, noise discarded, manifest +1 skill','t-block');
+      $('runBtn').disabled=false;
+    },1800);
+  }
+})();
+</script>
+</body>
+</html>

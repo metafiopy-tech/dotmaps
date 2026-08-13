@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dot Maps — Weak-Model-as-Instrument</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2F5F7; --grid:#DAE2E8; --ink:#17242E; --ink-soft:#4A5A66;
+    --blueprint:#1E5AA8; --signal:#E8541A; --verified:#1F8A5D; --fail:#B3322E;
+    --card:#FFFFFF; --rule:#C3CFD8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'IBM Plex Sans',sans-serif; color:var(--ink); background:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:28px 28px; line-height:1.6; font-size:16px;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  /* ---------- header ---------- */
+  header{padding:72px 0 40px;border-bottom:3px solid var(--ink)}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--blueprint);margin-bottom:14px}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(52px,9vw,96px);line-height:.95;letter-spacing:-.01em}
+  h1 .dot{color:var(--signal)}
+  .thesis{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(21px,3.4vw,28px);color:var(--ink-soft);margin-top:18px;max-width:640px}
+  .oneliner{font-family:'IBM Plex Mono',monospace;font-size:13.5px;background:var(--ink);color:var(--paper);display:inline-block;padding:9px 14px;margin-top:26px;border-radius:2px}
+  .badges{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px}
+  .badge{font-family:'IBM Plex Mono',monospace;font-size:11.5px;border:1.5px solid var(--ink);padding:5px 10px;border-radius:2px;background:var(--card)}
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;background:var(--paper);border-bottom:1.5px solid var(--rule);z-index:50}
+  nav .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:0;padding-bottom:0}
+  nav a{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);text-decoration:none;padding:13px 12px;white-space:nowrap;border-bottom:3px solid transparent}
+  nav a:hover,nav a:focus-visible{color:var(--ink);border-bottom-color:var(--signal)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--blueprint);outline-offset:2px}
+  /* ---------- sections styled as protocol form ---------- */
+  section{padding:64px 0;border-bottom:1.5px solid var(--rule)}
+  .field-label{display:flex;align-items:baseline;gap:14px;margin-bottom:26px}
+  .field-code{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--card);background:var(--blueprint);padding:4px 9px;border-radius:2px;letter-spacing:.08em}
+  h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(30px,4.5vw,42px)}
+  h3{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:17px;margin:30px 0 10px}
+  p{max-width:70ch;margin-bottom:14px}
+  .muted{color:var(--ink-soft)}
+  code{font-family:'IBM Plex Mono',monospace;font-size:.88em;background:#E5EBF0;padding:1px 5px;border-radius:2px}
+  pre{font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.55;background:var(--ink);color:#DCE6EE;padding:18px;border-radius:3px;overflow-x:auto;margin:16px 0}
+  pre .k{color:#8FC1FF} pre .s{color:#FFC98F} pre .c{color:#7E93A3}
+  .fill{border:1.5px dashed var(--signal);background:#FDF1EA;padding:12px 14px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#8C3A12;margin:14px 0}
+  .fill b{letter-spacing:.06em}
+  .note{border-left:3px solid var(--blueprint);background:var(--card);padding:12px 16px;margin:16px 0;font-size:14.5px}
+  .src{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);margin-top:6px}
+  /* ---------- instrument demo ---------- */
+  .bench{background:var(--card);border:2px solid var(--ink);border-radius:4px;padding:22px;box-shadow:6px 6px 0 rgba(23,36,46,.12)}
+  .bench-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+  .bench-title{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+  .controls{display:flex;gap:8px;flex-wrap:wrap}
+  button{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 14px;border-radius:2px;cursor:pointer}
+  button:hover{background:var(--ink);color:var(--paper)}
+  button.primary{background:var(--signal);border-color:var(--signal);color:#fff}
+  button.primary:hover{background:#C6440F;border-color:#C6440F}
+  .maps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:760px){.maps{grid-template-columns:1fr}}
+  .map-card{border:1.5px solid var(--rule);border-radius:3px;padding:14px;background:var(--paper)}
+  .map-name{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .stamp{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;padding:3px 7px;border-radius:2px;border:1.5px solid transparent}
+  .stamp.pending{color:var(--ink-soft);border-color:var(--rule)}
+  .stamp.cert{color:#fff;background:var(--verified);transform:rotate(-2deg)}
+  .stamp.failed{color:#fff;background:var(--fail);transform:rotate(-2deg)}
+  canvas{width:100%;image-rendering:pixelated;border:1.5px solid var(--rule);border-radius:2px;background:#10181F;display:block}
+  .stats{font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-top:10px;color:var(--ink-soft)}
+  .stats b{color:var(--ink)}
+  .ivl-track{position:relative;height:26px;background:#E5EBF0;border-radius:2px;margin-top:8px;overflow:hidden}
+  .ivl-bar{position:absolute;top:7px;height:12px;background:var(--blueprint);border-radius:2px;transition:left .25s,width .25s}
+  .ivl-point{position:absolute;top:4px;width:3px;height:18px;background:var(--signal);transition:left .25s}
+  .ivl-thresh{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.55}
+  .ivl-thresh::after{content:"θ";position:absolute;top:-2px;left:4px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink)}
+  .legend{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin-top:14px}
+  .legend span{display:inline-block;margin-right:14px}
+  .swatch{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+  /* ---------- inversion diagram ---------- */
+  .inv{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+  @media(max-width:640px){.inv{grid-template-columns:1fr}}
+  .inv-card{background:var(--card);border:1.5px solid var(--rule);border-radius:3px;padding:18px}
+  .inv-card.hot{border-color:var(--signal);border-width:2px}
+  .inv-card h4{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;color:var(--ink-soft)}
+  .inv-card.hot h4{color:var(--signal)}
+  .flow{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:2}
+  .flow .fx{color:var(--blueprint);font-weight:600}
+  .flow .meas{color:var(--signal);font-weight:600}
+  /* ---------- protocol steps ---------- */
+  ol.protocol{counter-reset:step;list-style:none;max-width:74ch}
+  ol.protocol li{counter-increment:step;position:relative;padding:0 0 22px 58px}
+  ol.protocol li::before{content:counter(step,decimal-leading-zero);position:absolute;left:0;top:0;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--card);background:var(--ink);width:40px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:2px}
+  ol.protocol li::after{content:"";position:absolute;left:19px;top:34px;bottom:2px;width:1.5px;background:var(--rule)}
+  ol.protocol li:last-child::after{display:none}
+  ol.protocol h3{margin-top:0}
+  /* ---------- provenance ---------- */
+  .prov{font-family:'IBM Plex Mono',monospace;font-size:12.5px;border-collapse:collapse;width:100%}
+  .prov td{border-top:1px solid var(--rule);padding:9px 10px 9px 0;vertical-align:top}
+  .prov td:first-child{white-space:nowrap;color:var(--blueprint);padding-right:18px}
+  footer{padding:50px 0 70px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft)}
+  ul.plain{max-width:70ch;margin:0 0 14px 20px}
+  ul.plain li{margin-bottom:8px}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important} html{scroll-behavior:auto} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">A verification instrument · pre-registered · negatives published</div>
+    <h1>DOT MAPS<span class="dot">.</span></h1>
+    <p class="thesis">Hold the model weak. Grade the map.</p>
+    <div class="oneliner">"I held a weak model fixed and used its convergence to grade map quality."</div>
+    <div class="badges">
+      <span class="badge">WEAK-MODEL-AS-INSTRUMENT</span>
+      <span class="badge">WILSON INTERVALS</span>
+      <span class="badge">REPLAY = TRUST CERTIFICATE</span>
+      <span class="badge">ADVERSARIAL POSTURE</span>
+    </div>
+  </div>
+</header>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <a href="#instrument">§1 Instrument</a>
+    <a href="#claim">§2 Claim</a>
+    <a href="#paper">§3 Paper</a>
+    <a href="#howto">§4 Protocol</a>
+    <a href="#sandbox">§5 Agent Sandbox</a>
+    <a href="#findings">§6 Findings</a>
+    <a href="#provenance">§7 Provenance</a>
+  </div>
+</nav>
+
+<!-- ================= §1 THE INSTRUMENT ================= -->
+<section id="instrument">
+  <div class="wrap">
+    <div class="field-label"><span class="field-code">§1 · LIVE</span><h2>The instrument, running</h2></div>
+    <p>One frozen weak agent. Three maps of unknown quality. The agent attempts each map repeatedly; its convergence rate — with a Wilson score interval — is the grade. When the interval's <b>lower bound</b> clears the pre-registered threshold θ&nbsp;=&nbsp;0.70, the map is <b>certified</b>. When the <b>upper bound</b> falls below θ after n&nbsp;≥&nbsp;50 trials, the map <b>fails</b> — and the negative is published, not buried. The agent never changes. Only the map is on trial.</p>
+
+    <div class="bench">
+      <div class="bench-head">
+        <span class="bench-title">Bench · frozen agent w-0 · θ = 0.70 · pre-registered</span>
+        <div class="controls">
+          <button class="primary" id="runBtn">Run trials</button>
+          <button id="stepBtn">+1 trial</button>
+          <button id="resetBtn">Reset bench</button>
+        </div>
+      </div>
+      <div class="maps" id="mapsRow"></div>
+      <div class="legend">
+        <span><span class="swatch" style="background:var(--signal)"></span>observed rate</span>
+        <span><span class="swatch" style="background:var(--blueprint)"></span>95% Wilson interval</span>
+        <span><span class="swatch" style="background:var(--ink)"></span>θ threshold</span>
+        <span><span class="swatch" style="background:#10181F;border:1px solid var(--rule)"></span>replay tape</span>
+      </div>
+    </div>
+
+    <div class="note"><b>What's simulated here:</b> each map has a hidden traversal probability standing in for real predicate-map quality; trials are draws against it. In the real instrument, a trial is a full sandboxed run of the frozen agent against the map's predicates, and the replay tape is a verbatim, watchable record a counterparty can audit. The statistics — Wilson intervals, thresholds, certify/fail logic — are exactly what runs in v0.</div>
+  </div>
+</section>
+
+<!-- ================= §2 THE CLAIM ================= -->
+<section id="claim">
+  <div class="wrap">
+    <div class="field-label"><span class="field-code">§2 · CLAIM</span><h2>The inversion</h2></div>
+    <p>The literature uses weak models as the thing to be improved, supervised, or scaled past. Dot Maps inverts the direction of measurement: the weak model is the <b>fixed instrument</b>, and the environment — the predicate map — is what gets graded.</p>
+    <div class="inv">
+      <div class="inv-card">
+        <h4>Literature direction</h4>
+        <div class="flow">environment <span class="fx">[fixed]</span><br>&nbsp;&nbsp;↓ shapes<br>weak model <span class="meas">[measured, improved]</span></div>
+        <p class="muted" style="font-size:13.5px;margin-top:10px">Weak-to-strong generalization, harness engineering, curriculum design: hold the world steady, lift the agent.</p>
+      </div>
+      <div class="inv-card hot">
+        <h4>Dot Maps direction</h4>
+        <div class="flow">weak model <span class="fx">[fixed]</span><br>&nbsp;&nbsp;↓ probes<br>map <span class="meas">[measured, certified]</span></div>
+        <p class="muted" style="font-size:13.5px;margin-top:10px">Freeze the agent, read its convergence as a grade of the map. Sovereign verifiers issue the certificate; the replay is the proof.</p>
+      </div>
+    </div>
+    <h3>Why adversarial, not cooperative</h3>
+    <p>Harness engineering builds for the organization that trusts its own harness. Dot Maps builds for the <b>counterparty who doesn't</b>: frozen rules, critic pipelines, cheating detection, and a watchable replay any third party can verify. The cooperative frame asks "did our agent do well?" The adversarial frame asks "can you prove it to someone with no reason to believe you?"</p>
+    <h3>The confound, stated up front</h3>
+    <p>A fixed weak model's convergence might measure how <i>legible</i> a map is to that particular model rather than the map's intrinsic quality. These correlate but are not identical. The mitigation is in the design: expand to a grid of <b>3+ weak models × 3+ map sources</b>, pre-registered. If the convergence <i>ranking</i> of maps is stable across different weak instruments, single-model legibility is ruled out as the sole explanation. This is the first limitation in the paper, not a footnote.</p>
+  </div>
+</section>
+
+<!-- ================= §3 THE PAPER ================= -->
+<section id="paper">
+  <div class="wrap">
+    <div class="field-label"><span class="field-code">§3 · PAPER</span><h2>The writeup — 8 pages, workshop format</h2></div>
+
+    <h3>1 · Introduction</h3>
+    <p>One paragraph of thesis context: when generation is cheap, the scarce load-bearing function is the mechanism that decides what's real. The field is converging on this independently, so the thesis carries no moat — <b>the instrument is the moat</b>. The paper is about the instrument.</p>
+
+    <h3>2 · Method</h3>
+    <ul class="plain">
+      <li><b>Predicate maps</b> — structured, certifiable descriptions of a workflow as verifiable predicates.</li>
+      <li><b>Sovereign verifiers</b> — independent verifiers issue certificates; no self-grading.</li>
+      <li><b>Frozen rules</b> — the cheap agent and its rule set are pinned before any run.</li>
+      <li><b>Replay as trust certificate</b> — a watchable record replaces "trust me."</li>
+    </ul>
+
+    <h3>3 · Pre-registration</h3>
+    <p>Thresholds and kill criteria published verbatim before execution. Certification: interval lower bound ≥ θ. Failure: upper bound &lt; θ at n ≥ minimum. Negatives are results, not embarrassments.</p>
+
+    <h3>4 · Experiments</h3>
+    <p>The v0 result plus the expanded grid: 3+ weak models × 3+ map sources, at least two task domains <b>not constructed by the author</b>. Client-derived workflows enter as case studies only — uncontrolled samples can't be pre-registered, so they support external validity without carrying core claims.</p>
+    <ul class="plain">
+      <li><b>v0 result (Run 005):</b> frontier learner (claude-sonnet-5), fresh API calls, zero session context, answer key withheld — banked <b>4 primitives</b>, every one a real discriminating check; honestly fogged ~20 false hypotheses; grew a map that cleared the readout with <b>zero circular checks</b> (first ever); probe-certified <b>5/5</b>; total cost <b>$0.50</b>. Pre-registered v0 signal <b>MET</b>: an agent grew a certifiable map with no task description and no oracle.</li>
+      <li><b>Stated caveats, kept verbatim:</b> all four banked dots are seed invariants — traversability is vacuous until a learner banks mutation rules; recovery overlap with the human-authored map is genuine but shallow; <b>one run, one model</b>. "Small, honest, real" is the correct size of this result.</li>
+      <li><b>Wilson intervals born in production:</b> map-content-migration v0.1.1 completed live end-to-end by qwen2.5-coder:7b, probe-certified 5/5 — then went <b>0/5</b> after an environment-trivial prompt change. Certification now carries Wilson intervals (that map: <b>[0.57, 1.00]</b>) and re-certifies on any version change.</li>
+    </ul>
+    <div class="note"><b>Source:</b> session <i>The killer app for AI adoption</i> (2026-07-16) — runs 001–005, hull v0.1 launch record.</div>
+    <ul class="plain">
+      <li><b>Runs 001–004:</b> convicted by the same gates that certified Run 005 — the instrument's discrimination demonstrated on its own record.</li>
+      <li><b>H1 — killed by instrumentation, not falsified:</b> four planted-quality map variants × 5 probe runs each — all four tiers went 5/5 (zero separation; the 7B flies over the road). The 3B floors at 0/5; the 8B eats exactly one dot per run and starves. No owned model lands in the 20–80% measurement window. Banked insight: <b>assay across model families, not sizes</b>. Question open until the instrument exists.</li>
+      <li><b>The certification regression:</b> a 5/5-certified map going 0/5 on an environment-trivial prompt change — published, and converted into method (intervals + re-certification on version change).</li>
+      <li><b>Bottleneck ladder:</b> 7B couldn't author checks; 14B couldn't select moves; the frontier learner was capped by the harness's own ~120-char observation window — when the model stops being the bottleneck, the instrument starts.</li>
+    </ul>
+
+    <h3>5 · Limitations</h3>
+    <p>Legibility confound first (§2 above). Then: sample size, generalization bounds of the certified predicate vocabulary, and cost scaling of the verification grid.</p>
+
+    <h3>6 · Related work</h3>
+    <ul class="plain">
+      <li>Weak-to-strong generalization — the contrast class; same actors, inverse direction.</li>
+      <li>LLM-as-judge calibration — adjacent measurement-validity literature.</li>
+      <li>Verifier construction for agent benchmarks; SWE-bench test-patch methodology.</li>
+      <li>Test-suite insufficiency and oracle literature: EvalPlus, PatchDiff, mutation testing, property-based testing, metamorphic relations. (Reference list already harvested in the incompleteness research brief: Smith et al. ESEC/FSE 2015; Valentin et al. AAAI 2026; Petrović et al.; Meta ACH/TestGen-LLM.)</li>
+      <li>Harness engineering — the cooperative-posture counterpart. Its evaluation guidance describes the measurement Dot Maps ships.</li>
+    </ul>
+    <div class="note"><b>Risk, logged:</b> adversarial literature contact hasn't happened since the ideas moved. One of these areas may contain the result from another angle. That check is a <i>pre-writing</i> task.</div>
+
+    <h3>7 · Reproducibility appendix</h3>
+    <p>One-command replay, pinned models, frozen rules documented. LaTeX, not TypeScript — the pixel replay is the appendix, not the argument.</p>
+  </div>
+</section>
+
+<!-- ================= §4 HOW TO USE ================= -->
+<section id="howto">
+  <div class="wrap">
+    <div class="field-label"><span class="field-code">§4 · PROTOCOL</span><h2>How to run the instrument</h2></div>
+    <ol class="protocol">
+      <li><h3>Write the map</h3><p>Decompose the workflow into verifiable predicates — each one a check a machine can pass or fail, no judgment calls. The map is the artifact under test.</p></li>
+      <li><h3>Freeze the instrument</h3><p>Pin the weak model (exact version), its rule set, and its prompt scaffold. From this point, touching the agent invalidates the run.</p></li>
+      <li><h3>Pre-register</h3><p>Publish θ, minimum n, and kill criteria before the first trial. What would count as failure is written down while you still don't know the answer.</p></li>
+      <li><h3>Run the grid</h3><p>The frozen agent attempts the map repeatedly, sandboxed. Every trial produces a replay tape. Convergence accumulates; Wilson intervals narrow.</p></li>
+      <li><h3>Read the verdict</h3><p>Lower bound clears θ → the sovereign verifier issues a certificate bound to the replay. Upper bound falls below θ → the map fails, and the negative ships with the same visibility as a win.</p></li>
+      <li><h3>Hand over the certificate</h3><p>The consumer of the map gets the predicate list, the certificate, and the replay. They don't have to trust you — they can watch.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= §5 AGENT SANDBOX ================= -->
+<section id="sandbox">
+  <div class="wrap">
+    <div class="field-label"><span class="field-code">§5 · SANDBOX</span><h2>Agents consuming Dot Maps: the sandbox upgrade</h2></div>
+    <p>The same instrument that grades maps for humans upgrades a sandbox for agents. Today's sandboxes answer one question: <i>did the code run?</i> A Dot-Maps-equipped sandbox answers a stronger one: <i>can this workflow be certifiably traversed — and here's the tape.</i> Three integration surfaces:</p>
+
+    <h3>A · The map bundle (context surface)</h3>
+    <p>Ships like an <code>AGENTS.md</code> — a context bundle the agent reads before touching the workflow. Predicates, frozen rules, current certificate status. The agent doesn't discover the environment; it's handed the certified geometry of it.</p>
+<pre><span class="c">// dotmap.json — consumed by any agent entering the sandbox</span>
+{
+  <span class="k">"map_id"</span>: <span class="s">"sheets-booking-flow.v3"</span>,
+  <span class="k">"predicates"</span>: [
+    { <span class="k">"id"</span>: <span class="s">"P1"</span>, <span class="k">"check"</span>: <span class="s">"auth.jwt_valid"</span>,        <span class="k">"verifier"</span>: <span class="s">"sv-auth"</span> },
+    { <span class="k">"id"</span>: <span class="s">"P2"</span>, <span class="k">"check"</span>: <span class="s">"sheet.row_appended"</span>,     <span class="k">"verifier"</span>: <span class="s">"sv-data"</span> },
+    { <span class="k">"id"</span>: <span class="s">"P3"</span>, <span class="k">"check"</span>: <span class="s">"booking.confirmed_email"</span>, <span class="k">"verifier"</span>: <span class="s">"sv-io"</span> }
+  ],
+  <span class="k">"frozen_rules"</span>: { <span class="k">"model"</span>: <span class="s">"w-0@pinned-sha"</span>, <span class="k">"max_steps"</span>: 40 },
+  <span class="k">"certificate"</span>: {
+    <span class="k">"status"</span>: <span class="s">"CERTIFIED"</span>, <span class="k">"theta"</span>: 0.70,
+    <span class="k">"wilson_lower"</span>: 0.57, <span class="k">"wilson_upper"</span>: 1.00, <span class="k">"n"</span>: 5,
+    <span class="k">"replay_uri"</span>: <span class="s">"replays/sheets-booking-flow.v3/"</span>,
+    <span class="k">"issued_by"</span>: <span class="s">"sv-root"</span>, <span class="k">"preregistration"</span>: <span class="s">"prereg/2026-07-XX.md"</span>
+  }
+}</pre>
+
+    <h3>B · The verifier endpoint (tool surface)</h3>
+    <p>Exposed to agents as a tool (MCP-shaped): submit a traversal, get a graded verdict per predicate plus a replay pointer. The agent can't self-grade; the verdict comes from the sovereign verifier or it doesn't count.</p>
+<pre><span class="c">// tool: dotmaps.verify_traversal</span>
+request:  { <span class="k">map_id</span>, <span class="k">trajectory</span> }
+response: { <span class="k">verdict</span>: <span class="s">"pass"</span>|<span class="s">"fail"</span>,
+            <span class="k">predicates</span>: [{id, passed, evidence}],
+            <span class="k">replay_uri</span>, <span class="k">running_interval</span>: [lo, hi] }</pre>
+
+    <h3>C · The promotion loop (lifecycle surface)</h3>
+    <p>How an agent team uses the sandbox as a ladder rather than a cage:</p>
+    <ol class="protocol">
+      <li><h3>Admit</h3><p>New workflow enters as an uncertified map. Any agent may attempt it; nothing it produces is trusted downstream.</p></li>
+      <li><h3>Traverse</h3><p>The frozen weak instrument runs trials. Stronger agents may also run — their traversals generate candidate map <i>revisions</i>, never grades.</p></li>
+      <li><h3>Certify</h3><p>The interval clears θ under the weak instrument → certificate issued. The map is now a trusted rung: downstream agents may build on outputs that pass its predicates.</p></li>
+      <li><h3>Promote / demote</h3><p>Certified maps compose into larger maps. Any predicate drift (API change, environment shift) triggers re-verification; a failed re-check demotes the map and everything stacked on it — substrate-level honesty.</p></li>
+    </ol>
+    <div class="note"><b>Why this is an upgrade and not a wrapper:</b> the sandbox's trust boundary moves from "the code executed" to "a fixed, auditable instrument converged on it, within pre-registered bounds, on tape." That's the difference between a playground and an exam — and it's what lets one agent's work become another agent's ground truth.</div>
+  </div>
+</section>
+
+<!-- ================= §6 FINDINGS ================= -->
+<section id="findings">
+  <div class="wrap">
+    <div class="field-label"><span class="field-code">§6 · FINDINGS</span><h2>First contact: four findings from one real procedure</h2></div>
+    <p>2026-07-30 — the translation layer met a real restaurant closing procedure, described by its owner. Four compile-test rounds: three published failures, one certification. Each failure produced a design finding now binding on the method. Full record: <i>Case Study — Closing Procedure, Four Rounds</i>.</p>
+
+    <h3>F1 · Branch flattening</h3>
+    <p>The compiler collapsed "if variance &gt; $20, alert the manager" into a gate requiring variance ≤ $20 — a conditional flattened into a pass requirement. <b>Consequence:</b> predicate schema needs explicit branch semantics; compilers must preserve if/then structure.</p>
+
+    <h3>F2 · The evidence ladder</h3>
+    <p>Human-legible ≠ machine-verifiable. Physical-world steps bottom out in evidence artifacts (a named file, a written count) because verifiers can't enter the kitchen. <b>Consequence:</b> verification tiers are real — T1 judgment / T2 named observable state / T3 tamper-evident attestation — and the schema needs an evidence-binding predicate type.</p>
+
+    <h3>F3 · The unfrozen verifier <span class="src">— promoted to method principle</span></h3>
+    <p>An identical sentence graded CHECKABLE one round and NEEDS CLARITY the next: the compiler was re-rolling standards per invocation, demanding infinite attestation regress. The system violated its own thesis and its own loop caught it. <b>Principle:</b> every verifier in the pipeline — including the compiler — operates under frozen, pre-registered rules (fixed tier rubric, no escalation past the declared tier).</p>
+
+    <h3>F4 · Length–quality conflation</h3>
+    <p>A zero-ambiguity 7-predicate map failed at 0.35: whole-run conjunction scoring compounds per-step probability, so meticulous long maps score worse than sloppy short ones. <b>Consequence:</b> per-predicate certification — each predicate clears θ individually; the certificate is the conjunction of certified predicates. Map length must not masquerade as map quality. Open calibration note: post-fix pass rates ran hot; true per-predicate base rates are an empirical constant obtainable only from real sandboxed traversals.</p>
+  </div>
+</section>
+
+<!-- ================= §7 PROVENANCE ================= -->
+<section id="provenance">
+  <div class="wrap">
+    <div class="field-label"><span class="field-code">§7 · SOURCES</span><h2>Provenance — where every claim lives</h2></div>
+    <p class="muted">Assembled from the FioVault archive, 2026-07-30. Wikilinked in the vault copy.</p>
+    <table class="prov">
+      <tr><td>2026-05-21</td><td><b>Detecting structural incompleteness in automated code generation</b> — oracle/test-insufficiency literature survey; harvested reference list for §6 Related Work.</td></tr>
+      <tr><td>2026-05-23</td><td><b>Testing ambitious claims rigorously</b> — falsification framing; ablation-vs-control, translation-quality, and reverse-prediction test designs.</td></tr>
+      <tr><td>2026-07-21</td><td><b>Harness engineering and environmental shaping</b> — three-axis differentiation (genre / direction of measurement / posture); Lopopolo artifact-not-pitch channel.</td></tr>
+      <tr><td>2026-07-22</td><td><b>Convergence on agentic AI problems</b> — the 10-week plan; grid design 3+ × 3+; specimen rules for client domains; "more true vs more impressive" test.</td></tr>
+      <tr><td>2026-07-16</td><td><b>The killer app for AI adoption</b> — v0 evidence record: Run 005 ($0.50, 5/5, signal MET), runs 001–004 convictions, H1 instrumentation kill, [0.57, 1.00] interval, bottleneck ladder.</td></tr>
+      <tr><td>2026-07-23</td><td><b>Graph vs loop architecture</b> — stigmergic swarm architecture, covenant-as-trip, recursive geometry, Hammerhead audit wedge.</td></tr>
+      <tr><td>2026-07-27</td><td><b>Deciding between breakthrough pursuit…</b> — full pressure test; legibility confound; n caveat; distribution doctrine (fifteen people, not the feed).</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    STATUS: LIGHTS OUT — evidence slots closed (v0 Run 005 + negatives 001–004, H1, regression) · four findings integrated · next: LaTeX writeup → grid experiments → distribution<br><br>
+    THE ONE TEST FOR EVERY TASK: does this make the claim more true, or the demo more impressive?
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---- bench simulation: frozen weak agent vs three maps ----
+  var THETA = 0.70, MIN_N = 50, Z = 1.96;
+  var maps = [
+    {name:"MAP A · dense predicates", p:0.92, key:"a"},
+    {name:"MAP B · partial spec",     p:0.74, key:"b"},
+    {name:"MAP C · hollow build",     p:0.38, key:"c"}
+  ];
+  var state, timer = null, reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function wilson(succ,n){
+    if(n===0) return [0,1,0];
+    var ph = succ/n, z2 = Z*Z;
+    var den = 1 + z2/n;
+    var ctr = ph + z2/(2*n);
+    var mar = Z*Math.sqrt((ph*(1-ph) + z2/(4*n))/n);
+    return [Math.max(0,(ctr-mar)/den), Math.min(1,(ctr+mar)/den), ph];
+  }
+
+  function makeCard(m,i){
+    var el = document.createElement('div');
+    el.className='map-card';
+    el.innerHTML =
+      '<div class="map-name"><span>'+m.name+'</span><span class="stamp pending" id="st'+i+'">PENDING</span></div>'+
+      '<canvas id="cv'+i+'" width="120" height="72" aria-label="replay tape for '+m.name+'"></canvas>'+
+      '<div class="ivl-track"><div class="ivl-thresh" style="left:'+(THETA*100)+'%"></div>'+
+      '<div class="ivl-bar" id="bar'+i+'"></div><div class="ivl-point" id="pt'+i+'"></div></div>'+
+      '<div class="stats" id="stx'+i+'">n=0 · rate=— · CI=[—,—]</div>';
+    return el;
+  }
+
+  function reset(){
+    if(timer){clearInterval(timer);timer=null;document.getElementById('runBtn').textContent='Run trials';}
+    state = maps.map(function(){return {n:0,s:0,done:false,px:[]};});
+    var row = document.getElementById('mapsRow'); row.innerHTML='';
+    maps.forEach(function(m,i){row.appendChild(makeCard(m,i));});
+    maps.forEach(function(_,i){drawTape(i);paint(i);});
+  }
+
+  function drawTape(i){
+    var cv = document.getElementById('cv'+i), ctx = cv.getContext('2d');
+    ctx.fillStyle='#10181F'; ctx.fillRect(0,0,cv.width,cv.height);
+    // faint grid
+    ctx.fillStyle='rgba(255,255,255,0.05)';
+    for(var x=0;x<cv.width;x+=6)for(var y=0;y<cv.height;y+=6)ctx.fillRect(x,y,1,1);
+    // trial dots: green=converged, red=failed, drawn as a tape left→right
+    var px = state[i].px;
+    for(var k=0;k<px.length;k++){
+      var col = k % 20, rowY = Math.floor(k/20);
+      ctx.fillStyle = px[k] ? '#2FBF83' : '#D9534F';
+      ctx.fillRect(2+col*6, 2+rowY*6, 4, 4);
+    }
+    // agent dot blinking at the head
+    if(!state[i].done && px.length<240){
+      var c2 = px.length % 20, r2 = Math.floor(px.length/20);
+      ctx.fillStyle = '#E8541A';
+      ctx.fillRect(2+c2*6, 2+r2*6, 4, 4);
+    }
+  }
+
+  function paint(i){
+    var st = state[i], w = wilson(st.s, st.n);
+    var bar = document.getElementById('bar'+i), pt = document.getElementById('pt'+i);
+    bar.style.left  = (w[0]*100)+'%';
+    bar.style.width = ((w[1]-w[0])*100)+'%';
+    pt.style.left   = (w[2]*100)+'%';
+    document.getElementById('stx'+i).innerHTML =
+      'n=<b>'+st.n+'</b> · rate=<b>'+(st.n? (w[2]).toFixed(2):'—')+'</b> · CI=[<b>'+w[0].toFixed(2)+'</b>, <b>'+w[1].toFixed(2)+'</b>]';
+    var stamp = document.getElementById('st'+i);
+    if(!st.done){
+      if(st.n>=MIN_N && w[0]>=THETA){ st.done=true; stamp.className='stamp cert'; stamp.textContent='CERTIFIED'; }
+      else if(st.n>=MIN_N && w[1]<THETA){ st.done=true; stamp.className='stamp failed'; stamp.textContent='FAILED · PUBLISHED'; }
+    }
+  }
+
+  function trial(){
+    var allDone = true;
+    state.forEach(function(st,i){
+      if(st.done || st.n>=240) return;
+      allDone = false;
+      var ok = Math.random() < maps[i].p;
+      st.n++; if(ok) st.s++;
+      st.px.push(ok);
+      drawTape(i); paint(i);
+    });
+    if(allDone && timer){clearInterval(timer);timer=null;document.getElementById('runBtn').textContent='Run trials';}
+  }
+
+  document.getElementById('stepBtn').addEventListener('click', trial);
+  document.getElementById('resetBtn').addEventListener('click', reset);
+  document.getElementById('runBtn').addEventListener('click', function(){
+    if(timer){clearInterval(timer);timer=null;this.textContent='Run trials';return;}
+    this.textContent='Pause';
+    timer = setInterval(trial, reduced ? 200 : 70);
+  });
+
+  reset();
+})();
+</script>
+</body>
+</html>

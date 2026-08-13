@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory that metabolizes — a thesis</title>
+<meta name="description" content="AI memory is a filing cabinet. Yours is a metabolism. A public demo of the shift: seeds not photocopies, recall that rewrites, forgetting as selection, habits that harden and melt.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8F6EF; --grid:#EAE5D6; --ink:#1C2730; --soft:#5C6B75;
+    --life:#177A54; --life-soft:#E3F1E9; --old:#C24E14; --old-soft:#F6E7DC;
+    --seed:#7A5FB5; --card:#FFFFFF; --edge:#E0DACA; --diary:#8A6D1F;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'IBM Plex Sans',sans-serif;color:var(--ink);background:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:28px 28px;line-height:1.65;font-size:16.5px}
+  .wrap{max-width:840px;margin:0 auto;padding:0 18px}
+  header{padding:60px 0 26px}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--life);text-transform:uppercase}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(40px,8vw,68px);line-height:1.04;margin-top:6px}
+  h1 em{font-style:italic;color:var(--life)}
+  h1 s{color:var(--old);text-decoration-thickness:3px}
+  .lede{font-size:19px;max-width:58ch;margin-top:14px}
+  .lede b{color:var(--life)}
+  section{padding:42px 0;border-top:1.5px solid var(--edge)}
+  h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(26px,4.5vw,34px);margin-bottom:6px}
+  p{max-width:64ch;margin-bottom:12px}
+  .soft{color:var(--soft)}
+  .mono{font-family:'IBM Plex Mono',monospace}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--soft);text-transform:uppercase}
+
+  /* road */
+  .road{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:12.5px}
+  .stop{border:1.5px solid var(--edge);background:var(--card);border-radius:4px;padding:8px 11px;color:var(--soft)}
+  .stop small{display:block;font-size:10px;color:#9AA6AE}
+  .arrow{color:var(--soft)}
+  .stop.next{border-color:var(--life);color:var(--life);background:var(--life-soft);font-weight:600}
+
+  /* THE DEMO */
+  .demo{background:var(--card);border:2px solid var(--ink);border-radius:6px;box-shadow:7px 7px 0 rgba(28,39,48,.10);overflow:hidden;margin-top:16px}
+  .demo-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 16px;border-bottom:1.5px solid var(--edge);background:#F3EFE3}
+  .demo-title{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+  .beat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--soft)}
+  .cols{display:grid;grid-template-columns:1fr 1fr;min-height:340px}
+  @media(max-width:640px){.cols{grid-template-columns:1fr}}
+  .col{padding:14px 16px}
+  .col+.col{border-left:1.5px solid var(--edge)}
+  @media(max-width:640px){.col+.col{border-left:none;border-top:1.5px solid var(--edge)}}
+  .col h3{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+  .col.lib h3{color:var(--old)} .col.met h3{color:var(--life)}
+  .ev{font-size:13.5px;border:1px solid var(--edge);border-radius:4px;padding:8px 10px;margin-bottom:8px;background:var(--card);opacity:0;transform:translateY(4px);transition:opacity .5s,transform .5s}
+  .ev.show{opacity:1;transform:none}
+  .ev.bad{border-color:var(--old);background:var(--old-soft)}
+  .ev.good{border-color:var(--life);background:var(--life-soft)}
+  .ev.seed{border-color:var(--seed);background:#F0EBFA}
+  .ev.diary{border-color:var(--diary);background:#FAF3DE}
+  .ev .lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:2px}
+  .ev.bad .lbl{color:var(--old)} .ev.good .lbl{color:var(--life)} .ev.seed .lbl{color:var(--seed)} .ev.diary .lbl{color:var(--diary)}
+  .fadebar{height:6px;background:var(--edge);border-radius:3px;overflow:hidden;margin-top:5px}
+  .fadebar i{display:block;height:100%;background:var(--seed);width:100%;transition:width 1.4s linear}
+  .demo-foot{padding:12px 16px;border-top:1.5px solid var(--edge);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);padding:10px 16px;border-radius:4px;cursor:pointer}
+  button:hover{background:var(--ink);color:var(--paper)}
+  button.life{background:var(--life);border-color:var(--life);color:#fff}
+  button.life:hover{background:#0F5E40;border-color:#0F5E40}
+  button:focus-visible{outline:2px solid var(--life);outline-offset:2px}
+  .caption{font-size:12.5px;color:var(--soft)}
+
+  /* bio/tech mapping */
+  .map{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  @media(max-width:640px){.map{grid-template-columns:1fr}}
+  .mcard{background:var(--card);border:1.5px solid var(--edge);border-radius:5px;padding:15px}
+  .mcard .bio{font-weight:600;font-size:15.5px}
+  .mcard .bio small{display:block;font-weight:400;font-size:11px;color:#9AA6AE;font-family:'IBM Plex Mono',monospace;margin-top:2px}
+  .mcard .tech{font-size:13.5px;color:var(--soft);margin-top:8px;padding-top:8px;border-top:1px dashed var(--edge)}
+  .mcard .tech b{color:var(--life)}
+
+  footer{padding:38px 0 70px;border-top:1.5px solid var(--edge);font-size:13.5px;color:var(--soft)}
+  footer a{color:var(--life)}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">a thesis, shown</div>
+  <h1>Memory that <s>stores</s> <em>metabolizes</em>.</h1>
+  <p class="lede">Every AI memory system today is a filing cabinet: hoard everything, hope you grab the right page later. Your brain does something completely different — and it's buildable. <b>This page shows both, side by side.</b></p>
+</header>
+
+<section style="border-top:none;padding-top:4px">
+  <div class="kicker">the road so far</div>
+  <h2>Every step got better at finding. None of them can age.</h2>
+  <div class="road">
+    <span class="stop">Retrieval<small>fetch the transcript</small></span><span class="arrow">→</span>
+    <span class="stop">Knowledge graphs<small>fetch, but connected</small></span><span class="arrow">→</span>
+    <span class="stop">Attractor memory<small>attention = one frozen step of it</small></span><span class="arrow">→</span>
+    <span class="stop next">The metabolic graph<small>memory with a clock in it</small></span>
+  </div>
+  <p class="soft" style="margin-top:12px">The missing ingredient was never capacity. It's <b style="color:var(--ink)">time</b>: decay, rewrite-on-recall, forgetting as selection, habits that harden — and melt.</p>
+</section>
+
+<section>
+  <div class="kicker">watch one memory live for a month</div>
+  <h2>The library vs. the metabolism</h2>
+  <p>Same event happens to both systems: <span class="mono" style="font-size:14px">"Tuesday — supplier raised mozzarella to $4.85."</span> Then a month passes, the price changes again, and both get asked to remember. Press play.</p>
+  <div class="demo">
+    <div class="demo-head">
+      <span class="demo-title">one memory · thirty days · two fates</span>
+      <span class="beat" id="beat">day 0</span>
+    </div>
+    <div class="cols">
+      <div class="col lib"><h3>The library (today's AI)</h3><div id="lib"></div></div>
+      <div class="col met"><h3>The metabolism (the proposal)</h3><div id="met"></div></div>
+    </div>
+    <div class="demo-foot">
+      <button class="life" id="play">&#9654; Play the month</button>
+      <span class="caption" id="cap">Six beats. About 20 seconds.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">this is not a metaphor — it's how your head works</div>
+  <h2>The biology, and the build</h2>
+  <p>Each piece below is a documented property of human memory (left, with the science) mapped to an engineerable mechanism (right). Together they're one system.</p>
+  <div class="map">
+    <div class="mcard"><div class="bio">You don't store memories — you regrow them<small>reconstructive memory · Bartlett 1932</small></div><div class="tech"><b>Seeds, not photocopies.</b> Keep the gist + key facts + a pointer into the diary. Regenerate the full memory on demand. Storage collapses ~10×.</div></div>
+    <div class="mcard"><div class="bio">Your regrown memories can be wrong<small>false memory · Loftus</small></div><div class="tech"><b>So every regrowth gets fact-checked.</b> Hard facts must match an append-only diary exactly; structure must be consistent with it; only connective tissue regenerates freely. The system cannot "remember" what the diary doesn't contain.</div></div>
+    <div class="mcard"><div class="bio">Recalling a memory rewrites it<small>reconsolidation · Nader, Schafe & LeDoux 2000</small></div><div class="tech"><b>Recall is a write.</b> Every use updates the seed, resets its decay clock, and logs the change. Memory becomes shaped by its own usage history — with an audit trail biology never had.</div></div>
+    <div class="mcard"><div class="bio">You forget most things — on purpose<small>forgetting curve · Ebbinghaus</small></div><div class="tech"><b>Forgetting is the filter.</b> Unused memories fade back to seeds on a spaced-repetition clock. What survives repeated fading is, by definition, what keeps proving useful. Selection, not loss.</div></div>
+    <div class="mcard"><div class="bio">Practice hardens skills into reflexes<small>consolidation · systems-level</small></div><div class="tech"><b>Verified patterns crystallize.</b> A memory that keeps passing its fact-checks crosses a threshold and hardens into an instant, near-free artifact. The threshold moves only on external verification — never on the system's own confidence.</div></div>
+    <div class="mcard"><div class="bio">Old habits break when the world changes — or should<small>the failure is called dogma</small></div><div class="tech"><b>Crystals can melt.</b> Every hardened artifact carries a fingerprint of the conditions it formed under. When the world drifts from that fingerprint, it demotes itself back to "re-learn me." No calcification.</div></div>
+    <div class="mcard"><div class="bio">Sleep consolidates the day<small>complementary learning systems · McClelland 1995</small></div><div class="tech"><b>A nightly cycle</b> compresses the day's episodes into durable gist, discards noise, and promotes/demotes across the layers. Fast clock, medium clock, slow clock — deliberately never in lockstep.</div></div>
+    <div class="mcard"><div class="bio">You know things by predicting them<small>predictive coding · surprise as signal</small></div><div class="tech"><b>Grounding that scales with time.</b> The system predicts its next input; surprise is free error signal. External reality — not internal coherence — is the only thing allowed to move any threshold.</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">the one-line thesis</div>
+  <h2>When generation is cheap, the scarce function is deciding what's real.</h2>
+  <p>A generator can produce anything — including fluent, confident false memories. The entire proposal reduces to wiring generation to three disciplines: <b>a diary it can't edit</b> (provenance), <b>tests it can't sweet-talk</b> (external verification), and <b>a clock it can't ignore</b> (decay, reconsolidation, annealing). That's not a storage upgrade. That's a metabolism.</p>
+</section>
+
+<footer>
+  <b style="color:var(--ink)">Status, honestly:</b> this is a public proposal with working parts, not a finished product. Already built &amp; tested in the open: the fact-checking ladder, the decay engine, and crystallization-by-external-test (a skill-certification system that survived 52 pre-registered runs — including the claim that died and was published anyway). The genuinely new piece — recall-that-rewrites — is specced and small. The first falsification test is pre-registered: compress real memories to seeds, delete the originals, regrow on demand, and measure fidelity against the diary. If it fails, that gets published too. Receipts: <a href="https://github.com/metafiopy-tech/dotmaps">github.com/metafiopy-tech/dotmaps</a>
+</footer>
+
+</div>
+<script>
+(function(){
+  var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function $(id){return document.getElementById(id)}
+  function add(col,cls,lbl,txt,extra){
+    var d=document.createElement('div');d.className='ev '+cls;
+    d.innerHTML='<span class="lbl">'+lbl+'</span>'+txt+(extra||'');
+    $(col).appendChild(d);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('show')})});
+    return d;
+  }
+  var BEATS=[
+    {day:"day 0 — the event",fn:function(){
+      add('lib','bad','stored','Full transcript photocopied into the pile. Pile size: +1 (and counting).');
+      add('met','seed','seed kept','gist: <b>mozzarella price up</b> · fact: <b>$4.85</b> · diary line: <b>#2841</b><div class="fadebar"><i id="fb"></i></div>');
+      add('met','diary','diary (append-only)','#2841 · Tue · supplier raised mozzarella to $4.85 — <i>can never be edited</i>');
+    }},
+    {day:"day 9 — recall",fn:function(){
+      add('lib','bad','retrieved','Grabbed the photocopy. Read it back. Nothing learned from the act.');
+      var s=add('met','good','regrown + fact-checked','Memory rebuilt from the seed → hard fact <b>$4.85</b> checked against diary #2841 → <b>exact match ✓</b>');
+      add('met','seed','recall rewrote it','Seed updated with the new context; decay clock reset. <i>Recalling is a write.</i>');
+      var fb=$('fb'); if(fb) fb.style.width='100%';
+    }},
+    {day:"day 10–24 — silence",fn:function(){
+      add('lib','bad','the pile grows','347 more transcripts filed. Retrieval is getting noisier — the right page is harder to find.');
+      add('met','seed','fading, on purpose','No recalls, so the memory fades toward bare seed. Forgetting is the null hypothesis it must keep rejecting.');
+      var fb=$('fb'); if(fb) fb.style.width='28%';
+    }},
+    {day:"day 25 — the world changes",fn:function(){
+      add('lib','bad','nothing happens','New price ($5.20) filed as transcript #2,189. The old photocopy still sits there, equally confident.');
+      add('met','diary','diary appends','#3007 · supplier raised mozzarella to <b>$5.20</b>');
+      add('met','good','drift detected','The old memory\u2019s fingerprint no longer matches the world → it demotes itself: <b>"re-learn me."</b> No dogma.');
+    }},
+    {day:"day 30 — the question: \u201cwhat\u2019s mozzarella cost?\u201d",fn:function(){
+      add('lib','bad','confidently stale','Retrieval grabs the strongest match — the old photocopy. Answer: <b>\u201c$4.85\u201d</b> ✗ · <i>fluent, confident, wrong.</i>');
+      add('met','good','regrown against the diary','Rebuilds from seed → checks diary → newest verified line is #3007 → answer: <b>\u201c$5.20, changed day 25\u201d</b> ✓ · <i>with the receipt.</i>');
+    }},
+    {day:"that night — sleep",fn:function(){
+      add('lib','bad','the pile: 2,190','Storage grows forever. Trust doesn\u2019t.');
+      add('met','good','consolidation','Day\u2019s episodes compressed to gist · noise discarded · the price-tracking pattern, verified twice now, moves one step toward <b>crystallizing</b> into a reflex.');
+      $('cap').textContent='That\u2019s the shift: not a bigger cabinet — a metabolism. Scroll on for the biology.';
+    }}
+  ];
+  var i=0,timer=null;
+  $('play').addEventListener('click',function(){
+    if(timer) return;
+    i=0;$('lib').innerHTML='';$('met').innerHTML='';
+    $('cap').textContent='Watch the right side check itself.';
+    var self=this;self.textContent='Playing\u2026';
+    (function next(){
+      if(i>=BEATS.length){self.textContent='\u21BB Replay the month';timer=null;return}
+      var b=BEATS[i++];$('beat').textContent=b.day;b.fn();
+      timer=setTimeout(function(){timer=null;next()},reduced?200:3400);
+    })();
+  });
+})();
+</script>
+</body>
+</html>

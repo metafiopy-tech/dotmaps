@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dot Maps — A driving test for AI helpers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2F5F7; --grid:#DAE2E8; --ink:#17242E; --ink-soft:#4A5A66;
+    --blueprint:#1E5AA8; --signal:#E8541A; --verified:#1F8A5D; --fail:#B3322E;
+    --card:#FFFFFF; --rule:#C3CFD8; --amber:#B07A1E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'IBM Plex Sans',sans-serif; color:var(--ink); background:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:28px 28px; line-height:1.65; font-size:16.5px;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+  header{padding:70px 0 44px;text-align:left}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(44px,8vw,76px);line-height:1.02}
+  h1 .dot{color:var(--signal)}
+  .sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(22px,3.6vw,30px);color:var(--ink-soft);margin-top:14px}
+  .plain{margin-top:24px;max-width:62ch;font-size:17.5px}
+  section{padding:52px 0}
+  h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(28px,4.2vw,38px);margin-bottom:18px}
+  p{max-width:66ch;margin-bottom:14px}
+  .muted{color:var(--ink-soft)}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+  @media(max-width:700px){.cards{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1.5px solid var(--rule);border-radius:4px;padding:18px}
+  .card h3{font-size:16px;font-weight:600;margin-bottom:8px}
+  .card p{font-size:14.5px;margin:0;color:var(--ink-soft)}
+  /* try-it bench */
+  .bench{background:var(--card);border:2px solid var(--ink);border-radius:5px;padding:24px;box-shadow:7px 7px 0 rgba(23,36,46,.12)}
+  .bench-title{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint);margin-bottom:14px}
+  textarea{width:100%;min-height:120px;font-family:'IBM Plex Sans',sans-serif;font-size:15.5px;line-height:1.6;padding:14px;border:1.5px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink);resize:vertical}
+  textarea:focus{outline:2px solid var(--blueprint);outline-offset:1px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+  button{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:11px 18px;border-radius:3px;cursor:pointer}
+  button:hover{background:var(--ink);color:var(--paper)}
+  button.primary{background:var(--signal);border-color:var(--signal);color:#fff}
+  button.primary:hover{background:#C6440F;border-color:#C6440F}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  button:disabled:hover{background:var(--paper);color:var(--ink)}
+  button.primary:disabled:hover{background:var(--signal);color:#fff}
+  .hint{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft)}
+  .status{font-family:'IBM Plex Mono',monospace;font-size:12.5px;margin-top:12px;min-height:20px}
+  .status.err{color:var(--fail)}
+  .status.busy{color:var(--blueprint)}
+  /* generated map */
+  #mapOut{margin-top:22px;display:none}
+  .map-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+  .map-name{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.06em}
+  .stamp{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;padding:4px 9px;border-radius:2px}
+  .stamp.pending{color:var(--ink-soft);border:1.5px solid var(--rule)}
+  .stamp.cert{color:#fff;background:var(--verified);transform:rotate(-2deg)}
+  .stamp.failed{color:#fff;background:var(--fail);transform:rotate(-2deg)}
+  .pred{border:1.5px solid var(--rule);border-radius:4px;background:var(--paper);padding:12px 14px;margin-bottom:10px}
+  .pred-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .pred-id{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:var(--blueprint)}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:2px 7px;border-radius:2px}
+  .tag.det{background:#E2EEE8;color:var(--verified)}
+  .tag.amb{background:#F6EBD6;color:var(--amber)}
+  .pred-plain{font-size:14.5px;margin:6px 0 2px}
+  .pred-check{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft)}
+  .pred-fix{font-size:13px;color:var(--amber);margin-top:6px}
+  .pbar{height:8px;background:#E5EBF0;border-radius:2px;margin-top:8px;overflow:hidden}
+  .pbar i{display:block;height:100%;background:var(--verified);width:0%}
+  .pbar.low i{background:var(--amber)}
+  /* overall interval */
+  .ivl-wrap{margin-top:16px}
+  .ivl-track{position:relative;height:28px;background:#E5EBF0;border-radius:3px;overflow:hidden}
+  .ivl-bar{position:absolute;top:8px;height:12px;background:var(--blueprint);border-radius:2px}
+  .ivl-point{position:absolute;top:5px;width:3px;height:18px;background:var(--signal)}
+  .ivl-thresh{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.6;left:70%}
+  .ivl-thresh::after{content:"pass line";position:absolute;top:4px;left:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink)}
+  .stats{font-family:'IBM Plex Mono',monospace;font-size:12px;margin-top:8px;color:var(--ink-soft)}
+  .stats b{color:var(--ink)}
+  .verdict{margin-top:14px;font-size:15px;display:none;border-left:3px solid var(--blueprint);background:var(--paper);padding:10px 14px}
+  /* deep dive */
+  details{background:var(--card);border:1.5px solid var(--rule);border-radius:4px;margin-bottom:12px;overflow:hidden}
+  summary{cursor:pointer;padding:16px 18px;font-weight:600;font-size:15.5px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-family:'IBM Plex Mono',monospace;color:var(--blueprint);font-size:18px}
+  details[open] summary::after{content:"–"}
+  .dbody{padding:0 18px 18px;font-size:15px}
+  .dbody code{font-family:'IBM Plex Mono',monospace;font-size:.87em;background:#E5EBF0;padding:1px 5px;border-radius:2px}
+  pre{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.55;background:var(--ink);color:#DCE6EE;padding:16px;border-radius:3px;overflow-x:auto;margin:12px 0}
+  footer{padding:40px 0 70px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft)}
+  a{color:var(--blueprint)}
+  a:focus-visible,button:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--blueprint);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Dot Maps<span class="dot">.</span></h1>
+    <p class="sub">A driving test for AI helpers.</p>
+    <p class="plain">You wouldn't hand a stranger your car keys without a driving test. Dot Maps is that test for AI — before an AI helper touches a real job, it drives the course while everything gets recorded. Pass or fail is decided by math, not vibes, and you get the certificate <i>and the tape</i>.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Why it works</h2>
+    <div class="cards">
+      <div class="card"><h3>Same course, every time</h3><p>The test never bends to make the AI look good. The course is frozen before the first attempt — so a pass means something.</p></div>
+      <div class="card"><h3>Watched the whole way</h3><p>Every attempt is recorded. You don't have to trust anyone's word — you can watch the tape yourself.</p></div>
+      <div class="card"><h3>Pass/fail is math</h3><p>The pass line is set before the test starts, and fails get published too. No grading on a curve, no hiding bad runs.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="try">
+  <div class="wrap">
+    <h2>Try it — your words become the test</h2>
+    <p>Describe how you do any task, in plain language, like you're training a new employee. We'll turn it into a Dot Map — a checkable test course — and then run an AI helper through it, live.</p>
+    <div class="bench">
+      <div class="bench-title">Step 1 · Describe your task</div>
+      <textarea id="taskIn" placeholder="Example: When an order comes in, I check the order sheet for the customer's name, confirm the booking time is open on the calendar, then send them a confirmation email with the details."></textarea>
+      <div class="row">
+        <button class="primary" id="buildBtn">Turn it into a test</button>
+        <button id="exampleBtn">Use the example</button>
+        <span class="hint">nothing is saved · runs in your browser</span>
+      </div>
+      <div class="status" id="status" role="status"></div>
+
+      <div id="mapOut">
+        <div class="bench-title" style="margin-top:10px">Step 2 · Your map</div>
+        <div class="map-head">
+          <span class="map-name" id="mapName"></span>
+          <span class="stamp pending" id="mapStamp">NOT YET TESTED</span>
+        </div>
+        <div id="predList"></div>
+        <div class="row">
+          <button class="primary" id="testBtn">Run the driving test</button>
+          <span class="hint">100 attempts · pass line 70% · watched</span>
+        </div>
+        <div class="ivl-wrap">
+          <div class="ivl-track"><div class="ivl-thresh"></div><div class="ivl-bar" id="ivlBar" style="left:0%;width:100%"></div><div class="ivl-point" id="ivlPt" style="left:50%"></div></div>
+          <div class="stats" id="ivlStats">attempts=0 · pass rate=— · confidence range=[—, —]</div>
+        </div>
+        <div class="verdict" id="verdict"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Go deeper</h2>
+    <p class="muted">Everything above in full technical form — nothing was removed, just layered.</p>
+
+    <details>
+      <summary>What a "map" actually is</summary>
+      <div class="dbody">
+        <p>A Dot Map is a <b>predicate map</b>: your task broken into checks a machine can verify pass/fail with no judgment calls — <code>booking.time_slot_open</code>, <code>email.confirmation_sent</code>. Steps that can be checked mechanically are typed <b>deterministic</b>; steps that need interpretation are typed <b>ambiguous</b> and flagged back to you to clarify or assign a verifier. That routing is the translation layer: it doesn't just build the test, it teaches you to specify.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>The research claim (weak-model-as-instrument)</summary>
+      <div class="dbody">
+        <p>The examiner is deliberately a <b>weak, frozen model</b>. The literature improves weak models; Dot Maps inverts the direction of measurement — the weak model is the fixed instrument, and its convergence rate <i>grades the map</i>. A map only a genius can follow is a bad map. If the weakest driver can pass your course reliably, the course is well-built.</p>
+        <p>Statistics: pre-registered threshold θ, <b>Wilson score intervals</b>, certification when the interval's lower bound clears θ, published failure when the upper bound falls below it. Known confound, stated up front: convergence may partly measure map <i>legibility to that one model</i> rather than intrinsic quality — mitigated by running a grid of 3+ weak models × 3+ map sources and checking that map rankings stay stable.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>How agents use this as a sandbox upgrade</summary>
+      <div class="dbody">
+        <p>Three surfaces. <b>(1) The map bundle</b> — a <code>dotmap.json</code> the agent reads before touching the workflow: predicates, frozen rules, certificate status, plus a <code>capabilities</code> manifest declaring required tools/MCP servers/skills. <b>(2) The verifier endpoint</b> — an MCP-shaped tool where agents submit traversals and receive graded verdicts; agents cannot self-grade. <b>(3) The lifecycle</b> — admit → traverse → certify → promote/demote: certified maps become trusted rungs other agents build on, and predicate drift demotes a map and everything stacked on it.</p>
+<pre>{
+  "map_id": "order-confirm.v1",
+  "predicates": [ ... ],
+  "capabilities": { "mcp": ["calendar","email"], "skills": [] },
+  "frozen_rules": { "model": "w-0@pinned", "max_steps": 40 },
+  "certificate": { "status": "CERTIFIED", "theta": 0.70,
+                   "replay_uri": "replays/order-confirm.v1/" }
+}</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary>Where this goes: graphs, swarms, Forge</summary>
+      <div class="dbody">
+        <p>Certified maps <b>compose</b>: one map's exit predicates feed another's entry predicates, so trust propagates through a graph the way types propagate through a program. In a swarm, no central boss is needed — agents deposit traversals, convergent traversals cluster, and clusters that clear θ crystallize into certified maps (θ is the crystallization criterion). <b>Forge</b> is the economy on top: a network where certified maps are the unit of trusted, tradeable work.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>The paper &amp; full technical package</summary>
+      <div class="dbody">
+        <p>The full research package — live instrument bench, 8-page paper skeleton with sources, run protocol, and complete sandbox spec — lives in the companion file <code>dotmaps.html</code>. Two evidence slots remain open (v0 exact numbers, negatives list), marked and sourced.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">DOT MAPS · pre-registered · negatives published · the tape is the trust</div>
+</footer>
+
+<script>
+(function(){
+  var THETA=0.70, MIN_N=40, MAX_N=100, Z=1.96;
+  var currentMap=null, timer=null, st=null;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $=function(id){return document.getElementById(id)};
+
+  $('exampleBtn').addEventListener('click',function(){
+    $('taskIn').value="When an order comes in, I check the order sheet for the customer's name, confirm the booking time is open on the calendar, then send them a confirmation email with the details.";
+  });
+
+  function setStatus(msg,cls){var s=$('status');s.textContent=msg||'';s.className='status'+(cls?' '+cls:'');}
+
+  function wilson(succ,n){
+    if(n===0)return[0,1,0];
+    var ph=succ/n,z2=Z*Z,den=1+z2/n,ctr=ph+z2/(2*n),mar=Z*Math.sqrt((ph*(1-ph)+z2/(4*n))/n);
+    return[Math.max(0,(ctr-mar)/den),Math.min(1,(ctr+mar)/den),ph];
+  }
+
+  // ---- Step 1: translate words -> map via Claude ----
+  $('buildBtn').addEventListener('click', async function(){
+    var text=$('taskIn').value.trim();
+    if(!text){setStatus('Describe your task first — or hit "Use the example".','err');return;}
+    this.disabled=true; setStatus('Translating your words into a checkable map…','busy');
+    stopTest(); $('mapOut').style.display='none';
+    try{
+      var resp=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          model:"claude-sonnet-4-6",
+          max_tokens:1000,
+          system:"You compile informal task descriptions into predicate maps for AI agent verification. Respond ONLY with valid JSON, no markdown fences, no preamble. Schema: {\"map_name\": string (short kebab-case), \"predicates\": [{\"id\": \"P1\", \"plain\": string (plain-language description of the check, one sentence), \"check\": string (machine-style check name like sheet.customer_name_found), \"type\": \"deterministic\"|\"ambiguous\", \"clarity\": number 0.35-0.97 (ambiguous steps must be <= 0.65, deterministic steps must be >= 0.75), \"fix_hint\": string (ONLY for ambiguous: one sentence telling the person how to make this step checkable, else omit)}]}. Rules: 3-7 predicates. Every predicate must be a check (a state that is true or false after the task), not an action. FROZEN RUBRIC — grade at Tier 2 exactly, never higher: Tier 1 = step is human-legible but relies on judgment, taste, or unstated criteria ('clean enough', 'anything left'). Tier 2 = a designated checker (person or machine) could answer yes/no from a named observable state or artifact: a reading in a stated range, a named file, a written number, a physical position (locked/unlocked, light on/off), a labeled item with a stated format. Tier 3 = tamper-evident attestation: timestamps, delivery receipts, photographic proof, audit logs. Type a step DETERMINISTIC if it meets Tier 2 as described. Type it AMBIGUOUS only if it fails Tier 2. NEVER mark a Tier-2 step ambiguous for lacking Tier-3 evidence, and NEVER write fix_hints demanding Tier-3 artifacts (no requests for timestamps, receipts, photos, or logging conventions when a named observable state or artifact already exists). A physical state a closer can see (deadbolt position, indicator light, keypad armed display, thermometer reading) IS Tier 2. Do not escalate requirements beyond the rubric under any circumstances.",
+          messages:[{role:"user",content:"Task description:\n"+text}]
+        })
+      });
+      var data=await resp.json();
+      var raw=(data.content||[]).filter(function(b){return b.type==="text"}).map(function(b){return b.text}).join("\n");
+      var clean=raw.replace(/```json|```/g,"").trim();
+      var map=JSON.parse(clean);
+      if(!map.predicates||!map.predicates.length) throw new Error("empty map");
+      currentMap=map; renderMap(map);
+      setStatus('Map built — '+map.predicates.length+' checks. Now run the test.','');
+    }catch(e){
+      console.error(e);
+      setStatus('Translation hit a snag — try again, or simplify the description a little.','err');
+    }finally{ this.disabled=false; }
+  });
+
+  function renderMap(map){
+    $('mapName').textContent=map.map_name||'your-task.v1';
+    var stamp=$('mapStamp');stamp.className='stamp pending';stamp.textContent='NOT YET TESTED';
+    var list=$('predList');list.innerHTML='';
+    map.predicates.forEach(function(p){
+      var d=document.createElement('div');d.className='pred';
+      var amb=p.type==='ambiguous';
+      d.innerHTML='<div class="pred-top"><span class="pred-id">'+p.id+'</span>'+
+        '<span class="tag '+(amb?'amb':'det')+'">'+(amb?'NEEDS CLARITY':'CHECKABLE')+'</span></div>'+
+        '<div class="pred-plain">'+esc(p.plain)+'</div>'+
+        '<div class="pred-check">'+esc(p.check)+'</div>'+
+        (amb&&p.fix_hint?'<div class="pred-fix">→ '+esc(p.fix_hint)+'</div>':'')+
+        '<div class="pbar'+(p.clarity<0.7?' low':'')+'"><i id="pb-'+p.id+'"></i></div>';
+      list.appendChild(d);
+    });
+    resetStats();
+    $('mapOut').style.display='block';
+    $('mapOut').scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest'});
+  }
+  function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+
+  // ---- Step 2: run the frozen weak agent ----
+  function resetStats(){
+    st={n:0,s:0,per:{}};
+    if(currentMap)currentMap.predicates.forEach(function(p){st.per[p.id]={n:0,s:0};var b=$('pb-'+p.id);if(b)b.style.width='0%';});
+    $('ivlBar').style.left='0%';$('ivlBar').style.width='100%';$('ivlPt').style.left='50%';
+    $('ivlStats').innerHTML='attempts=0 · pass rate=— · confidence range=[—, —]';
+    $('verdict').style.display='none';
+  }
+  function stopTest(){if(timer){clearInterval(timer);timer=null;$('testBtn').textContent='Run the driving test';}}
+
+  $('testBtn').addEventListener('click',function(){
+    if(!currentMap)return;
+    if(timer){stopTest();return;}
+    resetStats();
+    var stamp=$('mapStamp');stamp.className='stamp pending';stamp.textContent='TESTING…';
+    this.textContent='Pause';
+    timer=setInterval(trial, reduced?150:60);
+  });
+
+  function trial(){
+    var pass=true;
+    currentMap.predicates.forEach(function(p){
+      var base=(p.type==='ambiguous')?(p.clarity||0.5):(0.88+((p.clarity||0.85)-0.75)*0.5);
+      base=Math.max(0.05,Math.min(0.995,base));
+      var eff=1-Math.pow(1-base,2); // frozen agent may retry a failed step once, within max_steps
+      var ok=Math.random()<eff;
+      var pp=st.per[p.id];pp.n++;if(ok)pp.s++;
+      if(!ok)pass=false;
+      var b=$('pb-'+p.id);if(b)b.style.width=((pp.s/pp.n)*100)+'%';
+    });
+    st.n++;if(pass)st.s++;
+    var w=wilson(st.s,st.n);
+    $('ivlBar').style.left=(w[0]*100)+'%';
+    $('ivlBar').style.width=((w[1]-w[0])*100)+'%';
+    $('ivlPt').style.left=(w[2]*100)+'%';
+    $('ivlStats').innerHTML='attempts=<b>'+st.n+'</b> · pass rate=<b>'+w[2].toFixed(2)+'</b> · confidence range=[<b>'+w[0].toFixed(2)+'</b>, <b>'+w[1].toFixed(2)+'</b>]';
+
+    var stamp=$('mapStamp'), v=$('verdict');
+    if(st.n>=MIN_N&&w[0]>=THETA){
+      stopTest();stamp.className='stamp cert';stamp.textContent='CERTIFIED';
+      v.style.display='block';v.style.borderColor='var(--verified)';
+      v.innerHTML='<b>Certified.</b> The lower edge of the confidence range cleared the pass line — this map is clear enough that even a weak AI helper passes it reliably. In the real system you\'d now hold a certificate plus the full tape of every attempt.';
+    } else if((st.n>=MIN_N&&w[1]<THETA)||st.n>=MAX_N){
+      stopTest();
+      if(w[1]<THETA||w[0]<THETA){
+        stamp.className='stamp failed';stamp.textContent='FAILED · PUBLISHED';
+        var ambs=currentMap.predicates.filter(function(p){return (p.clarity||0)<0.7});
+        v.style.display='block';v.style.borderColor='var(--fail)';
+        v.innerHTML='<b>Failed — and that\'s the system working.</b> The map isn\'t clear enough to pass reliably'+(ambs.length?', mostly because of the steps tagged <b>NEEDS CLARITY</b> above. Follow the → hints, rewrite your description, and rebuild the map — that loop is the translation layer teaching you to specify.':'. Tighten the fuzziest steps and rebuild.')+' Fails get published with the same visibility as passes. No grading on a curve.';
+      }
+    }
+  }
+})();
+</script>
+</body>
+</html>

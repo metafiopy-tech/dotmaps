@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Queen — an AI that proves its work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF7EE; --grid:#EFE7D6; --ink:#1E2833; --soft:#5D6B76;
+    --honey:#C77F14; --honey-deep:#9C6109; --comb:#F3E7C9;
+    --verified:#1F8A5D; --signal:#D14E17; --card:#FFFFFF; --edge:#E3D9C2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'IBM Plex Sans',sans-serif;color:var(--ink);background:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:28px 28px;line-height:1.65;font-size:16.5px;
+  }
+  .wrap{max-width:780px;margin:0 auto;padding:0 18px}
+  header{padding:64px 0 30px}
+  .crown{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--honey-deep);text-transform:uppercase}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(42px,8.5vw,72px);line-height:1.02;margin-top:6px}
+  h1 em{font-style:italic;color:var(--honey)}
+  .lede{font-size:19px;max-width:56ch;margin-top:16px}
+  .lede b{color:var(--honey-deep)}
+  section{padding:44px 0;border-top:1.5px solid var(--edge)}
+  h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(27px,4.5vw,36px);margin-bottom:6px}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--honey-deep);text-transform:uppercase}
+  p{max-width:62ch;margin-bottom:12px}
+  .soft{color:var(--soft)}
+  .ledger{background:var(--card);border:2px solid var(--ink);border-radius:6px;box-shadow:6px 6px 0 rgba(30,40,51,.10);overflow:hidden;margin-top:16px}
+  .ledger-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:12px 16px;background:var(--comb);border-bottom:1.5px solid var(--edge)}
+  .ledger-title{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--honey-deep)}
+  .counters{display:flex;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:12px}
+  .counters b{color:var(--ink);font-size:14px}
+  .entries{padding:8px 16px 14px;min-height:230px}
+  .entry{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--edge);opacity:0;transform:translateY(4px);transition:opacity .5s,transform .5s;font-size:14.5px}
+  .entry.show{opacity:1;transform:none}
+  .entry .when{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--soft);white-space:nowrap;padding-top:2px}
+  .entry .free{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--verified);white-space:nowrap;padding-top:3px}
+  .entry .ask{color:var(--honey-deep);font-weight:600}
+  .replay{margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--soft)}
+  .replay a{color:var(--honey-deep)}
+  .play{margin:14px 0 0}
+  button{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);padding:10px 16px;border-radius:4px;cursor:pointer}
+  button:hover{background:var(--ink);color:var(--paper)}
+  button.honey{background:var(--honey);border-color:var(--honey);color:#fff}
+  button.honey:hover{background:var(--honey-deep);border-color:var(--honey-deep)}
+  button:focus-visible{outline:2px solid var(--honey-deep);outline-offset:2px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  @media(max-width:600px){.cards{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1.5px solid var(--edge);border-radius:5px;padding:16px}
+  .card h3{font-size:16px;font-weight:600;margin-bottom:6px}
+  .card h3 .hex{color:var(--honey);margin-right:6px}
+  .card p{font-size:14px;color:var(--soft);margin:0}
+  .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+  @media(max-width:640px){.trio{grid-template-columns:1fr}}
+  .trio .card{border-top:4px solid var(--honey)}
+  .big{font-family:'Instrument Serif',serif;font-size:30px;line-height:1.1}
+  table{width:100%;border-collapse:collapse;margin-top:14px;background:var(--card);border:1.5px solid var(--edge);font-size:14px}
+  th,td{padding:11px 12px;text-align:left;border-top:1px solid var(--edge);vertical-align:top}
+  thead th{background:var(--comb);border-top:none;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--honey-deep)}
+  td.yes{color:var(--verified);font-weight:600}
+  td.no{color:var(--soft)}
+  tbody th{font-weight:600;font-size:14px;width:38%}
+  .stairs{margin-top:14px;display:flex;flex-direction:column}
+  .stair{display:flex;gap:14px;padding:14px 0;border-bottom:1px dashed var(--edge)}
+  .stair .step{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--honey-deep);white-space:nowrap;padding-top:3px;width:84px;text-transform:uppercase}
+  .stair p{margin:0;font-size:15px}
+  .stair b{color:var(--honey-deep)}
+  footer{padding:40px 0 70px;border-top:1.5px solid var(--edge);font-size:13.5px;color:var(--soft)}
+  footer a{color:var(--honey-deep)}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crown">meet the queen</div>
+  <h1>An AI that <em>proves</em> its work.</h1>
+  <p class="lede">Most AI gives you answers and asks you to trust them. The Queen runs your repeating tasks, <b>shows you the receipt for every single one</b>, learns new jobs on her own — and once she's learned something, doing it again costs nothing. You check one card a day. Usually it says: <b>nothing needs you.</b></p>
+</header>
+
+<section style="border-top:none;padding-top:8px">
+  <div class="kicker">watch a day happen</div>
+  <h2>Her ledger, while you lived your life</h2>
+  <div class="ledger">
+    <div class="ledger-head">
+      <span class="ledger-title">today · receipts attached to everything</span>
+      <span class="counters">saved <b id="cTime">0h 0m</b> · spent <b id="cMoney">$0.00</b> · needs you <b id="cAsk">0</b></span>
+    </div>
+    <div class="entries" id="entries"><div class="soft" style="padding-top:10px;font-size:14px">Press play. This is a simulation of one ordinary day.</div></div>
+  </div>
+  <div class="play"><button class="honey" id="playBtn">&#9654; Play the day</button></div>
+</section>
+
+<section>
+  <div class="kicker">everyday jobs + the unusual ones</div>
+  <h2>What she actually does</h2>
+  <div class="cards">
+    <div class="card"><h3><span class="hex">&#x2B21;</span>The boring loops</h3><p>Invoices checked, menus updated, reports filed, sites monitored, inboxes triaged — the stuff that eats an hour here and twenty minutes there, every week, forever.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Teaches herself new jobs</h3><p>Hand her a task nobody set up. She pokes at it, figures out the rules, builds her own checklist — then passes a test on that checklist before you ever rely on it.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Learns once, repeats free</h3><p>Learning a new job costs about the price of a coffee, once. After she passes the test, every repeat costs $0 — no AI even needs to run. The lesson itself does the work.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Proves it, doesn't promise it</h3><p>Every job comes with a receipt: what was checked, what passed, and a replay you can watch. You never take her word for anything.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Explores where you'd never look</h3><p>Give her helpers a head start of proven skills and something strange happens: they dig 12&times; deeper into the untested corners — the edge cases you'd only find the hard way.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Knows when to quit — and when not to</h3><p>She can tell a dead end from a slow start, spots when the problem is a bad measuring stick rather than a hard task, and never grinds your money into a wall.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">the three things she gives back</div>
+  <h2>Time. Money. Headaches.</h2>
+  <div class="trio">
+    <div class="card"><div class="big">Hours</div><p>The repeating tasks run themselves. Your attention gets one card a day, not forty tabs.</p></div>
+    <div class="card"><div class="big">Dollars</div><p>Pay once to learn a skill, then repeats are free. She spends smallest-first and shows every cent on the ledger.</p></div>
+    <div class="card"><div class="big">Trust</div><p>The headache with AI isn't the work — it's checking the work. Receipts and replays end the double-checking forever.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">the part nobody else has</div>
+  <h2>She remembers like something alive</h2>
+  <p>Every other AI remembers like a filing cabinet: it hoards photocopies and hopes it grabs the right one later. The Queen remembers like a person who keeps a diary — and it changes everything about what you can trust.</p>
+  <div class="cards">
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Seeds, not photocopies</h3><p>She keeps the seed of a memory, not the whole document — and regrows the full picture when you ask. Less hoarding, more knowing.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Every memory gets fact-checked</h3><p>When she regrows a memory, she checks it against her diary — the untouchable record of what actually happened. She cannot "remember" something that isn't in the diary. No confident making-things-up.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Forgetting is the filter</h3><p>Whatever stops being useful fades back to a seed. What survives the fading, over and over, is by definition what keeps mattering. She doesn't hoard — she selects.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Proven routines become instant</h3><p>A task she's verified again and again hardens into a reflex — instant to use, like a habit. That's why her repeats cost nothing.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>Habits can melt when the world changes</h3><p>The dangerous AI is the one that keeps an old habit after the rules change. When her world shifts — a price format, a new form, a moved page — the stale habit demotes itself back to "re-learn me." No dogma.</p></div>
+    <div class="card"><h3><span class="hex">&#x2B21;</span>She actually sleeps</h3><p>Every night: the day's lessons get compressed, the noise gets discarded, and she wakes with a clean head. Memory that's alive needs rest. Hers gets it on schedule.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">the honest comparison</div>
+  <h2>"Can't I just buy a chatbot subscription?"</h2>
+  <p>You should — a great chat AI is a brilliant conversation partner. The Queen is a different animal: not something you talk to, something that <b>runs things and answers for them</b>.</p>
+  <table>
+    <thead><tr><th></th><th>A chat subscription</th><th>The Queen</th></tr></thead>
+    <tbody>
+      <tr><th>How you use it</th><td>You ask, it answers, you do the work</td><td class="yes">She does the work; you get the receipt</td></tr>
+      <tr><th>When you're away</th><td class="no">Nothing happens</td><td class="yes">The colony keeps running</td></tr>
+      <tr><th>Repeating a learned task</th><td class="no">Pay full price, every time</td><td class="yes">$0 after the first pass</td></tr>
+      <tr><th>Proof of correctness</th><td class="no">Read it and hope</td><td class="yes">A test passed + a replay you can watch</td></tr>
+      <tr><th>Memory of your world</th><td>Chat history</td><td class="yes">A growing library of proven skills</td></tr>
+      <tr><th>How memory works</th><td class="no">A pile of transcripts</td><td class="yes">Living: regrown from seeds, fact-checked against her diary, useless parts fade, stale habits melt</td></tr>
+      <tr><th>When it fails</th><td class="no">Confidently, quietly</td><td class="yes">Loudly, on the ledger, failure published</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <div class="kicker">why this matters beyond your to-do list</div>
+  <h2>AI you can check changes everything</h2>
+  <p>The whole industry is racing to make AI more capable. Almost nobody is making it <b>more checkable</b> — and that's the actual bottleneck. You can't delegate what you can't verify; you just create a second job called "reviewing the AI."</p>
+  <p>The Queen is built on the opposite bet: <b>the receipt is the product.</b> Every skill she holds passed a test with a score attached. Every claim about what she can do links to evidence. And when one of her own claims failed testing, it was published next to the wins — at the same size. That's the standard the whole field needs, running in one small colony first.</p>
+</section>
+
+<section>
+  <div class="kicker">from your first task to your big idea</div>
+  <h2>She grows the way you do</h2>
+  <div class="stairs">
+    <div class="stair"><span class="step">Week 1</span><p>You hand her one annoying loop — the weekly invoice check. She learns it, passes the test, and it never touches your morning again.</p></div>
+    <div class="stair"><span class="step">Month 1</span><p>Five loops run themselves. Her skill library is growing, and every new task starts faster because <b>new helpers inherit everything the old ones proved.</b></p></div>
+    <div class="stair"><span class="step">Month 3</span><p>You describe a task in plain words and watch it become a checklist in front of you. The unclear steps bounce back with questions — she's teaching you to explain, while you teach her to work.</p></div>
+    <div class="stair"><span class="step">Month 6</span><p>You bring her an <b>idea</b>, not a task. She breaks it into checkable pieces, runs what she already knows for free, and sends explorers into the parts nobody's ever done.</p></div>
+    <div class="stair"><span class="step">Year 1</span><p>The library is yours — every skill proven, portable, permanent. She's not a subscription you rent. She's a capability you <b>own</b>, compounding.</p></div>
+  </div>
+</section>
+
+<footer>
+  <b style="color:var(--ink)">Honesty box:</b> this page is a concept demo. The parts underneath are real and public — the self-teaching, the testing that can't be fooled, the learn-once-repeat-free replay, the 12&times; exploration finding, and the published failure — all reproducible at
+  <a href="https://github.com/metafiopy-tech/dotmaps">github.com/metafiopy-tech/dotmaps</a>. The Queen is the body being assembled from those proven parts. She was designed six times before anyone noticed it was one design.
+</footer>
+
+</div>
+<script>
+(function(){
+  var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function $(id){return document.getElementById(id)}
+  var DAY=[
+    {t:"6:50a",txt:"Colony wakes. Overnight site watch: all pages healthy, booking flow tested end-to-end.",free:true,min:10},
+    {t:"7:15a",txt:"14 supplier invoices checked against last week. One price jump flagged — mozzarella +9%.",free:true,min:35},
+    {t:"9:02a",txt:"Menu prices synced to the POS after the flag. Round-trip verified, replay saved.",free:true,min:20},
+    {t:"11:30a",txt:"New job learned: exporting the catering calendar. Poked it, built the checklist, passed 20/20.",cost:0.47,min:45},
+    {t:"1:10p",txt:"Inbox triage: 31 emails sorted, 3 drafts staged for your review. Nothing sent without you.",free:true,min:25},
+    {t:"3:40p",txt:"Explorer dug into the order form's edge cases — found it accepts a blank phone number. Logged.",cost:0.62,min:0},
+    {t:"4:20p",txt:"Memory check: regrew the supplier history from its seed, matched the diary word-for-word. Trusted.",free:true,min:0},
+    {t:"4:45p",txt:"A stale habit melted: the delivery app changed its export format, so the old shortcut demoted itself to re-learn.",free:true,min:0},
+    {t:"5:05p",ask:true,txt:"One thing needs you: the delivery-zone rule came out unclear two runs straight. Redraw the zone, or keep the old one?",min:0},
+    {t:"9:30p",txt:"Sleep: the day's lessons compressed, noise discarded. Library +1 skill — catering export is free forever now.",free:true,min:0}
+  ];
+  var i=0,mins=0,usd=0,asks=0,timer=null;
+  function fmt(m){return Math.floor(m/60)+"h "+(m%60)+"m"}
+  $('playBtn').addEventListener('click',function(){
+    if(timer){return}
+    i=0;mins=0;usd=0;asks=0;
+    $('entries').innerHTML='';
+    $('cTime').textContent='0h 0m';$('cMoney').textContent='$0.00';$('cAsk').textContent='0';
+    this.textContent='Playing\u2026';
+    var self=this;
+    (function next(){
+      if(i>=DAY.length){self.textContent='\u21BB Play it again';timer=null;
+        var d=document.createElement('div');d.className='replay show';
+        d.innerHTML='Every line above has a receipt in the real system. That is the whole point.';
+        $('entries').appendChild(d);return}
+      var e=DAY[i++];
+      var d=document.createElement('div');d.className='entry';
+      d.innerHTML='<span class="when">'+e.t+'</span><span'+(e.ask?' class="ask"':'')+'>'+e.txt+'</span>'+
+        (e.free?'<span class="free">$0.00 \u2713</span>':(e.cost?'<span class="free" style="color:var(--honey-deep)">$'+e.cost.toFixed(2)+'</span>':''));
+      $('entries').appendChild(d);
+      requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('show')})});
+      mins+=e.min;usd+=(e.cost||0);if(e.ask)asks++;
+      $('cTime').textContent=fmt(mins);$('cMoney').textContent='$'+usd.toFixed(2);$('cAsk').textContent=asks;
+      timer=setTimeout(next,reduced?150:1150);
+    })();
+  });
+})();
+</script>
+</body>
+</html>

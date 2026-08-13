@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>storage vs metabolism</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F8F6EF;--grid:#EAE5D6;--ink:#1C2730;--soft:#8A97A0;--old:#C24E14;
+        --life:#177A54;--seed:#7A5FB5;--diary:#B8901F;--card:#fff;--edge:#DDD6C4}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'IBM Plex Mono',monospace;background:var(--paper);color:var(--ink);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:26px 26px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:18px}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(22px,5vw,32px);margin-bottom:4px;text-align:center}
+  h1 em{font-style:italic;color:var(--life)}
+  .sub{font-size:11px;color:var(--soft);margin-bottom:18px;letter-spacing:.08em}
+  .stage{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:640px}
+  .side{background:var(--card);border:2px solid var(--ink);border-radius:6px;padding:12px 12px 14px;position:relative;overflow:hidden;height:330px}
+  .side h2{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;text-align:center;margin-bottom:8px}
+  .lib h2{color:var(--old)} .met h2{color:var(--life)}
+
+  /* shared bits */
+  .memcard{position:absolute;left:50%;transform:translateX(-50%);width:120px;border:1.5px solid var(--ink);
+    border-radius:4px;background:var(--card);padding:5px 7px;font-size:10px;line-height:1.4;text-align:center}
+  .memcard b{font-size:12px}
+  .q{position:absolute;left:50%;transform:translateX(-50%);top:36px;font-size:20px;color:var(--ink);opacity:0}
+  .verdict{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;font-size:11px;font-weight:600;
+    padding:4px 10px;border-radius:3px;opacity:0;white-space:nowrap}
+
+  /* ---------- LEFT: LIBRARY ---------- */
+  .copy{position:absolute;left:50%;width:110px;border:1.2px solid #B9AE97;border-radius:3px;background:#F4EFE2;
+    height:26px;opacity:0;transform:translateX(-50%)}
+  .lib .c1{animation:pile1 12s infinite}
+  .lib .c2{animation:pile2 12s infinite}
+  .lib .c3{animation:pile3 12s infinite}
+  .lib .c4{animation:pile4 12s infinite}
+  .lib .c5{animation:pile5 12s infinite}
+  .lib .src{top:52px;animation:libsrc 12s infinite}
+  .lib .q{animation:qpop 12s infinite}
+  .lib .stale{top:92px;border-color:var(--old);color:var(--old);opacity:0;animation:stalepop 12s infinite}
+  .lib .verdict{background:#F6E7DC;color:var(--old);animation:vlib 12s infinite}
+  @keyframes libsrc{0%{opacity:0;top:40px}4%,20%{opacity:1;top:52px}26%,100%{opacity:0}}
+  @keyframes pile1{0%,8%{opacity:0}12%,96%{opacity:1;bottom:44px}98%,100%{opacity:0}}
+  @keyframes pile2{0%,12%{opacity:0}16%,96%{opacity:1;bottom:74px}98%,100%{opacity:0}}
+  @keyframes pile3{0%,16%{opacity:0}20%,96%{opacity:1;bottom:104px}98%,100%{opacity:0}}
+  @keyframes pile4{0%,26%{opacity:0}31%,96%{opacity:.75;bottom:134px}98%,100%{opacity:0}}
+  @keyframes pile5{0%,31%{opacity:0}36%,96%{opacity:.55;bottom:164px}98%,100%{opacity:0}}
+  @keyframes stalepop{0%,54%{opacity:0;transform:translateX(-50%) scale(.9)}60%,92%{opacity:1;transform:translateX(-50%) scale(1)}97%,100%{opacity:0}}
+  @keyframes vlib{0%,60%{opacity:0}66%,92%{opacity:1}97%,100%{opacity:0}}
+
+  /* ---------- RIGHT: METABOLISM ---------- */
+  .met .src{top:52px;animation:metsrc 12s infinite}
+  .seed{position:absolute;left:50%;top:64px;width:16px;height:16px;border-radius:50%;background:var(--seed);
+    transform:translateX(-50%);opacity:0;animation:seedlife 12s infinite}
+  .diarybox{position:absolute;left:50%;transform:translateX(-50%);bottom:44px;width:150px;border:1.5px solid var(--diary);
+    border-radius:4px;background:#FAF3DE;font-size:9px;padding:4px 7px;color:#7A6115;line-height:1.5}
+  .diarybox .t{letter-spacing:.1em;text-transform:uppercase;font-size:8.5px}
+  .dl2{opacity:0;animation:dline 12s infinite}
+  .met .q{animation:qpop 12s infinite}
+  .regrown{top:92px;border-color:var(--life);opacity:0;animation:regrow 12s infinite}
+  .checkline{position:absolute;left:50%;transform:translateX(-50%);top:148px;width:2px;height:0;background:var(--life);
+    animation:chk 12s infinite}
+  .met .verdict{background:#E3F1E9;color:var(--life);animation:vmet 12s infinite}
+  @keyframes metsrc{0%{opacity:0;top:40px}4%,14%{opacity:1;top:52px}20%,100%{opacity:0;top:60px}}
+  @keyframes seedlife{
+    0%,14%{opacity:0;transform:translateX(-50%) scale(.2)}
+    20%{opacity:1;transform:translateX(-50%) scale(1)}
+    38%{opacity:.85;transform:translateX(-50%) scale(.8)}
+    52%{opacity:.45;transform:translateX(-50%) scale(.62)}   /* fading = forgetting */
+    58%{opacity:.9;transform:translateX(-50%) scale(.9)}     /* recall wakes it */
+    62%,100%{opacity:0;transform:translateX(-50%) scale(.4)}
+  }
+  @keyframes dline{0%,42%{opacity:0}47%,94%{opacity:1}98%,100%{opacity:0}}
+  @keyframes regrow{0%,58%{opacity:0;transform:translateX(-50%) scale(.5)}64%,92%{opacity:1;transform:translateX(-50%) scale(1)}97%,100%{opacity:0}}
+  @keyframes chk{0%,64%{height:0;opacity:0}70%,90%{height:26px;opacity:1}95%,100%{height:0;opacity:0}}
+  @keyframes qpop{0%,48%{opacity:0;transform:translateX(-50%) scale(.7)}53%,60%{opacity:1;transform:translateX(-50%) scale(1)}64%,100%{opacity:0}}
+  @keyframes vmet{0%,68%{opacity:0}74%,93%{opacity:1}97%,100%{opacity:0}}
+
+  .cap{display:flex;justify-content:space-between;width:100%;max-width:640px;margin-top:10px;font-size:10px;color:var(--soft);letter-spacing:.06em}
+  .cap b{font-weight:600}
+  .cap .l{color:var(--old)} .cap .r{color:var(--life);text-align:right}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important}
+    .lib .c1,.lib .c2,.lib .c3{opacity:1}.lib .c1{bottom:44px}.lib .c2{bottom:74px}.lib .c3{bottom:104px}
+    .lib .stale,.lib .verdict,.met .verdict,.regrown,.dl2{opacity:1}
+    .seed{opacity:.6;transform:translateX(-50%) scale(.7)}
+  }
+  @media(max-width:430px){.side{height:300px}.memcard{width:104px}.diarybox{width:132px}}
+</style>
+</head>
+<body>
+  <h1>storage <span style="color:var(--soft)">vs</span> <em>metabolism</em></h1>
+  <div class="sub">the same memory · one month · two fates · loops forever</div>
+
+  <div class="stage">
+    <!-- LIBRARY -->
+    <div class="side lib">
+      <h2>today's AI: store</h2>
+      <div class="memcard src">mozzarella<br><b>$4.85</b></div>
+      <div class="copy c1"></div><div class="copy c2"></div><div class="copy c3"></div>
+      <div class="copy c4"></div><div class="copy c5"></div>
+      <div class="q">?</div>
+      <div class="memcard stale">mozzarella<br><b>$4.85</b><br>✗ stale</div>
+      <div class="verdict">confidently wrong</div>
+    </div>
+
+    <!-- METABOLISM -->
+    <div class="side met">
+      <h2>the proposal: metabolize</h2>
+      <div class="memcard src">mozzarella<br><b>$4.85</b></div>
+      <div class="seed"></div>
+      <div class="q">?</div>
+      <div class="memcard regrown">mozzarella<br><b>$5.20</b><br>✓ fresh</div>
+      <div class="checkline"></div>
+      <div class="diarybox"><span class="t">diary · append-only</span><br>#2841 mozz $4.85<br><span class="dl2">#3007 mozz <b>$5.20</b> ←</span></div>
+      <div class="verdict">regrown · checked · right</div>
+    </div>
+  </div>
+
+  <div class="cap">
+    <span class="l"><b>hoard copies</b> → pile grows → grab the old one</span>
+    <span class="r"><b>keep a seed</b> → let it fade → regrow → check the diary</span>
+  </div>
+</body>
+</html>

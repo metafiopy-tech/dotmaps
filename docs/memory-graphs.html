@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>retrieval vs metabolism</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{--black:#0B0D0F;--silver:#C7CDD4;--dim:#6B747D;--faint:#3A4148;--orange:#FF6B1A}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'IBM Plex Mono',monospace;background:var(--black);color:var(--silver);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:28px 14px}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(22px,4.6vw,32px);text-align:center;color:#EDF0F3}
+  h1 em{font-style:italic;color:var(--orange)}
+  h1 .dim{color:var(--dim)}
+  .sub{font-size:10px;color:var(--dim);margin:6px 0 26px;letter-spacing:.14em;text-align:center;text-transform:uppercase}
+  .stage{display:grid;grid-template-columns:1fr 1fr;gap:40px;width:100%;max-width:760px}
+  @media(max-width:600px){.stage{grid-template-columns:1fr;gap:30px}}
+  .side h2{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;text-align:center;margin-bottom:10px;color:var(--dim)}
+  .met h2{color:var(--orange)}
+  svg{display:block;width:100%;height:auto}
+  .cap{width:100%;max-width:760px;display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:16px;
+       font-size:9.5px;line-height:1.7;color:var(--dim)}
+  @media(max-width:600px){.cap{grid-template-columns:1fr;gap:12px}}
+  .cap .r b{color:var(--orange)} .cap .l b{color:var(--silver)}
+  @media (prefers-reduced-motion: reduce){ .pulse{display:none} }
+</style>
+</head>
+<body>
+  <h1>retrieval <span class="dim">vs</span> <em>metabolism</em></h1>
+  <div class="sub">one terminates &#183; one circulates</div>
+
+  <div class="stage">
+    <!-- ============ LEFT: DAG ============ -->
+    <div class="side lib">
+      <h2>storage &#183; feed-forward</h2>
+      <svg viewBox="0 0 280 420" font-family="IBM Plex Mono,monospace">
+        <!-- spine -->
+        <line x1="140" y1="40" x2="140" y2="330" stroke="#3A4148" stroke-width="1.4"/>
+        <path id="L" d="M140,40 L140,352" fill="none" stroke="none"/>
+        <!-- node dots + labels -->
+        <g font-size="11" fill="#C7CDD4">
+          <circle cx="140" cy="40"  r="3.5" fill="#C7CDD4"/><text x="158" y="44">event</text>
+          <circle cx="140" cy="112" r="3.5" fill="#C7CDD4"/><text x="158" y="116">embed</text>
+          <circle cx="140" cy="184" r="3.5" fill="#C7CDD4"/><text x="158" y="180">vector store</text>
+          <text x="158" y="194" font-size="8.5" fill="#6B747D">append-only &#8734;</text>
+          <circle cx="140" cy="256" r="3.5" fill="#C7CDD4"/><text x="158" y="252">top-k lookup</text>
+          <text x="158" y="266" font-size="8.5" fill="#6B747D">similarity &#8800; truth</text>
+          <circle cx="140" cy="330" r="4" fill="#FF6B1A"/><text x="158" y="334" fill="#FF6B1A">output</text>
+        </g>
+        <!-- ground -->
+        <line x1="140" y1="334" x2="140" y2="356" stroke="#6B747D" stroke-width="1.2" stroke-dasharray="3 3"/>
+        <line x1="120" y1="358" x2="160" y2="358" stroke="#6B747D" stroke-width="1.6"/>
+        <line x1="127" y1="365" x2="153" y2="365" stroke="#6B747D" stroke-width="1.6"/>
+        <line x1="134" y1="372" x2="146" y2="372" stroke="#6B747D" stroke-width="1.6"/>
+        <text x="140" y="394" font-size="9" fill="#6B747D" text-anchor="middle">no feedback</text>
+        <!-- pulse -->
+        <circle class="pulse" r="3.5" fill="#C7CDD4">
+          <animateMotion dur="5s" repeatCount="indefinite"><mpath href="#L"/></animateMotion></circle>
+      </svg>
+    </div>
+
+    <!-- ============ RIGHT: CYCLIC ============ -->
+    <div class="side met">
+      <h2>metabolism &#183; cyclic</h2>
+      <svg viewBox="0 0 280 420" font-family="IBM Plex Mono,monospace">
+        <!-- spine -->
+        <line x1="140" y1="40" x2="140" y2="330" stroke="#3A4148" stroke-width="1.4"/>
+        <path id="R" d="M140,40 L140,330" fill="none" stroke="none"/>
+
+        <!-- loop 1: reconsolidate (output -> seed) -->
+        <path id="R1" d="M144,330 C232,308 232,134 146,112" fill="none" stroke="#FF6B1A" stroke-width="1.4"/>
+        <!-- loop 2: decay self-loop on seed -->
+        <path id="R2" d="M136,106 C104,96 104,128 136,118" fill="none" stroke="#3A4148" stroke-width="1.2"/>
+        <!-- loop 3: anneal (harden <-> melt), left sweep from below output back to seed -->
+        <path id="R3" d="M136,332 C48,310 48,136 134,114" fill="none" stroke="#FF6B1A" stroke-width="1.2" stroke-dasharray="5 4"/>
+
+        <!-- nodes -->
+        <g font-size="11" fill="#C7CDD4">
+          <circle cx="140" cy="40"  r="3.5" fill="#C7CDD4"/><text x="152" y="32">event</text>
+          <circle cx="140" cy="112" r="4.5" fill="#FF6B1A"/><text x="140" y="98" fill="#FF6B1A" text-anchor="middle">seed</text>
+          <circle cx="140" cy="184" r="3.5" fill="#C7CDD4"/><text x="154" y="188">regrow</text>
+          <circle cx="140" cy="256" r="3.5" fill="#C7CDD4"/><text x="154" y="260">verify</text>
+          <text x="154" y="273" font-size="8.5" fill="#6B747D">vs append-only log</text>
+          <circle cx="140" cy="330" r="4" fill="#FF6B1A"/><text x="140" y="352" fill="#FF6B1A" text-anchor="middle">output &#10003;</text>
+        </g>
+
+        <!-- loop labels -->
+        <g font-size="8.5">
+          <text x="232" y="222" fill="#FF6B1A" text-anchor="middle" transform="rotate(90 232 222)">recall rewrites the seed</text>
+          <text x="86" y="88" fill="#6B747D">decay</text>
+          <text x="48" y="222" fill="#FF6B1A" text-anchor="middle" transform="rotate(-90 48 222)">harden &#8646; melt</text>
+        </g>
+
+        <!-- pulses -->
+        <circle class="pulse" r="3.5" fill="#FF6B1A">
+          <animateMotion dur="5s" repeatCount="indefinite"><mpath href="#R"/></animateMotion></circle>
+        <circle class="pulse" r="3" fill="#FF6B1A">
+          <animateMotion dur="4.4s" begin="3.2s" repeatCount="indefinite"><mpath href="#R1"/></animateMotion></circle>
+        <circle class="pulse" r="2.4" fill="#6B747D">
+          <animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#R2"/></animateMotion></circle>
+        <circle class="pulse" r="2.6" fill="#FF6B1A">
+          <animateMotion dur="7s" begin="4.6s" repeatCount="indefinite"><mpath href="#R3"/></animateMotion></circle>
+      </svg>
+    </div>
+  </div>
+
+  <div class="cap">
+    <div class="l"><b>DAG:</b> embed &#8594; store &#8594; lookup &#8594; output. No clock, no decay, no write-back. Ends.</div>
+    <div class="r"><b>Cyclic:</b> seed &#8594; regrow &#8594; verify &#8594; output &#8212; then recall rewrites the seed, disuse decays it, verified patterns harden and melt when the world drifts. Time-native.</div>
+  </div>
+</body>
+</html>
