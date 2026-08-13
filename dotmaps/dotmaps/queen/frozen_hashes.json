@@ -1,0 +1,11 @@
+{
+  "extractor_rubric": "141b906996a11ed5d44a302167d0e46b14c30e3abca74fbeef0eb4200551694c",
+  "certify_oracle_gate": "fa904d23434fe5e15682220a77be02f1a43fc51152fd648d6d22a01248a410ce",
+  "registrations": {
+    "corpus/pilot2_registration.md": "f6bcbf36b0cff886ad98d3be94dc486bb0c158476e02de8de9bbd575836b6275",
+    "corpus/window_assay_registration.md": "3815e1caaf827adfb432c225d2a7eef10dda609a318f11ec28f9ab1c338103fb",
+    "experiments/e1b_registration.md": "f57393c3916a08b192ac92bbe6d6fbc0c097f78cf4d69f0366e8e4d7ec0d3bfe",
+    "experiments/e1c_registration.md": "a2190891c052a8ad074a486cdf7cf3e429c49c0f932dd39a3be918bcbf8fe2e3",
+    "experiments/e1d_registration.md": "8253bdd135c0f055f14407e45eb635bb41f3758bba47bf47c30ff21ffb87da71"
+  }
+}

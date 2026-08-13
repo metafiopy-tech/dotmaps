@@ -122,6 +122,10 @@ def main(argv: list[str] | None = None) -> int:
     p_ui.add_argument("--host", default="127.0.0.1")
     p_ui.add_argument("--port", type=int, default=8765)
 
+    p_assure = sub.add_parser("assure", help="the certainty command (QUEEN v1, Q11): CLAIMS table, PASS/FAIL")
+    p_assure.add_argument("--freeze", action="store_true",
+                          help="(re)generate the frozen-hashes manifest — a deliberate, human-run action")
+
     args = parser.parse_args(argv)
 
     if args.cmd == "run":
@@ -310,6 +314,16 @@ def main(argv: list[str] | None = None) -> int:
         from .queen.ui import main as ui_main
         ui_main(host=args.host, port=args.port)
         return 0
+
+    if args.cmd == "assure":
+        from .queen.assure import generate_frozen_manifest, render, run_assure
+        if args.freeze:
+            p = generate_frozen_manifest()
+            print(f"froze current bytes -> {p}")
+            return 0
+        res = run_assure()
+        print(render(res))
+        return 0 if res["pass"] else 1
 
     return 2
 
