@@ -118,7 +118,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p_sleep = sub.add_parser("sleep", help="the homeostasis tick (QUEEN v0, Q6): decay -> recompute -> dedup -> SLEEP")
 
-    p_ui = sub.add_parser("ui", help="the operator console (QUEEN v1, Q10): serves localhost, zero deps")
+    p_ui = sub.add_parser("ui", help="The Hive (QUEEN v1, Q10, keeper's edition): serves localhost, zero deps")
     p_ui.add_argument("--host", default="127.0.0.1")
     p_ui.add_argument("--port", type=int, default=8765)
 

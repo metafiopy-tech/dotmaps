@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ground: #10181F;
+    --panel: #161F28;
+    --edge: #243140;
+    --bone: #DCE6EE;
+    --dim: #7E93A3;
+    --honey: #E8A93D;
+    --wax: #C9B48A;
+    --quiet: #3A4A5A;
+    --good: #2FBF83;
+    --gone: #6B4B4B;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--ground); }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--ground);
+    color: var(--bone);
+    line-height: 1.55;
+    padding-bottom: 4rem;
+  }
+  .voice, h1, h2, .big {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 1.4rem 1.1rem; }
+
+  /* ---- 1. the hive door ---- */
+  .door {
+    text-align: center;
+    padding: 2.6rem 1rem 2rem;
+  }
+  .door .glyph { font-size: 2.6rem; margin-bottom: .6rem; }
+  .door h1 {
+    font-size: clamp(1.9rem, 8vw, 2.7rem);
+    line-height: 1.15;
+    color: var(--bone);
+  }
+  .door h1 em { font-style: italic; color: var(--honey); }
+  .questions { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.6rem; text-align: left; }
+  .question-card {
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+  }
+  .question-card p { font-size: 1.05rem; margin-bottom: .9rem; }
+  .answers { display: flex; flex-direction: column; gap: .55rem; }
+  .answer-btn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: .8rem 1rem;
+    border-radius: 10px;
+    border: none;
+    background: var(--honey);
+    color: #1c1406;
+    cursor: pointer;
+    text-align: left;
+  }
+  .answer-btn:active { transform: scale(.98); }
+  .answer-btn.secondary { background: transparent; border: 1px solid var(--edge); color: var(--bone); }
+
+  /* ---- section chrome ---- */
+  section { margin-top: 2.4rem; }
+  h2 { font-size: 1.6rem; color: var(--bone); margin-bottom: .3rem; }
+  .subtext { color: var(--dim); font-size: .92rem; margin-bottom: 1.1rem; }
+
+  /* ---- 2. the honeycomb ---- */
+  .honeycomb { display: flex; flex-direction: column; align-items: center; }
+  .hex-row { display: flex; justify-content: center; margin-top: -16px; }
+  .hex-row:first-child { margin-top: 0; }
+  .hex-row.offset { margin-left: 42px; }
+  .hex {
+    width: 78px; height: 67.5px;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    margin: -6px 3px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    background: var(--wax);
+    position: relative;
+    transition: transform .15s ease;
+  }
+  .hex:active { transform: scale(.94); }
+  .hex.trusted { background: var(--honey); }
+  .hex.retired { background: var(--gone); }
+  .hex .mark { font-size: 1.1rem; opacity: .85; }
+  .hex.pulse { animation: hexpulse 1.8s ease-in-out infinite; }
+  @keyframes hexpulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,169,61,.5); }
+    50% { box-shadow: 0 0 0 8px rgba(232,169,61,0); }
+  }
+  .honeycomb-empty { color: var(--dim); text-align: center; padding: 1rem; }
+
+  /* ---- card sheet (skill detail) ---- */
+  .sheet-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,.55);
+    display: none; align-items: flex-end; justify-content: center; z-index: 20;
+  }
+  .sheet-backdrop.open { display: flex; }
+  .sheet {
+    background: var(--panel); border: 1px solid var(--edge);
+    border-radius: 18px 18px 0 0; padding: 1.4rem 1.3rem 1.8rem;
+    width: 100%; max-width: 640px; max-height: 80vh; overflow-y: auto;
+  }
+  .sheet h3 { font-family: 'Instrument Serif', serif; font-size: 1.5rem; margin-bottom: .5rem; }
+  .sheet .field { color: var(--dim); font-size: .95rem; margin: .25rem 0; }
+  .sheet .field b { color: var(--bone); font-weight: 600; }
+  .close-btn {
+    display: block; margin: 1.1rem auto 0; background: none; border: 1px solid var(--edge);
+    color: var(--dim); padding: .55rem 1.4rem; border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  /* ---- 3. the diary ---- */
+  .diary-list { display: flex; flex-direction: column; gap: .1rem; }
+  .diary-line {
+    display: flex; align-items: baseline; gap: .6rem;
+    padding: .6rem 0; border-bottom: 1px solid var(--edge);
+  }
+  .diary-line .g { font-size: 1.05rem; flex-shrink: 0; }
+  .diary-line .t { flex: 1; font-size: .98rem; }
+  .diary-line .when { color: var(--quiet); font-size: .75rem; white-space: nowrap; }
+  .receipt-toggle {
+    background: none; border: none; color: var(--dim); font-size: .95rem;
+    cursor: pointer; padding: 0 .2rem; flex-shrink: 0;
+  }
+  .receipt {
+    display: none; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .74rem; color: var(--dim); background: var(--ground);
+    border: 1px solid var(--edge); border-radius: 8px; padding: .6rem .7rem;
+    margin: .2rem 0 .6rem; white-space: pre-wrap; word-break: break-word;
+  }
+  .receipt.open { display: block; }
+  .diary-empty { color: var(--dim); padding: 1rem 0; }
+
+  /* ---- 4. the one counter ---- */
+  .counter {
+    text-align: center; padding: 2rem 1rem 1rem;
+  }
+  .counter .num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 3.4rem; color: var(--honey); line-height: 1;
+  }
+  .counter .label { color: var(--dim); margin-top: .4rem; font-size: .95rem; }
+
+  footer { text-align: center; color: var(--quiet); font-size: .75rem; padding: 2rem 1rem 0; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- 1. THE HIVE DOOR -->
+  <div class="door" id="door">
+    <div class="glyph">🐝</div>
+    <h1 id="door-headline">Checking in on her…</h1>
+    <div class="questions" id="questions"></div>
+  </div>
+
+  <!-- 2. THE HONEYCOMB -->
+  <section>
+    <h2>What she's learned</h2>
+    <p class="subtext">Every hex is one thing she can now do for free. Tap one to see it.</p>
+    <div class="honeycomb" id="honeycomb"></div>
+  </section>
+
+  <!-- 3. THE DIARY -->
+  <section>
+    <h2>Her diary</h2>
+    <p class="subtext">The last few things that happened. Tap ⌁ for the receipt.</p>
+    <div class="diary-list" id="diary"></div>
+  </section>
+
+  <!-- 4. THE ONE COUNTER -->
+  <div class="counter">
+    <div class="num" id="counter-num">—</div>
+    <div class="label">jobs done for free since she learned them</div>
+  </div>
+
+  <footer>The Hive · a quiet page, only speaks when something needs you.</footer>
+</div>
+
+<div class="sheet-backdrop" id="sheet-backdrop">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script>
+const $ = (sel) => document.querySelector(sel);
+
+async function getJSON(url, opts) {
+  const r = await fetch(url, opts);
+  return r.json();
+}
+
+function timeAgo(iso) {
+  if (!iso) return 'not yet';
+  const then = new Date(iso.replace(' ', 'T') + (iso.includes('Z') ? '' : ''));
+  const days = Math.floor((Date.now() - then.getTime()) / 86400000);
+  if (Number.isNaN(days)) return iso;
+  if (days <= 0) return 'today';
+  if (days === 1) return 'yesterday';
+  if (days < 30) return days + ' days ago';
+  return then.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+// ---------------- 1. the hive door ----------------
+async function loadDoor() {
+  const status = await getJSON('/api/status');
+  $('#counter-num').textContent = status.free_jobs_count;
+  const headline = $('#door-headline');
+  const box = $('#questions');
+  box.innerHTML = '';
+  if (status.calm) {
+    headline.innerHTML = 'All quiet. <em>Nothing needs you.</em>';
+    return;
+  }
+  const n = status.questions.length;
+  headline.innerHTML = `The hive has <em>${n} question${n === 1 ? '' : 's'}</em>`;
+  status.questions.forEach((q) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    const p = document.createElement('p');
+    p.textContent = q.text;
+    card.appendChild(p);
+    const answers = document.createElement('div');
+    answers.className = 'answers';
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-btn' + (i === 0 ? '' : ' secondary');
+      btn.textContent = opt.label;
+      btn.onclick = () => answer(q.id, opt.choice);
+      answers.appendChild(btn);
+    });
+    card.appendChild(answers);
+    box.appendChild(card);
+  });
+}
+
+async function answer(id, choice) {
+  await getJSON('/api/resolve', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, choice }),
+  });
+  loadDoor();
+  loadDiary();
+}
+
+// ---------------- 2. the honeycomb ----------------
+function hexClass(skill) {
+  if (skill.status === 'certified') return 'trusted';
+  if (skill.status === 'convicted') return 'retired';
+  return '';
+}
+
+function statusWord(status) {
+  if (status === 'certified') return "She's sure of this one";
+  if (status === 'convicted') return "Retired — it didn't hold up";
+  return 'Still testing it';
+}
+
+async function loadHoneycomb() {
+  const skills = await getJSON('/api/skills');
+  const box = $('#honeycomb');
+  box.innerHTML = '';
+  if (!skills.length) {
+    box.innerHTML = '<p class="honeycomb-empty">She hasn’t learned anything yet.</p>';
+    return;
+  }
+  const perRow = window.innerWidth < 480 ? 4 : window.innerWidth < 860 ? 6 : 8;
+  for (let i = 0; i < skills.length; i += perRow) {
+    const row = document.createElement('div');
+    row.className = 'hex-row' + (((i / perRow) % 2) ? ' offset' : '');
+    skills.slice(i, i + perRow).forEach((skill) => row.appendChild(hexEl(skill)));
+    box.appendChild(row);
+  }
+}
+
+function hexEl(skill) {
+  const hex = document.createElement('div');
+  hex.className = 'hex ' + hexClass(skill);
+  if (skill.pulse) hex.classList.add('pulse');
+  hex.style.opacity = Math.max(0.3, skill.freshness ?? 1);
+  hex.title = skill.statement || skill.name;
+  const mark = document.createElement('div');
+  mark.className = 'mark';
+  mark.textContent = skill.status === 'certified' ? '✓' : skill.status === 'convicted' ? '✕' : '·';
+  hex.appendChild(mark);
+  hex.onclick = () => openSheet(skill.name);
+  return hex;
+}
+
+async function openSheet(name) {
+  const detail = await getJSON('/api/skill/' + encodeURIComponent(name));
+  const sheet = $('#sheet');
+  sheet.innerHTML = '';
+  const h3 = document.createElement('h3');
+  h3.textContent = detail.statement || detail.name;
+  sheet.appendChild(h3);
+
+  const fields = [
+    ['Learned', detail.learned ? timeAgo(detail.learned) : 'not yet'],
+    ['Cost', 'once, free every time since'],
+    ['Used', `${detail.used_count} time${detail.used_count === 1 ? '' : 's'}, free`],
+    ['Last checked', timeAgo(detail.last_checked)],
+    ['How sure she is', statusWord(detail.status)],
+  ];
+  fields.forEach(([label, val]) => {
+    const p = document.createElement('div');
+    p.className = 'field';
+    p.innerHTML = `<b>${label}:</b> ${val}`;
+    sheet.appendChild(p);
+  });
+
+  const receiptBtn = document.createElement('button');
+  receiptBtn.className = 'receipt-toggle';
+  receiptBtn.textContent = '⌁ receipt';
+  const receipt = document.createElement('div');
+  receipt.className = 'receipt';
+  receipt.textContent = JSON.stringify(detail.raw, null, 2);
+  receiptBtn.onclick = () => receipt.classList.toggle('open');
+  sheet.appendChild(receiptBtn);
+  sheet.appendChild(receipt);
+
+  const close = document.createElement('button');
+  close.className = 'close-btn';
+  close.textContent = 'Close';
+  close.onclick = closeSheet;
+  sheet.appendChild(close);
+
+  $('#sheet-backdrop').classList.add('open');
+}
+
+function closeSheet() { $('#sheet-backdrop').classList.remove('open'); }
+$('#sheet-backdrop').addEventListener('click', (e) => {
+  if (e.target === $('#sheet-backdrop')) closeSheet();
+});
+
+// ---------------- 3. the diary ----------------
+async function loadDiary() {
+  const events = await getJSON('/api/diary');
+  const box = $('#diary');
+  box.innerHTML = '';
+  if (!events.length) {
+    box.innerHTML = '<p class="diary-empty">Nothing written yet.</p>';
+    return;
+  }
+  events.forEach((ev) => {
+    const line = document.createElement('div');
+    line.className = 'diary-line';
+    line.innerHTML = `
+      <span class="g">${ev.glyph}</span>
+      <span class="t">${ev.text}</span>
+      <span class="when">${timeAgo(ev.t)}</span>
+      <button class="receipt-toggle" aria-label="receipt">⌁</button>
+    `;
+    const receipt = document.createElement('div');
+    receipt.className = 'receipt';
+    receipt.textContent = JSON.stringify(ev.raw, null, 2);
+    line.querySelector('.receipt-toggle').onclick = () => receipt.classList.toggle('open');
+    box.appendChild(line);
+    box.appendChild(receipt);
+  });
+}
+
+// ---------------- boot ----------------
+loadDoor();
+loadHoneycomb();
+loadDiary();
+</script>
+</body>
+</html>

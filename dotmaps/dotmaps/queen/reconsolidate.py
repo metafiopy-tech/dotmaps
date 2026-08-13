@@ -86,6 +86,22 @@ def touch(skill_path: Path, trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH,
             "stability": decay["stability"], "last_used": now}
 
 
+def freshness_ratio(skill_path: Path, now_ts: float | None = None) -> float | None:
+    """Time made visible: exp(-days_since_last_used / half_life), 1.0 =
+    just used, ->0 as it goes stale. None if never invoked (no last_used
+    yet — a candidate, or a certified card route hasn't touched). Shared
+    math with due_for_recheck() so the UI's opacity and the governor's
+    shelf trigger read the same clock."""
+    card = yaml.safe_load(Path(skill_path).read_text())
+    decay = card.get("decay", {})
+    if not decay.get("last_used"):
+        return None
+    now_ts = now_ts if now_ts is not None else time.time()
+    last = time.mktime(time.strptime(decay["last_used"], "%Y-%m-%dT%H:%M:%S"))
+    days = max(0.0, (now_ts - last) / 86400.0)
+    return math.exp(-days / SHELF_HALF_LIFE_DAYS)
+
+
 def due_for_recheck(skill_path: Path, now_ts: float | None = None) -> bool:
     """FSRS-lite decay: stability decays exponentially since last_used at
     SHELF_HALF_LIFE_DAYS. Below SHELF_THRESHOLD of its banked value -> due."""
@@ -93,10 +109,8 @@ def due_for_recheck(skill_path: Path, now_ts: float | None = None) -> bool:
     decay = card.get("decay", {})
     if not decay.get("last_used") or not decay.get("stability"):
         return False
-    now_ts = now_ts if now_ts is not None else time.time()
-    last = time.mktime(time.strptime(decay["last_used"], "%Y-%m-%dT%H:%M:%S"))
-    days = max(0.0, (now_ts - last) / 86400.0)
-    decayed = decay["stability"] * math.exp(-days / SHELF_HALF_LIFE_DAYS)
+    ratio = freshness_ratio(skill_path, now_ts=now_ts)
+    decayed = decay["stability"] * ratio
     return decayed < (decay["stability"] * SHELF_THRESHOLD)
 
 

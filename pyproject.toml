@@ -30,6 +30,7 @@ include = ["dotmaps*"]
 
 [tool.setuptools.package-data]
 "dotmaps.compiler" = ["templates/*.yaml"]
+"dotmaps.queen" = ["static/*.html"]
 
 [tool.pytest.ini_options]
 testpaths = ["dotmaps/tests"]
