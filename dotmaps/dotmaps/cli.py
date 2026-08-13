@@ -100,6 +100,21 @@ def main(argv: list[str] | None = None) -> int:
     p_board = sub.add_parser("board", help="print the scoreboard summary")
     p_board.add_argument("workspace")
 
+    p_surface = sub.add_parser("surface", help="the queen's one card (QUEEN v0, Q1)")
+    p_surface.add_argument("--resolve", help="escalation id to resolve")
+    p_surface.add_argument("--choice", type=int, help="numbered option to choose (with --resolve)")
+    p_surface.add_argument("--purple", action="store_true",
+                           help="act-rate ledger by escalation category (Q5)")
+
+    p_queen = sub.add_parser("queen", help="dispatch: route manifest coverage, staff the frontier (QUEEN v0, Q2)")
+    p_queen.add_argument("target", help="preset name (pilot|migration) or path to a compiled map.yaml")
+    p_queen.add_argument("--live", action="store_true",
+                         help="Q7 only: live dispatch, subscription-billed via the claude CLI")
+    p_queen.add_argument("--driver", choices=["claude-code"], default="claude-code",
+                         help="Q7 live driver (never AnthropicLearner/API-key)")
+
+    p_sleep = sub.add_parser("sleep", help="the homeostasis tick (QUEEN v0, Q6): decay -> recompute -> dedup -> SLEEP")
+
     args = parser.parse_args(argv)
 
     if args.cmd == "run":
@@ -249,6 +264,38 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "board":
         board = Scoreboard.load_or_init(args.workspace)
         print(json.dumps(board.summary(), indent=2))
+        return 0
+
+    if args.cmd == "surface":
+        from .queen import surface as surface_mod
+        if args.purple:
+            from .queen import purple as purple_mod
+            print(json.dumps(purple_mod.act_rate_table(), indent=2))
+            return 0
+        if args.resolve:
+            if args.choice is None:
+                print("--resolve requires --choice <n>")
+                return 2
+            rec = surface_mod.resolve(args.resolve, args.choice)
+            print(f"resolved [{args.resolve}] -> {rec['data']['choice_label']}")
+            return 0
+        c = surface_mod.card()
+        print(surface_mod.render(c))
+        return 0 if c["status"] == "calm" else 1
+
+    if args.cmd == "queen":
+        from .queen.dispatch import dispatch
+        if args.live:
+            from .queen.live import live_dispatch
+            report = live_dispatch(args.target, driver=args.driver)
+        else:
+            report = dispatch(args.target)
+        print(json.dumps(report, indent=2))
+        return 0
+
+    if args.cmd == "sleep":
+        from .queen.sleep import sleep as sleep_fn
+        print(json.dumps(sleep_fn(), indent=2))
         return 0
 
     return 2
