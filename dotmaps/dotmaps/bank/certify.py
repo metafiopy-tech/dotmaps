@@ -84,7 +84,16 @@ def probe(skill: dict, seed: Path, n: int = PROBE_N) -> dict[str, Any]:
 
 
 def certify_all(skills_dir: Path, seed: Path) -> dict[str, Any]:
-    skills_dir, seed = Path(skills_dir), Path(seed)
+    """Runs against a DISPOSABLE COPY of the seed: harvested skills may
+    contain write steps (e.g. flight-2's r004 creates target_items.json),
+    and certification must never mutate the repo's seed workspace. The
+    oracle-gate ordering below is unchanged."""
+    skills_dir = Path(skills_dir)
+    import shutil as _sh, tempfile as _tf
+    _tmp = _tf.mkdtemp(prefix="certify-seed-")
+    _seed_copy = Path(_tmp) / "seed"
+    _sh.copytree(Path(seed), _seed_copy)
+    seed = _seed_copy
     results = []
     for f in sorted(skills_dir.glob("*.yaml")):
         skill = yaml.safe_load(f.read_text())

@@ -1,0 +1,34 @@
+name: source-items-json-contains-exactly-5-items
+statement: source_items.json contains exactly 5 items
+trigger:
+- source_items.json::json_item_count::ef2d127d
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 71270afd8280
+check:
+  predicate: json_item_count
+  value: 5
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration
+  rule_id: r001
+  banked_at: '2026-08-12T23:50:02'
+  confirmed_by_poke: 3
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

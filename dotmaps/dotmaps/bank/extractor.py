@@ -120,6 +120,16 @@ def bank(run_dirs: list[Path], skills_dir: Path) -> dict[str, Any]:
     skills_dir.mkdir(parents=True, exist_ok=True)
     by_identity: dict[tuple, dict] = {}
 
+    # Library-wide dedup (flight-2 harvest fix): pre-seed identity with the
+    # EXISTING library so (a) re-extraction merges provenance instead of
+    # duplicating, and (b) the regenerated manifest keeps every card rather
+    # than clobbering to just the passed runs. Existing cards keep their
+    # certificate/decay state verbatim (loaded and re-dumped whole).
+    for f in sorted(skills_dir.glob("*.yaml")):
+        card = yaml.safe_load(f.read_text())
+        key = (card["trigger"][0], card["method"]["hash"])
+        by_identity[key] = card
+
     for rd in run_dirs:
         for card in extract_run(Path(rd)):
             key = (card["trigger"][0], card["method"]["hash"])

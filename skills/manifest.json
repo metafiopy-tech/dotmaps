@@ -1,39 +1,9 @@
 {
   "skills": [
     {
-      "name": "the-workspace-contains-a-file-named-source-items",
+      "name": "source-items-json-contains-a-json-array-starts-w",
       "trigger": [
-        "source_items.json::json_parses::any"
-      ],
-      "certificate": {
-        "status": "convicted",
-        "theta": null,
-        "wilson": null,
-        "n": 0,
-        "oracle_gate": "NON-DISCRIMINATING: check also passes on a broken environment"
-      }
-    },
-    {
-      "name": "the-source-items-json-file-contains-items-with-a",
-      "trigger": [
-        "source_items.json::contains::be1a7e65"
-      ],
-      "certificate": {
-        "status": "certified",
-        "theta": 0.7,
-        "wilson": [
-          0.839,
-          1.0
-        ],
-        "n": 20,
-        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
-      }
-    },
-    {
-      "name": "source-items-json-contains-an-item-with-slug-spr",
-      "trigger": [
-        "source_items.json::contains::cfa05d48"
+        "source_items.json::contains::f167415b"
       ],
       "certificate": {
         "status": "certified",
@@ -82,9 +52,120 @@
       }
     },
     {
-      "name": "source-items-json-contains-a-json-array-starts-w",
+      "name": "source-items-json-contains-an-item-with-slug-spr",
       "trigger": [
-        "source_items.json::contains::f167415b"
+        "source_items.json::contains::cfa05d48"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-source-items-json-file-contains-items-with-a",
+      "trigger": [
+        "source_items.json::contains::be1a7e65"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-workspace-contains-a-file-named-source-items",
+      "trigger": [
+        "source_items.json::json_parses::any"
+      ],
+      "certificate": {
+        "status": "convicted",
+        "theta": null,
+        "wilson": null,
+        "n": 0,
+        "oracle_gate": "NON-DISCRIMINATING: check also passes on a broken environment"
+      }
+    },
+    {
+      "name": "source-items-json-contains-exactly-5-items",
+      "trigger": [
+        "source_items.json::json_item_count::ef2d127d"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-summer-scoring-camp-item-in-source-items-jso",
+      "trigger": [
+        "source_items.json::contains::edf6e329"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "migration-json-sets-spot-hash-sample-to-3",
+      "trigger": [
+        "migration.json::contains::c1c5dec6"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "writing-to-target-items-json-creates-the-file-an",
+      "trigger": [
+        "target_items.json::equals::b3283bf1"
+      ],
+      "certificate": {
+        "status": "convicted",
+        "theta": null,
+        "wilson": null,
+        "n": 0,
+        "oracle_gate": "NON-DISCRIMINATING: check also passes on a broken environment"
+      }
+    },
+    {
+      "name": "migration-json-s-required-fields-array-is-exactl",
+      "trigger": [
+        "migration.json::contains::b2f59d5d"
       ],
       "certificate": {
         "status": "certified",
@@ -100,19 +181,24 @@
     }
   ],
   "coverage": {
+    "migration.json::contains::b2f59d5d": "migration-json-s-required-fields-array-is-exactl",
+    "migration.json::contains::c1c5dec6": "migration-json-sets-spot-hash-sample-to-3",
     "source_items.json::contains::f167415b": "source-items-json-contains-a-json-array-starts-w",
     "source_items.json::contains::afade72f": "source-items-json-contains-an-item-with-slug-spr-2",
     "source_items.json::contains::5a9a9e52": "source-items-json-contains-an-item-with-slug-spr-3",
     "source_items.json::contains::cfa05d48": "source-items-json-contains-an-item-with-slug-spr",
-    "source_items.json::contains::be1a7e65": "the-source-items-json-file-contains-items-with-a"
+    "source_items.json::json_item_count::ef2d127d": "source-items-json-contains-exactly-5-items",
+    "source_items.json::contains::be1a7e65": "the-source-items-json-file-contains-items-with-a",
+    "source_items.json::contains::edf6e329": "the-summer-scoring-camp-item-in-source-items-jso"
   },
   "frontier": [
-    "source_items.json::json_parses::any"
+    "source_items.json::json_parses::any",
+    "target_items.json::equals::b3283bf1"
   ],
   "counts": {
-    "skills": 6,
-    "provenance_entries": 23,
+    "skills": 11,
+    "provenance_entries": 28,
     "dedup_merges": 17,
-    "certified": 5
+    "certified": 9
   }
 }

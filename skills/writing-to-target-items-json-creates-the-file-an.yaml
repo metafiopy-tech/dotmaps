@@ -1,0 +1,37 @@
+name: writing-to-target-items-json-creates-the-file-an
+statement: Writing '[]' to target_items.json creates the file, and reading it back
+  returns exactly '[]'
+trigger:
+- target_items.json::equals::b3283bf1
+method:
+  steps:
+  - tool: filesystem.write_file
+    args:
+      path: target_items.json
+      content: '[]'
+  - tool: filesystem.read_file
+    args:
+      path: target_items.json
+  hash: c8c5b81b7897
+check:
+  predicate: equals
+  value: '[]'
+requires:
+  tools:
+  - filesystem.read_file
+  - filesystem.write_file
+provenance:
+- banked_from: migration
+  rule_id: r004
+  banked_at: '2026-08-13T14:25:18'
+  confirmed_by_poke: 8
+certificate:
+  status: convicted
+  theta: null
+  wilson: null
+  n: 0
+  oracle_gate: 'NON-DISCRIMINATING: check also passes on a broken environment'
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

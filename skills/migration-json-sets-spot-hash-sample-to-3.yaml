@@ -1,0 +1,34 @@
+name: migration-json-sets-spot-hash-sample-to-3
+statement: migration.json sets spot_hash_sample to 3
+trigger:
+- migration.json::contains::c1c5dec6
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: migration.json
+  hash: 240bf17ae136
+check:
+  predicate: contains
+  value: '"spot_hash_sample": 3'
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration
+  rule_id: r003
+  banked_at: '2026-08-13T14:21:53'
+  confirmed_by_poke: 6
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

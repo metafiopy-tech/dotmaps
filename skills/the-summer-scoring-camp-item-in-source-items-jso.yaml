@@ -1,0 +1,34 @@
+name: the-summer-scoring-camp-item-in-source-items-jso
+statement: The 'summer-scoring-camp' item in source_items.json has price 60
+trigger:
+- source_items.json::contains::edf6e329
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 1778bc2f4c04
+check:
+  predicate: contains
+  value: '"price": "60"'
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration
+  rule_id: r002
+  banked_at: '2026-08-13T14:21:40'
+  confirmed_by_poke: 4
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

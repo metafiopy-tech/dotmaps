@@ -30,7 +30,7 @@ def _fresh_skills(tmp_path) -> Path:
 def test_full_run_completes_with_one_sleep_trip(tmp_path):
     skills = _fresh_skills(tmp_path)
     trips_path = tmp_path / "trips.jsonl"
-    summary = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path)
+    summary = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path, live_root=tmp_path / "nolive")
     assert "coverage" in summary and "frontier" in summary
     trips = trips_mod.read_all(trips_path)
     sleeps = [t for t in trips if t["type"] == "SLEEP"]
@@ -41,8 +41,8 @@ def test_idempotent_on_immediate_rerun(tmp_path):
     skills = _fresh_skills(tmp_path)
     trips_path = tmp_path / "trips.jsonl"
     now = time.time()
-    s1 = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path, now_ts=now)
-    s2 = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path, now_ts=now)
+    s1 = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path, live_root=tmp_path / "nolive", now_ts=now)
+    s2 = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path, live_root=tmp_path / "nolive", now_ts=now)
     assert s1["coverage"] == s2["coverage"]
     assert s1["frontier"] == s2["frontier"]
     assert s1["dedup_conflicts"] == s2["dedup_conflicts"] == []
@@ -62,7 +62,7 @@ def test_due_shelf_recheck_executes_and_resets(tmp_path):
     reconsolidate.touch(target, trips_path=trips_path, now_ts=now)
     far_future = now + reconsolidate.SHELF_HALF_LIFE_DAYS * 86400 * 20
 
-    summary = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path,
+    summary = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path, live_root=tmp_path / "nolive",
                               now_ts=far_future)
     assert summary["shelf_rechecks"] == 1
     assert "the-source-items-json-file-contains-items-with-a" in summary["shelf_recheck_skills"]
@@ -73,7 +73,7 @@ def test_due_shelf_recheck_executes_and_resets(tmp_path):
 
     # a second tick at the SAME far_future timestamp is now idempotent —
     # the reset already happened
-    summary2 = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path,
+    summary2 = sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path, live_root=tmp_path / "nolive",
                                now_ts=far_future)
     assert summary2["shelf_rechecks"] == 0
 
@@ -82,7 +82,7 @@ def test_dedup_sweep_flags_without_rewriting(tmp_path):
     skills = _fresh_skills(tmp_path)
     trips_path = tmp_path / "trips.jsonl"
     before = {f.name: f.read_text() for f in skills.glob("*.yaml")}
-    sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path)
+    sleep_mod.sleep(skills_dir=skills, seed=SEED, trips_path=trips_path, live_root=tmp_path / "nolive")
     # no conflicts expected in the real skill set, and no file's method/
     # check content should have moved (only decay/certificate blocks may)
     for f in skills.glob("*.yaml"):

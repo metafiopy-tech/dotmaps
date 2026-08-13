@@ -110,6 +110,9 @@ def main(argv: list[str] | None = None) -> int:
     p_queen.add_argument("target", help="preset name (pilot|migration) or path to a compiled map.yaml")
     p_queen.add_argument("--live", action="store_true",
                          help="Q7 only: live dispatch, subscription-billed via the claude CLI")
+    p_queen.add_argument("--authorized", action="store_true",
+                         help="human-authorized growth: real budget (60 pokes) "
+                              "+ frontier target statements on the board")
     p_queen.add_argument("--driver", choices=["claude-code"], default="claude-code",
                          help="Q7 live driver (never AnthropicLearner/API-key)")
 
@@ -287,7 +290,8 @@ def main(argv: list[str] | None = None) -> int:
         from .queen.dispatch import dispatch
         if args.live:
             from .queen.live import live_dispatch
-            report = live_dispatch(args.target, driver=args.driver)
+            report = live_dispatch(args.target, driver=args.driver,
+                                   authorized=args.authorized)
         else:
             report = dispatch(args.target)
         print(json.dumps(report, indent=2))

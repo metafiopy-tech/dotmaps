@@ -19,6 +19,7 @@ from typing import Any
 import yaml
 
 from ..bank.certify import certify_all
+from ..bank.extractor import bank as bank_extract
 from . import reconsolidate
 from . import trips as trips_mod
 
@@ -45,7 +46,8 @@ def _dedup_conflicts(skills_dir: Path) -> list[dict[str, str]]:
 
 def sleep(skills_dir: Path = DEFAULT_SKILLS, seed: Path = DEFAULT_SEED,
           trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH,
-          now_ts: float | None = None) -> dict[str, Any]:
+          now_ts: float | None = None,
+          live_root: Path | None = None) -> dict[str, Any]:
     skills_dir = Path(skills_dir)
 
     # which certified skills are due for a re-check, BEFORE the recompute
@@ -56,6 +58,23 @@ def sleep(skills_dir: Path = DEFAULT_SKILLS, seed: Path = DEFAULT_SEED,
         if (card.get("certificate", {}).get("status") == "certified"
                 and reconsolidate.due_for_recheck(f, now_ts=now_ts)):
             due.append(f.stem)
+
+    # 0. HARVEST (flight-2 gap): extract candidate skills from any live
+    #    growth journals into skills/ BEFORE the recompute, so newly grown
+    #    primitives get certified this tick and coverage can actually move.
+    #    R-DEDUP makes this idempotent; R-STATE means everything enters as
+    #    candidate and only the frozen certifier below can promote it.
+    harvested = 0
+    if live_root is None:
+        live_root = trips_mod.REPO_ROOT / "runs" / "queen-live"
+    live_root = Path(live_root)
+    if live_root.is_dir():
+        live_runs = [d for d in sorted(live_root.iterdir())
+                     if (d / "primitives").is_dir() or (d / "hypotheses.jsonl").exists()]
+        if live_runs:
+            before = len(list(skills_dir.glob("*.yaml")))
+            bank_extract(live_runs, skills_dir)
+            harvested = len(list(skills_dir.glob("*.yaml"))) - before
 
     # 1. manifest recompute: deterministic, free re-cert of every skill —
     #    coverage/frontier refreshed, no model in the loop.
@@ -77,6 +96,7 @@ def sleep(skills_dir: Path = DEFAULT_SKILLS, seed: Path = DEFAULT_SEED,
 
     manifest = json.loads((skills_dir / "manifest.json").read_text())
     summary = {
+        "harvested_candidates": harvested,
         "shelf_rechecks": len(shelf_trips),
         "shelf_recheck_skills": due,
         "dedup_conflicts": dupes,

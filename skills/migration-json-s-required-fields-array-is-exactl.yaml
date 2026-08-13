@@ -1,0 +1,36 @@
+name: migration-json-s-required-fields-array-is-exactl
+statement: migration.json's required_fields array is exactly ["title","price","date"]
+  (3 items)
+trigger:
+- migration.json::contains::b2f59d5d
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: migration.json
+  hash: f064624523b8
+check:
+  predicate: contains
+  value: "\"required_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n \
+    \ ],"
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration
+  rule_id: r005
+  banked_at: '2026-08-13T14:25:34'
+  confirmed_by_poke: 10
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null
