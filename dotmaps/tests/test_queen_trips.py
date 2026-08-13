@@ -50,6 +50,18 @@ def test_integrity_detects_rewrite(tmp_path):
     assert "seq 2" in reason or "seq" in reason
 
 
+def test_work_order_type_accepted_with_phase_payload(tmp_path):
+    """Q8/Q9: WORK_ORDER joins the fixed vocabulary; chain format unchanged
+    (still hash-linked, still just a `type` + `data` record)."""
+    p = tmp_path / "trips.jsonl"
+    r1 = trips_mod.emit("WORK_ORDER", path=p, phase="start", target="migration")
+    r2 = trips_mod.emit("WORK_ORDER", path=p, phase="complete", target="migration")
+    assert [r["data"]["phase"] for r in trips_mod.read_all(p)] == ["start", "complete"]
+    assert r2["prev_hash"] == r1["hash"]
+    ok, reason = trips_mod.verify_integrity(p)
+    assert ok and reason is None
+
+
 def test_integrity_detects_deleted_line(tmp_path):
     p = tmp_path / "trips.jsonl"
     trips_mod.emit("CERTIFIED", path=p, dot="d1")

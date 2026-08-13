@@ -16,6 +16,10 @@ queen organ, distinguished by the `data` payload):
                      proposed (frontier not grown, or decay past threshold)
     ESCALATE         a decision surfaced to Fio (phase=raised|resolved)
     SLEEP            one homeostasis tick completed
+    WORK_ORDER       a DO-phase agentic run against a temp workspace
+                     (data.phase=start|complete|failed) — Q8/Q9: the
+                     mechanical-completion-gated execution phase that
+                     precedes any authorized growth
 """
 from __future__ import annotations
 
@@ -30,7 +34,7 @@ DEFAULT_TRIPS_PATH = REPO_ROOT / "runs" / "queen" / "trips.jsonl"
 
 TYPES = {
     "CERTIFIED", "CONVICTED", "BLOCKED", "BUDGET_EXHAUSTED",
-    "ORACLE_FAIL", "SHELVED", "ESCALATE", "SLEEP",
+    "ORACLE_FAIL", "SHELVED", "ESCALATE", "SLEEP", "WORK_ORDER",
 }
 
 GENESIS_HASH = "0" * 64
