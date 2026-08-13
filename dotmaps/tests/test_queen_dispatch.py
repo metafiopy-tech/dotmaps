@@ -1,13 +1,27 @@
 """Q2 gate: the dispatcher routes manifest coverage and staffs the frontier,
 dry-run native — zero model calls under any circumstance."""
+import shutil
+from pathlib import Path
+
 from dotmaps.queen import dispatch as dispatch_mod
 from dotmaps.queen import surface as surface_mod
 from dotmaps.queen import trips as trips_mod
 
+REPO = Path(__file__).resolve().parents[2]
+
+
+def _fresh_skills(tmp_path) -> Path:
+    """A disposable copy of skills/ — C3 (Q4) writes decay updates on
+    every covered invocation, and tests must never mutate the committed
+    skill cards (same convention as test_bank_certify.py's _fresh)."""
+    d = tmp_path / "skills"
+    shutil.copytree(REPO / "skills", d)
+    return d
+
 
 def test_pilot_routes_4_of_4_covered_at_zero_cost(tmp_path):
     p = tmp_path / "trips.jsonl"
-    report = dispatch_mod.dispatch("pilot", trips_path=p)
+    report = dispatch_mod.dispatch("pilot", trips_path=p, skills=_fresh_skills(tmp_path))
     assert len(report["covered"]) == 4
     assert not report["frontier"]
     assert all(d["passed"] for d in report["covered"])
@@ -71,6 +85,31 @@ def test_covering_a_predicate_resets_its_shelve_streak(tmp_path):
     assert dispatch_mod._shelve_streak(p, sid) == 2
     trips_mod.emit("CERTIFIED", path=p, id=sid, dot="d1")
     assert dispatch_mod._shelve_streak(p, sid) == 0
+
+
+def test_pilot_dispatch_never_mutates_the_committed_skills(tmp_path):
+    """Q4 wiring lives here (dispatch -> reconsolidate.touch on every
+    covered invocation) but must never touch the real repo files under
+    test — every test passes its own disposable skills copy."""
+    import subprocess
+    p = tmp_path / "trips.jsonl"
+    dispatch_mod.dispatch("pilot", trips_path=p, skills=_fresh_skills(tmp_path))
+    out = subprocess.run(["git", "status", "--porcelain", "skills/"],
+                         cwd=REPO, capture_output=True, text=True)
+    assert out.stdout.strip() == "", f"pilot dispatch mutated tracked skills: {out.stdout}"
+
+
+def test_pilot_dispatch_touches_decay_on_a_disposable_copy(tmp_path):
+    import yaml
+    p = tmp_path / "trips.jsonl"
+    skills = _fresh_skills(tmp_path)
+    dispatch_mod.dispatch("pilot", trips_path=p, skills=skills)
+    touched = [yaml.safe_load(f.read_text()) for f in skills.glob("*.yaml")
+              if yaml.safe_load(f.read_text()).get("decay", {}).get("invocations")]
+    assert len(touched) == 4
+    for card in touched:
+        assert card["decay"]["invocations"] == 1
+        assert card["decay"]["stability"] == 1.0
 
 
 def test_check_budget_wired_but_never_called_in_dry_run(tmp_path):

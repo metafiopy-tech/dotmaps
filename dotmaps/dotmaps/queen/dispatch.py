@@ -23,6 +23,7 @@ import yaml
 
 from ..bank.route import route_map
 from ..grow.clock import ClockConfig
+from . import reconsolidate
 from . import surface as surface_mod
 from . import trips as trips_mod
 
@@ -168,6 +169,12 @@ def dispatch(target: str, *, skills: Path | None = None,
         if c["passed"]:
             trips_mod.emit("CERTIFIED", path=trips_path, id=sid, dot=c["dot"],
                            skill=c["skill"], wilson=c["wilson"])
+            # C3 — write-on-read: every certified-skill invocation via
+            # route updates the card's decay block. Never touches
+            # method.steps or check (law 3, self-checked inside touch()).
+            skill_path = Path(t["skills"]) / f"{c['skill']}.yaml"
+            if skill_path.exists():
+                reconsolidate.touch(skill_path, trips_path=trips_path)
         else:
             trips_mod.emit("ORACLE_FAIL", path=trips_path, id=sid, dot=c["dot"],
                            skill=c["skill"],
