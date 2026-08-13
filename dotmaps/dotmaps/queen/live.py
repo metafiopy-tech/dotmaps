@@ -57,25 +57,43 @@ def live_dispatch(target: str, *, driver: str = "claude-code",
         return {**plan, "live": False,
                 "note": "nothing frontier to grow — the dry-run plan stands"}
 
-    # Flight-2 finding: without targets on the board the learner grows
-    # adjacent invariants, not the authorized predicates. Statement-exact
-    # routing means only targeted growth can flip a dot to covered.
+    # Flight-3 fix: the directive must reach the workspace the learner
+    # actually flies (flight 3 reused an old agent-ws and never saw the
+    # targets). Copy the seed to a temp workspace, write the directive
+    # THERE, and fly from a fresh numbered run_dir every authorized flight.
+    workspace = Path(t["workspace"])
     targets = [f["statement"] for f in plan["frontier"] if f.get("statement")]
-    if targets:
-        board = Path(t["workspace"]) / ".dotmaps" / "approved_board.txt"
-        if board.exists():
-            base = board.read_text()
-            marker = "TARGET STATEMENTS (grow rules that verify EXACTLY these"
-            if marker not in base:
-                board.write_text(base.rstrip() + "\n\n" +
-                    "TARGET STATEMENTS (grow rules that verify EXACTLY these, "
-                    "verbatim wording):\n" +
-                    "\n".join(f"- {x}" for x in targets) + "\n")
+    if authorized and targets:
+        import shutil as _sh, tempfile as _tf
+        ws_copy = Path(_tf.mkdtemp(prefix="queen-authorized-")) / "ws"
+        _sh.copytree(workspace, ws_copy)
+        board = ws_copy / ".dotmaps" / "approved_board.txt"
+        base = board.read_text() if board.exists() else ""
+        board.parent.mkdir(exist_ok=True)
+        board.write_text(base.rstrip() + "\n\n" +
+            "AUTHORIZED MISSION (do-then-verify):\n"
+            "1. PERFORM the migration described by migration.json — read the\n"
+            "   source, write the migrated target file it specifies.\n"
+            "2. THEN bank rules whose statement text is EXACTLY, verbatim:\n" +
+            "\n".join(f"   - {x}" for x in targets) + "\n"
+            "A rule matching one of these statements verbatim, confirmed\n"
+            "against the migrated workspace, is the mission. Fine-grained\n"
+            "source invariants are already covered — do not re-bank them.\n")
+        workspace = ws_copy
 
     learner = ClaudeCodeLearner(model=model)
-    run_dir = Path(run_dir) if run_dir else (
-        trips_mod.REPO_ROOT / "runs" / "queen-live" / t["name"])
-    summary = grow(t["workspace"], run_dir, learner, cfg=cfg)
+    if run_dir:
+        run_dir = Path(run_dir)
+    else:
+        base = trips_mod.REPO_ROOT / "runs" / "queen-live" / t["name"]
+        if authorized:
+            n = 1
+            while (base.parent / f"{t['name']}-auth{n:02d}").exists():
+                n += 1
+            run_dir = base.parent / f"{t['name']}-auth{n:02d}"
+        else:
+            run_dir = base
+    summary = grow(workspace, run_dir, learner, cfg=cfg)
 
     return {**plan, "live": True, "driver": driver, "model": model,
             "learner_usd_estimate": round(learner.usd_estimate, 4),
