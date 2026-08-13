@@ -1,0 +1,37 @@
+{"t": "2026-08-13T14:39:04", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 5 item records", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 5}, "id": "r001"}}
+{"t": "2026-08-13T14:39:04", "event": "banked", "rule_id": "r001"}
+{"t": "2026-08-13T14:39:12", "event": "proposed", "rule": {"statement": "migration.json's hash_fields list is exactly [title, price, date]", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"hash_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n  ],"}, "id": "r002"}}
+{"t": "2026-08-13T14:39:12", "event": "banked", "rule_id": "r002"}
+{"t": "2026-08-13T14:39:18", "event": "proposed", "rule": {"statement": "source_items.json's spring-junior-clinic item body links to /summer-scoring-camp", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "/summer-scoring-camp"}, "id": "r003"}}
+{"t": "2026-08-13T14:39:18", "event": "banked", "rule_id": "r003"}
+{"t": "2026-08-13T14:39:24", "event": "proposed", "rule": {"statement": "source_items.json's fall-tune-up item has date 2026-09-14", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"fall-tune-up\",           \"title\": \"Fall Tune-Up\",           \"price\": \"40\", \"date\": \"2026-09-14\""}, "id": "r004"}}
+{"t": "2026-08-13T14:39:24", "event": "banked", "rule_id": "r004"}
+{"t": "2026-08-13T14:39:31", "event": "proposed", "rule": {"statement": "source_items.json's putting-intensive item has price 35 and date 2026-05-03", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"putting-intensive\",      \"title\": \"Putting Intensive\",      \"price\": \"35\", \"date\": \"2026-05-03\""}, "id": "r005"}}
+{"t": "2026-08-13T14:39:31", "event": "banked", "rule_id": "r005"}
+{"t": "2026-08-13T14:39:35", "event": "proposed", "rule": {"statement": "source_items.json's summer-scoring-camp item has price 60 and date 2026-06-20", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"summer-scoring-camp\",    \"title\": \"Summer Scoring Camp\",    \"price\": \"60\", \"date\": \"2026-06-20\""}, "id": "r006"}}
+{"t": "2026-08-13T14:39:35", "event": "banked", "rule_id": "r006"}
+{"t": "2026-08-13T14:39:39", "event": "proposed", "rule": {"statement": "source_items.json's holiday-mini-camp item has price 30 and date 2026-12-27", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"holiday-mini-camp\",      \"title\": \"Holiday Mini Camp\",      \"price\": \"30\", \"date\": \"2026-12-27\""}, "id": "r007"}}
+{"t": "2026-08-13T14:39:39", "event": "banked", "rule_id": "r007"}
+{"t": "2026-08-13T14:39:56", "event": "proposed", "rule": {"statement": "source_items.json's spring-junior-clinic item has price 45 and date 2026-04-12", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"spring-junior-clinic\",   \"title\": \"Spring Junior Clinic\",   \"price\": \"45\", \"date\": \"2026-04-12\""}, "id": "r008"}}
+{"t": "2026-08-13T14:39:56", "event": "banked", "rule_id": "r008"}
+{"t": "2026-08-13T14:40:00", "event": "proposed", "rule": {"statement": "source_items.json's fall-tune-up item has price 40", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"slug\": \"fall-tune-up\",           \"title\": \"Fall Tune-Up\",           \"price\": \"40\""}, "id": "r009"}}
+{"t": "2026-08-13T14:40:00", "event": "banked", "rule_id": "r009"}
+{"t": "2026-08-13T14:40:07", "event": "proposed", "rule": {"statement": "migration.json's spot_hash_sample value is 3", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"spot_hash_sample\": 3"}, "id": "r010"}}
+{"t": "2026-08-13T14:40:07", "event": "banked", "rule_id": "r010"}
+{"t": "2026-08-13T14:40:14", "event": "proposed", "rule": {"statement": "migration.json's source_sha256 field equals 85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac"}, "id": "r011"}}
+{"t": "2026-08-13T14:40:14", "event": "banked", "rule_id": "r011"}
+{"t": "2026-08-13T14:40:20", "event": "proposed", "rule": {"statement": "source_items.json's summer-scoring-camp item body text is 'Advanced short game.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Advanced short game."}, "id": "r012"}}
+{"t": "2026-08-13T14:40:20", "event": "banked", "rule_id": "r012"}
+{"t": "2026-08-13T14:40:24", "event": "proposed", "rule": {"statement": "source_items.json's putting-intensive item body text is 'Green reading focus.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Green reading focus."}, "id": "r013"}}
+{"t": "2026-08-13T14:40:24", "event": "banked", "rule_id": "r013"}
+{"t": "2026-08-13T14:40:28", "event": "proposed", "rule": {"statement": "source_items.json's fall-tune-up item body text is 'Pre-season sharpening.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Pre-season sharpening."}, "id": "r014"}}
+{"t": "2026-08-13T14:40:28", "event": "banked", "rule_id": "r014"}
+{"t": "2026-08-13T14:40:35", "event": "proposed", "rule": {"statement": "source_items.json's holiday-mini-camp item body text is 'Two-day fundamentals.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "Two-day fundamentals."}, "id": "r015"}}
+{"t": "2026-08-13T14:40:35", "event": "banked", "rule_id": "r015"}
+{"t": "2026-08-13T14:40:46", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the workspace (read fails)", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r016"}}
+{"t": "2026-08-13T14:40:51", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the workspace (reading it errors)", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r017"}}
+{"t": "2026-08-13T14:40:55", "event": "proposed", "rule": {"statement": "target_items.json does not exist in the workspace", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "blocked", "value": true}, "id": "r018"}}
+{"t": "2026-08-13T14:41:34", "event": "fogged", "rule_id": "r016"}
+{"t": "2026-08-13T14:42:05", "event": "banked", "rule_id": "r017"}
+{"t": "2026-08-13T14:42:19", "event": "fog-blocked", "rule_id": "r018"}
+{"t": "2026-08-13T14:42:24", "event": "fogged", "rule_id": "r018"}

@@ -1,9 +1,111 @@
 {
   "skills": [
     {
+      "name": "migration-json-s-hash-fields-array-is-exactly-ti",
+      "trigger": [
+        "migration.json::contains::3e73286c"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "migration-json-s-internal-link-base-field-is-nul",
+      "trigger": [
+        "migration.json::contains::385c4b5f"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "migration-json-s-links-field-is-body",
+      "trigger": [
+        "migration.json::contains::c8487781"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
       "name": "migration-json-s-required-fields-array-is-exactl",
       "trigger": [
         "migration.json::contains::b2f59d5d"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "migration-json-s-slug-field-is-slug",
+      "trigger": [
+        "migration.json::contains::51266a86"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "migration-json-s-source-sha256-field-equals-85c4",
+      "trigger": [
+        "migration.json::contains::a10ac2c1"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "migration-json-s-target-field-is-target-items-js",
+      "trigger": [
+        "migration.json::contains::5abb782a"
       ],
       "certificate": {
         "status": "certified",
@@ -120,9 +222,145 @@
       }
     },
     {
+      "name": "the-fall-tune-up-item-in-source-items-json-has-d",
+      "trigger": [
+        "source_items.json::contains::01ecf4f5"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-fall-tune-up-item-in-source-items-json-has-p",
+      "trigger": [
+        "source_items.json::contains::e269ec33"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-holiday-mini-camp-item-in-source-items-json",
+      "trigger": [
+        "source_items.json::contains::732771e1"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-putting-intensive-item-in-source-items-json",
+      "trigger": [
+        "source_items.json::contains::dbef4077"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-putting-intensive-item-s-body-field-is-exact",
+      "trigger": [
+        "source_items.json::contains::89ed6379"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
       "name": "the-source-items-json-file-contains-items-with-a",
       "trigger": [
         "source_items.json::contains::be1a7e65"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-spring-junior-clinic-item-in-source-items-js",
+      "trigger": [
+        "source_items.json::contains::5d86dc1b"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-spring-junior-clinic-item-s-body-field-conta",
+      "trigger": [
+        "source_items.json::contains::ea7e4ed6"
+      ],
+      "certificate": {
+        "status": "certified",
+        "theta": 0.7,
+        "wilson": [
+          0.839,
+          1.0
+        ],
+        "n": 20,
+        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
+        "probe_mode": "deterministic-replay"
+      }
+    },
+    {
+      "name": "the-summer-scoring-camp-item-in-source-items-jso-2",
+      "trigger": [
+        "source_items.json::contains::0df29138"
       ],
       "certificate": {
         "status": "certified",
@@ -180,9 +418,9 @@
       }
     },
     {
-      "name": "the-spring-junior-clinic-item-in-source-items-js",
+      "name": "migration-json-s-hash-fields-list-is-exactly-tit",
       "trigger": [
-        "source_items.json::contains::5d86dc1b"
+        "migration.json::contains::ebb3712f"
       ],
       "certificate": {
         "status": "certified",
@@ -197,9 +435,9 @@
       }
     },
     {
-      "name": "the-putting-intensive-item-in-source-items-json",
+      "name": "source-items-json-s-putting-intensive-item-has-p",
       "trigger": [
-        "source_items.json::contains::dbef4077"
+        "source_items.json::contains::0a455bb9"
       ],
       "certificate": {
         "status": "certified",
@@ -214,9 +452,9 @@
       }
     },
     {
-      "name": "the-fall-tune-up-item-in-source-items-json-has-p",
+      "name": "source-items-json-s-summer-scoring-camp-item-has",
       "trigger": [
-        "source_items.json::contains::e269ec33"
+        "source_items.json::contains::e0334135"
       ],
       "certificate": {
         "status": "certified",
@@ -231,9 +469,9 @@
       }
     },
     {
-      "name": "migration-json-s-source-sha256-field-equals-85c4",
+      "name": "source-items-json-s-holiday-mini-camp-item-has-p",
       "trigger": [
-        "migration.json::contains::a10ac2c1"
+        "source_items.json::contains::3e78db75"
       ],
       "certificate": {
         "status": "certified",
@@ -248,9 +486,9 @@
       }
     },
     {
-      "name": "the-holiday-mini-camp-item-in-source-items-json",
+      "name": "source-items-json-s-spring-junior-clinic-item-ha",
       "trigger": [
-        "source_items.json::contains::732771e1"
+        "source_items.json::contains::d0f05fac"
       ],
       "certificate": {
         "status": "certified",
@@ -265,9 +503,9 @@
       }
     },
     {
-      "name": "the-spring-junior-clinic-item-s-body-field-conta",
+      "name": "source-items-json-s-summer-scoring-camp-item-bod",
       "trigger": [
-        "source_items.json::contains::ea7e4ed6"
+        "source_items.json::contains::019d56ae"
       ],
       "certificate": {
         "status": "certified",
@@ -282,9 +520,9 @@
       }
     },
     {
-      "name": "migration-json-s-links-field-is-body",
+      "name": "source-items-json-s-putting-intensive-item-body",
       "trigger": [
-        "migration.json::contains::c8487781"
+        "source_items.json::contains::e564ca46"
       ],
       "certificate": {
         "status": "certified",
@@ -299,9 +537,9 @@
       }
     },
     {
-      "name": "the-summer-scoring-camp-item-in-source-items-jso-2",
+      "name": "source-items-json-s-fall-tune-up-item-body-text",
       "trigger": [
-        "source_items.json::contains::0df29138"
+        "source_items.json::contains::1698f417"
       ],
       "certificate": {
         "status": "certified",
@@ -316,94 +554,9 @@
       }
     },
     {
-      "name": "migration-json-s-slug-field-is-slug",
+      "name": "source-items-json-s-holiday-mini-camp-item-body",
       "trigger": [
-        "migration.json::contains::51266a86"
-      ],
-      "certificate": {
-        "status": "certified",
-        "theta": 0.7,
-        "wilson": [
-          0.839,
-          1.0
-        ],
-        "n": 20,
-        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
-      }
-    },
-    {
-      "name": "migration-json-s-hash-fields-array-is-exactly-ti",
-      "trigger": [
-        "migration.json::contains::3e73286c"
-      ],
-      "certificate": {
-        "status": "certified",
-        "theta": 0.7,
-        "wilson": [
-          0.839,
-          1.0
-        ],
-        "n": 20,
-        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
-      }
-    },
-    {
-      "name": "the-fall-tune-up-item-in-source-items-json-has-d",
-      "trigger": [
-        "source_items.json::contains::01ecf4f5"
-      ],
-      "certificate": {
-        "status": "certified",
-        "theta": 0.7,
-        "wilson": [
-          0.839,
-          1.0
-        ],
-        "n": 20,
-        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
-      }
-    },
-    {
-      "name": "migration-json-s-internal-link-base-field-is-nul",
-      "trigger": [
-        "migration.json::contains::385c4b5f"
-      ],
-      "certificate": {
-        "status": "certified",
-        "theta": 0.7,
-        "wilson": [
-          0.839,
-          1.0
-        ],
-        "n": 20,
-        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
-      }
-    },
-    {
-      "name": "the-putting-intensive-item-s-body-field-is-exact",
-      "trigger": [
-        "source_items.json::contains::89ed6379"
-      ],
-      "certificate": {
-        "status": "certified",
-        "theta": 0.7,
-        "wilson": [
-          0.839,
-          1.0
-        ],
-        "n": 20,
-        "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
-      }
-    },
-    {
-      "name": "migration-json-s-target-field-is-target-items-js",
-      "trigger": [
-        "migration.json::contains::5abb782a"
+        "source_items.json::contains::84d051c0"
       ],
       "certificate": {
         "status": "certified",
@@ -420,6 +573,7 @@
   ],
   "coverage": {
     "migration.json::contains::3e73286c": "migration-json-s-hash-fields-array-is-exactly-ti",
+    "migration.json::contains::ebb3712f": "migration-json-s-hash-fields-list-is-exactly-tit",
     "migration.json::contains::385c4b5f": "migration-json-s-internal-link-base-field-is-nul",
     "migration.json::contains::c8487781": "migration-json-s-links-field-is-body",
     "migration.json::contains::b2f59d5d": "migration-json-s-required-fields-array-is-exactl",
@@ -432,6 +586,14 @@
     "source_items.json::contains::5a9a9e52": "source-items-json-contains-an-item-with-slug-spr-3",
     "source_items.json::contains::cfa05d48": "source-items-json-contains-an-item-with-slug-spr",
     "source_items.json::json_item_count::ef2d127d": "source-items-json-contains-exactly-5-items",
+    "source_items.json::contains::1698f417": "source-items-json-s-fall-tune-up-item-body-text",
+    "source_items.json::contains::84d051c0": "source-items-json-s-holiday-mini-camp-item-body",
+    "source_items.json::contains::3e78db75": "source-items-json-s-holiday-mini-camp-item-has-p",
+    "source_items.json::contains::e564ca46": "source-items-json-s-putting-intensive-item-body",
+    "source_items.json::contains::0a455bb9": "source-items-json-s-putting-intensive-item-has-p",
+    "source_items.json::contains::d0f05fac": "source-items-json-s-spring-junior-clinic-item-ha",
+    "source_items.json::contains::019d56ae": "source-items-json-s-summer-scoring-camp-item-bod",
+    "source_items.json::contains::e0334135": "source-items-json-s-summer-scoring-camp-item-has",
     "source_items.json::contains::01ecf4f5": "the-fall-tune-up-item-in-source-items-json-has-d",
     "source_items.json::contains::e269ec33": "the-fall-tune-up-item-in-source-items-json-has-p",
     "source_items.json::contains::732771e1": "the-holiday-mini-camp-item-in-source-items-json",
@@ -448,9 +610,9 @@
     "target_items.json::equals::b3283bf1"
   ],
   "counts": {
-    "skills": 25,
-    "provenance_entries": 47,
-    "dedup_merges": 22,
-    "certified": 23
+    "skills": 34,
+    "provenance_entries": 82,
+    "dedup_merges": 48,
+    "certified": 32
   }
 }

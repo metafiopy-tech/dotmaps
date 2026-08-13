@@ -1,0 +1,35 @@
+name: source-items-json-s-summer-scoring-camp-item-bod
+statement: source_items.json's summer-scoring-camp item body text is 'Advanced short
+  game.'
+trigger:
+- source_items.json::contains::019d56ae
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 488c10f0e9a4
+check:
+  predicate: contains
+  value: Advanced short game.
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration-auth01
+  rule_id: r012
+  banked_at: '2026-08-13T14:40:20'
+  confirmed_by_poke: 16
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

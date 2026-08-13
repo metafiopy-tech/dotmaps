@@ -1,0 +1,35 @@
+name: source-items-json-s-putting-intensive-item-has-p
+statement: source_items.json's putting-intensive item has price 35 and date 2026-05-03
+trigger:
+- source_items.json::contains::0a455bb9
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 0228f82ed728
+check:
+  predicate: contains
+  value: '"putting-intensive",      "title": "Putting Intensive",      "price": "35",
+    "date": "2026-05-03"'
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration-auth01
+  rule_id: r005
+  banked_at: '2026-08-13T14:39:31'
+  confirmed_by_poke: 7
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

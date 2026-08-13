@@ -1,0 +1,35 @@
+name: source-items-json-s-spring-junior-clinic-item-ha
+statement: source_items.json's spring-junior-clinic item has price 45 and date 2026-04-12
+trigger:
+- source_items.json::contains::d0f05fac
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: f886206f642a
+check:
+  predicate: contains
+  value: '"slug": "spring-junior-clinic",   "title": "Spring Junior Clinic",   "price":
+    "45", "date": "2026-04-12"'
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration-auth01
+  rule_id: r008
+  banked_at: '2026-08-13T14:39:56'
+  confirmed_by_poke: 12
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

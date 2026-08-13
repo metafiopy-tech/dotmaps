@@ -19,6 +19,14 @@ provenance:
   rule_id: r012
   banked_at: '2026-08-13T14:33:25'
   confirmed_by_poke: 20
+- banked_from: migration
+  rule_id: r012
+  banked_at: '2026-08-13T14:33:25'
+  confirmed_by_poke: 20
+- banked_from: migration-auth01
+  rule_id: r017
+  banked_at: '2026-08-13T14:42:05'
+  confirmed_by_poke: 28
 certificate:
   status: certified
   theta: 0.7

@@ -1,0 +1,34 @@
+name: source-items-json-s-fall-tune-up-item-body-text
+statement: source_items.json's fall-tune-up item body text is 'Pre-season sharpening.'
+trigger:
+- source_items.json::contains::1698f417
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 75dd2abf896a
+check:
+  predicate: contains
+  value: Pre-season sharpening.
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration-auth01
+  rule_id: r014
+  banked_at: '2026-08-13T14:40:28'
+  confirmed_by_poke: 18
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

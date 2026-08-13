@@ -1,0 +1,35 @@
+name: source-items-json-s-putting-intensive-item-body
+statement: source_items.json's putting-intensive item body text is 'Green reading
+  focus.'
+trigger:
+- source_items.json::contains::e564ca46
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 406405713f92
+check:
+  predicate: contains
+  value: Green reading focus.
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration-auth01
+  rule_id: r013
+  banked_at: '2026-08-13T14:40:24'
+  confirmed_by_poke: 17
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

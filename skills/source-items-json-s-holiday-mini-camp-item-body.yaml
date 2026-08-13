@@ -1,0 +1,34 @@
+name: source-items-json-s-holiday-mini-camp-item-body
+statement: source_items.json's holiday-mini-camp item body text is 'Two-day fundamentals.'
+trigger:
+- source_items.json::contains::84d051c0
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: d5d9471c0ca9
+check:
+  predicate: contains
+  value: Two-day fundamentals.
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration-auth01
+  rule_id: r015
+  banked_at: '2026-08-13T14:40:35'
+  confirmed_by_poke: 19
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null

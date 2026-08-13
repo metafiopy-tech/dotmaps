@@ -1,0 +1,35 @@
+name: source-items-json-s-summer-scoring-camp-item-has
+statement: source_items.json's summer-scoring-camp item has price 60 and date 2026-06-20
+trigger:
+- source_items.json::contains::e0334135
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 32d9c5e520e7
+check:
+  predicate: contains
+  value: '"slug": "summer-scoring-camp",    "title": "Summer Scoring Camp",    "price":
+    "60", "date": "2026-06-20"'
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: migration-auth01
+  rule_id: r006
+  banked_at: '2026-08-13T14:39:35'
+  confirmed_by_poke: 8
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: null
+  stability: null
+  shelf_recheck: null
