@@ -1,0 +1,91 @@
+"""SLEEP — the homeostasis organ (QUEEN spec §3.8; metabolism spec C3 +
+C7 + C9: "sleep = scheduled consolidation: compress episodic to semantic,
+discard noise, wake with a clean working set").
+
+One tick: manifest recompute (deterministic re-cert, $0, no model) -> dedup
+sweep (audit only — crystallized cards are never rewritten, law 3) -> due
+shelf re-checks executed (the recompute step above IS the re-check;
+whichever cards were due get their decay clock reset once it confirms
+they still hold) -> one SLEEP trip with a morning-readable summary.
+
+`dotmaps sleep`, cron-ready — no arguments, no interaction, no model call.
+"""
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+from ..bank.certify import certify_all
+from . import reconsolidate
+from . import trips as trips_mod
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+DEFAULT_SKILLS = REPO_ROOT / "skills"
+DEFAULT_SEED = REPO_ROOT / "corpus" / "pilot" / "seed-ws"
+
+
+def _dedup_conflicts(skills_dir: Path) -> list[dict[str, str]]:
+    """Audit only — R-DEDUP is the extractor's law (bank/extractor.py);
+    sleep never rewrites a crystallized card, it just flags if two ever
+    coexist with the same (trigger, method.hash) identity."""
+    seen: dict[tuple, str] = {}
+    dupes = []
+    for f in sorted(Path(skills_dir).glob("*.yaml")):
+        card = yaml.safe_load(f.read_text())
+        key = (tuple(card["trigger"]), card["method"]["hash"])
+        if key in seen:
+            dupes.append({"a": seen[key], "b": card["name"]})
+        else:
+            seen[key] = card["name"]
+    return dupes
+
+
+def sleep(skills_dir: Path = DEFAULT_SKILLS, seed: Path = DEFAULT_SEED,
+          trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH,
+          now_ts: float | None = None) -> dict[str, Any]:
+    skills_dir = Path(skills_dir)
+
+    # which certified skills are due for a re-check, BEFORE the recompute
+    # runs — the recompute below IS the re-check executing.
+    due = []
+    for f in sorted(skills_dir.glob("*.yaml")):
+        card = yaml.safe_load(f.read_text())
+        if (card.get("certificate", {}).get("status") == "certified"
+                and reconsolidate.due_for_recheck(f, now_ts=now_ts)):
+            due.append(f.stem)
+
+    # 1. manifest recompute: deterministic, free re-cert of every skill —
+    #    coverage/frontier refreshed, no model in the loop.
+    certify_all(skills_dir, seed)
+
+    # 2. due shelf re-checks executed: the recompute above already re-
+    #    verified them; log the trip and reset the decay clock (C6
+    #    annealing) for whichever cards were due.
+    shelf_trips = []
+    for name in due:
+        rec = trips_mod.emit("SHELVED", path=trips_path, skill=name,
+                             reason="stability decayed below shelf threshold",
+                             action="re-certified this tick")
+        reconsolidate.reset_after_recert(skills_dir / f"{name}.yaml", now_ts=now_ts)
+        shelf_trips.append(rec)
+
+    # 3. dedup sweep (audit only)
+    dupes = _dedup_conflicts(skills_dir)
+
+    manifest = json.loads((skills_dir / "manifest.json").read_text())
+    summary = {
+        "shelf_rechecks": len(shelf_trips),
+        "shelf_recheck_skills": due,
+        "dedup_conflicts": dupes,
+        "coverage": len(manifest.get("coverage", {})),
+        "frontier": len(manifest.get("frontier", [])),
+    }
+    trips_mod.emit("SLEEP", path=trips_path, **summary)
+    return summary
+
+
+if __name__ == "__main__":
+    print(json.dumps(sleep(), indent=2))
