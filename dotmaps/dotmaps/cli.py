@@ -118,6 +118,10 @@ def main(argv: list[str] | None = None) -> int:
 
     p_sleep = sub.add_parser("sleep", help="the homeostasis tick (QUEEN v0, Q6): decay -> recompute -> dedup -> SLEEP")
 
+    p_ui = sub.add_parser("ui", help="the operator console (QUEEN v1, Q10): serves localhost, zero deps")
+    p_ui.add_argument("--host", default="127.0.0.1")
+    p_ui.add_argument("--port", type=int, default=8765)
+
     args = parser.parse_args(argv)
 
     if args.cmd == "run":
@@ -300,6 +304,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "sleep":
         from .queen.sleep import sleep as sleep_fn
         print(json.dumps(sleep_fn(), indent=2))
+        return 0
+
+    if args.cmd == "ui":
+        from .queen.ui import main as ui_main
+        ui_main(host=args.host, port=args.port)
         return 0
 
     return 2
