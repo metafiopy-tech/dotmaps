@@ -90,26 +90,37 @@ def test_covering_a_predicate_resets_its_shelve_streak(tmp_path):
 def test_pilot_dispatch_never_mutates_the_committed_skills(tmp_path):
     """Q4 wiring lives here (dispatch -> reconsolidate.touch on every
     covered invocation) but must never touch the real repo files under
-    test — every test passes its own disposable skills copy."""
+    test — every test passes its own disposable skills copy. Compares
+    git status BEFORE/AFTER (not against an assumed-clean tree) since a
+    real `dotmaps queen pilot` first flight legitimately leaves skills/
+    with committed decay data of its own."""
     import subprocess
+    def _status():
+        return subprocess.run(["git", "status", "--porcelain", "skills/"],
+                              cwd=REPO, capture_output=True, text=True).stdout
+    before = _status()
     p = tmp_path / "trips.jsonl"
     dispatch_mod.dispatch("pilot", trips_path=p, skills=_fresh_skills(tmp_path))
-    out = subprocess.run(["git", "status", "--porcelain", "skills/"],
-                         cwd=REPO, capture_output=True, text=True)
-    assert out.stdout.strip() == "", f"pilot dispatch mutated tracked skills: {out.stdout}"
+    after = _status()
+    assert after == before, f"pilot dispatch mutated tracked skills: {after!r} != {before!r}"
 
 
 def test_pilot_dispatch_touches_decay_on_a_disposable_copy(tmp_path):
+    """Deltas, not absolutes: the copied skill cards may already carry
+    real accumulated decay data from a prior `dotmaps queen pilot` first
+    flight against the committed repo — this asserts the invocation
+    counter advances by exactly one per certified dot this round, whatever
+    it started at."""
     import yaml
     p = tmp_path / "trips.jsonl"
     skills = _fresh_skills(tmp_path)
+    before = {f.name: (yaml.safe_load(f.read_text()).get("decay", {}).get("invocations") or 0)
+             for f in skills.glob("*.yaml")}
     dispatch_mod.dispatch("pilot", trips_path=p, skills=skills)
-    touched = [yaml.safe_load(f.read_text()) for f in skills.glob("*.yaml")
-              if yaml.safe_load(f.read_text()).get("decay", {}).get("invocations")]
+    after = {f.name: yaml.safe_load(f.read_text()).get("decay", {}).get("invocations")
+            for f in skills.glob("*.yaml")}
+    touched = [name for name in before if after[name] == before[name] + 1]
     assert len(touched) == 4
-    for card in touched:
-        assert card["decay"]["invocations"] == 1
-        assert card["decay"]["stability"] == 1.0
 
 
 def test_check_budget_wired_but_never_called_in_dry_run(tmp_path):

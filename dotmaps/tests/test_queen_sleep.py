@@ -14,8 +14,16 @@ SEED = REPO / "corpus" / "pilot" / "seed-ws"
 
 
 def _fresh_skills(tmp_path) -> Path:
+    """Test isolation: a real `dotmaps queen pilot` first flight against
+    the committed repo legitimately leaves some skills' decay non-null —
+    sleep() scans every certified card, so tests null the copy's decay
+    blocks rather than assume the ambient repo is pristine."""
     d = tmp_path / "skills"
     shutil.copytree(REPO / "skills", d)
+    for f in d.glob("*.yaml"):
+        card = yaml.safe_load(f.read_text())
+        card["decay"] = {"last_used": None, "stability": None, "shelf_recheck": None}
+        f.write_text(yaml.safe_dump(card, sort_keys=False))
     return d
 
 

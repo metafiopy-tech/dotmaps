@@ -17,13 +17,30 @@ CERTIFIED_SKILL = "the-source-items-json-file-contains-items-with-a.yaml"
 def _fresh_skill(tmp_path) -> Path:
     d = tmp_path / "skills"
     d.mkdir()
-    shutil.copy(REPO / "skills" / CERTIFIED_SKILL, d / CERTIFIED_SKILL)
-    return d / CERTIFIED_SKILL
+    target = d / CERTIFIED_SKILL
+    shutil.copy(REPO / "skills" / CERTIFIED_SKILL, target)
+    card = yaml.safe_load(target.read_text())
+    card["decay"] = {"last_used": None, "stability": None, "shelf_recheck": None}
+    target.write_text(yaml.safe_dump(card, sort_keys=False))
+    return target
+
+
+def _reset_all_decay(skills_dir: Path) -> None:
+    """Test isolation: a real `dotmaps queen pilot` first flight against
+    the committed repo legitimately leaves OTHER skills' decay non-null.
+    sweep_shelf_rechecks() scans every certified card in the dir, so a
+    test targeting ONE skill must null out the rest or it inherits
+    however-decayed the ambient repo happens to be."""
+    for f in skills_dir.glob("*.yaml"):
+        card = yaml.safe_load(f.read_text())
+        card["decay"] = {"last_used": None, "stability": None, "shelf_recheck": None}
+        f.write_text(yaml.safe_dump(card, sort_keys=False))
 
 
 def _fresh_skills_dir(tmp_path) -> Path:
     d = tmp_path / "skills"
     shutil.copytree(REPO / "skills", d)
+    _reset_all_decay(d)
     return d
 
 
