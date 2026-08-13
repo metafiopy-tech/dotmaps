@@ -1,0 +1,4 @@
+{"t": "2026-08-13T15:43:50", "event": "proposed", "rule": {"statement": "target_items.json currently mirrors source_items.json exactly, including the spring-junior-clinic entry's body with the internal link to /summer-scoring-camp", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "contains", "value": "See also <a href=\"/summer-scoring-camp\">summer camp</a>."}, "id": "r001"}}
+{"t": "2026-08-13T15:43:54", "event": "proposed", "rule": {"statement": "target_items.json's spring-junior-clinic entry has body 'See also <a href=\"/summer-scoring-camp\">summer camp</a>.'", "steps": [{"tool": "filesystem.read_file", "args": {"path": "target_items.json"}}], "expect": {"predicate": "contains", "value": "See also <a href=\"/summer-scoring-camp\">summer camp</a>."}, "id": "r002"}}
+{"t": "2026-08-13T15:43:54", "event": "fogged", "rule_id": "r001"}
+{"t": "2026-08-13T15:43:54", "event": "fogged", "rule_id": "r002"}

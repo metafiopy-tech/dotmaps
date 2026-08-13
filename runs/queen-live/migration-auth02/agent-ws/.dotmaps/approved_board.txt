@@ -1,0 +1,36 @@
+THE BOARD — content-migration v0.1.0
+
+5 promises will be verified mechanically:
+  ● m01: The migrated item count matches the source item count
+  ● m02: No target item has a missing or duplicate slug
+  ● m03: Every migrated item has all required fields non-empty
+  ● m04: Spot-hash comparison source<->target matches on sampled items
+  ● m05: Every internal link in migrated content resolves
+
+THE FOG — what this map does NOT decide:
+# Fog — what map 2 (content migration) does NOT decide
+
+- **Semantic correctness of the content.** Spot-hash proves the migrated fields
+  are byte-for-byte the intended source values; it does NOT judge whether the
+  source itself was right, whether copy reads well, or whether a price *should*
+  have changed. Editorial correctness is a human-approval item.
+- **Formatting / rendering fidelity.** Whether migrated HTML renders identically
+  (fonts, spacing, embedded media) is not checked — only that fields are present,
+  non-empty, and hash-equal on the sampled subset.
+- **Coverage beyond the sample.** Dot m04 spot-hashes a deterministic sample
+  (default 3 shared items), not every item — a full-corpus hash is a denser dot
+  to add if a probe stalls here. Counts (m01) and field presence (m03) DO cover
+  every item.
+- **External links.** m05 checks INTERNAL links only; external URLs are out of
+  scope (their liveness is not this migration's responsibility).
+
+[approved 2026-07-12T22:32:55.071392+00:00]
+
+AUTHORIZED MISSION (do-then-verify):
+This workspace has ALREADY been migrated by a completed, mechanically-gated work order (queen/workorder.py). Bank rules whose statement text is EXACTLY, verbatim:
+   - The migrated item count matches the source item count
+   - No target item has a missing or duplicate slug
+   - Every migrated item has all required fields non-empty
+   - Spot-hash comparison source<->target matches on sampled items
+   - Every internal link in migrated content resolves
+A rule matching one of these statements verbatim, confirmed against this (already-migrated) workspace, is the mission. Fine-grained source invariants are already covered — do not re-bank them.
