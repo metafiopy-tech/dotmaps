@@ -30,6 +30,11 @@ certificate:
   oracle_gate: oracle gate passed (terminates, discriminates, stable)
   probe_mode: deterministic-replay
 decay:
-  last_used: null
-  stability: null
+  last_used: '2026-08-12T23:52:35'
+  stability: 1.0
   shelf_recheck: null
+  invocations: 1
+usage:
+- t: '2026-08-12T23:52:35'
+  event: invoked
+  stability_after: 1.0

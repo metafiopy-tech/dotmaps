@@ -123,6 +123,14 @@ circular checks, ever**. Interactive demo of the instrument:
 [the instrument & paper skeleton](https://metafiopy-tech.github.io/dotmaps/instrument.html) ·
 [case study: four rounds to certification](docs/case-study-closing-procedure.md).
 
+The queen (dispatch organ, v0) and the grounded metabolism (the substrate
+beneath her) each have a walkthrough and a plain-language version:
+[queen console](docs/queen.html) ·
+[queen, for everyone](docs/queen-for-everyone.html) ·
+[memory metabolism](docs/memory.html) ·
+[memory loop](docs/memory-loop.html) ·
+[memory graphs](docs/memory-graphs.html).
+
 ## What's in the box
 
 | path | contents |
