@@ -1,28 +1,24 @@
-name: the-summer-scoring-camp-item-in-source-items-jso
-statement: The 'summer-scoring-camp' item in source_items.json has price 60
+name: migration-json-s-slug-field-is-slug
+statement: migration.json's slug_field is 'slug'
 trigger:
-- source_items.json::contains::edf6e329
+- migration.json::contains::51266a86
 method:
   steps:
   - tool: filesystem.read_file
     args:
-      path: source_items.json
-  hash: 1778bc2f4c04
+      path: migration.json
+  hash: c9ecdbecf26f
 check:
   predicate: contains
-  value: '"price": "60"'
+  value: '"slug_field": "slug"'
 requires:
   tools:
   - filesystem.read_file
 provenance:
 - banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
-- banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
+  rule_id: r014
+  banked_at: '2026-08-13T14:33:53'
+  confirmed_by_poke: 24
 certificate:
   status: certified
   theta: 0.7

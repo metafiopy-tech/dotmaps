@@ -1,28 +1,25 @@
-name: the-summer-scoring-camp-item-in-source-items-jso
-statement: The 'summer-scoring-camp' item in source_items.json has price 60
+name: the-spring-junior-clinic-item-s-body-field-conta
+statement: The 'spring-junior-clinic' item's body field contains an internal link
+  to /summer-scoring-camp
 trigger:
-- source_items.json::contains::edf6e329
+- source_items.json::contains::ea7e4ed6
 method:
   steps:
   - tool: filesystem.read_file
     args:
       path: source_items.json
-  hash: 1778bc2f4c04
+  hash: 92a9893934a2
 check:
   predicate: contains
-  value: '"price": "60"'
+  value: /summer-scoring-camp
 requires:
   tools:
   - filesystem.read_file
 provenance:
 - banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
-- banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
+  rule_id: r011
+  banked_at: '2026-08-13T14:33:19'
+  confirmed_by_poke: 19
 certificate:
   status: certified
   theta: 0.7

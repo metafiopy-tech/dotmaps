@@ -1,28 +1,25 @@
-name: the-summer-scoring-camp-item-in-source-items-jso
-statement: The 'summer-scoring-camp' item in source_items.json has price 60
+name: migration-json-s-hash-fields-array-is-exactly-ti
+statement: migration.json's hash_fields array is exactly ["title","price","date"],
+  same as required_fields
 trigger:
-- source_items.json::contains::edf6e329
+- migration.json::contains::3e73286c
 method:
   steps:
   - tool: filesystem.read_file
     args:
-      path: source_items.json
-  hash: 1778bc2f4c04
+      path: migration.json
+  hash: 3545c6954f85
 check:
   predicate: contains
-  value: '"price": "60"'
+  value: "\"hash_fields\": [\n    \"title\",\n    \"price\",\n    \"date\"\n  ]"
 requires:
   tools:
   - filesystem.read_file
 provenance:
 - banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
-- banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
+  rule_id: r015
+  banked_at: '2026-08-13T14:34:02'
+  confirmed_by_poke: 25
 certificate:
   status: certified
   theta: 0.7

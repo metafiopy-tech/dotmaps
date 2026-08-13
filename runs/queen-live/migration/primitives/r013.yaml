@@ -1,0 +1,13 @@
+statement: The 'summer-scoring-camp' item in source_items.json has date 2026-06-20
+steps:
+- tool: filesystem.read_file
+  args:
+    path: source_items.json
+expect:
+  predicate: contains
+  value: '"summer-scoring-camp",    "title": "Summer Scoring Camp",    "price": "60",
+    "date": "2026-06-20"'
+id: r013
+confirmed_by_poke: 23
+spiral: 2
+banked_at: '2026-08-13T14:33:47'

@@ -44,6 +44,121 @@ dots:
     spiral: 0
     confirmed_by_poke: 10
     kind: invariant
+- id: r006
+  statement: The 'spring-junior-clinic' item in source_items.json has price 45
+  verifier: verifiers/r006.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 13
+    kind: invariant
+- id: r007
+  statement: The 'putting-intensive' item in source_items.json has price 35
+  verifier: verifiers/r007.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 14
+    kind: invariant
+- id: r008
+  statement: The 'fall-tune-up' item in source_items.json has price 40
+  verifier: verifiers/r008.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 15
+    kind: invariant
+- id: r009
+  statement: migration.json's source_sha256 field equals '85c4fb1b404c0616e58a8e42f08d640da2971789e33f62b74f41dfc3a0e95fac'
+  verifier: verifiers/r009.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 16
+    kind: invariant
+- id: r010
+  statement: The 'holiday-mini-camp' item in source_items.json has price 30
+  verifier: verifiers/r010.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 18
+    kind: invariant
+- id: r011
+  statement: The 'spring-junior-clinic' item's body field contains an internal link
+    to /summer-scoring-camp
+  verifier: verifiers/r011.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 19
+    kind: invariant
+- id: r012
+  statement: migration.json's links_field is 'body'
+  verifier: verifiers/r012.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 20
+    kind: invariant
+- id: r013
+  statement: The 'summer-scoring-camp' item in source_items.json has date 2026-06-20
+  verifier: verifiers/r013.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 23
+    kind: invariant
+- id: r014
+  statement: migration.json's slug_field is 'slug'
+  verifier: verifiers/r014.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 24
+    kind: invariant
+- id: r015
+  statement: migration.json's hash_fields array is exactly ["title","price","date"],
+    same as required_fields
+  verifier: verifiers/r015.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 25
+    kind: invariant
+- id: r016
+  statement: The 'fall-tune-up' item in source_items.json has date 2026-09-14
+  verifier: verifiers/r016.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 26
+    kind: invariant
+- id: r017
+  statement: migration.json's internal_link_base field is null
+  verifier: verifiers/r017.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 27
+    kind: invariant
+- id: r018
+  statement: The 'putting-intensive' item's body field is exactly 'Green reading focus.'
+    with no internal link markup
+  verifier: verifiers/r018.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 29
+    kind: invariant
+- id: r019
+  statement: migration.json's target field is 'target_items.json'
+  verifier: verifiers/r019.py
+  depends_on: []
+  grown_from:
+    spiral: 2
+    confirmed_by_poke: 30
+    kind: invariant
 - id: r004
   statement: Writing '[]' to target_items.json creates the file, and reading it back
     returns exactly '[]'

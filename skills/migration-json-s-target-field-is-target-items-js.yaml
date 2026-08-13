@@ -1,28 +1,24 @@
-name: the-summer-scoring-camp-item-in-source-items-jso
-statement: The 'summer-scoring-camp' item in source_items.json has price 60
+name: migration-json-s-target-field-is-target-items-js
+statement: migration.json's target field is 'target_items.json'
 trigger:
-- source_items.json::contains::edf6e329
+- migration.json::contains::5abb782a
 method:
   steps:
   - tool: filesystem.read_file
     args:
-      path: source_items.json
-  hash: 1778bc2f4c04
+      path: migration.json
+  hash: ae890f22b7b3
 check:
   predicate: contains
-  value: '"price": "60"'
+  value: '"target": "target_items.json"'
 requires:
   tools:
   - filesystem.read_file
 provenance:
 - banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
-- banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
+  rule_id: r019
+  banked_at: '2026-08-13T14:34:27'
+  confirmed_by_poke: 30
 certificate:
   status: certified
   theta: 0.7

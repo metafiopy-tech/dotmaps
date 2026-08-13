@@ -1,28 +1,26 @@
-name: the-summer-scoring-camp-item-in-source-items-jso
-statement: The 'summer-scoring-camp' item in source_items.json has price 60
+name: the-putting-intensive-item-s-body-field-is-exact
+statement: The 'putting-intensive' item's body field is exactly 'Green reading focus.'
+  with no internal link markup
 trigger:
-- source_items.json::contains::edf6e329
+- source_items.json::contains::89ed6379
 method:
   steps:
   - tool: filesystem.read_file
     args:
       path: source_items.json
-  hash: 1778bc2f4c04
+  hash: 31c049430f34
 check:
   predicate: contains
-  value: '"price": "60"'
+  value: '"putting-intensive",      "title": "Putting Intensive",      "price": "35",
+    "date": "2026-05-03", "body": "Green reading focus."'
 requires:
   tools:
   - filesystem.read_file
 provenance:
 - banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
-- banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
+  rule_id: r018
+  banked_at: '2026-08-13T14:34:22'
+  confirmed_by_poke: 29
 certificate:
   status: certified
   theta: 0.7

@@ -1,28 +1,24 @@
-name: the-summer-scoring-camp-item-in-source-items-jso
-statement: The 'summer-scoring-camp' item in source_items.json has price 60
+name: the-putting-intensive-item-in-source-items-json
+statement: The 'putting-intensive' item in source_items.json has price 35
 trigger:
-- source_items.json::contains::edf6e329
+- source_items.json::contains::dbef4077
 method:
   steps:
   - tool: filesystem.read_file
     args:
       path: source_items.json
-  hash: 1778bc2f4c04
+  hash: ae92bc312925
 check:
   predicate: contains
-  value: '"price": "60"'
+  value: '"putting-intensive",      "title": "Putting Intensive",      "price": "35"'
 requires:
   tools:
   - filesystem.read_file
 provenance:
 - banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
-- banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
+  rule_id: r007
+  banked_at: '2026-08-13T14:32:51'
+  confirmed_by_poke: 14
 certificate:
   status: certified
   theta: 0.7

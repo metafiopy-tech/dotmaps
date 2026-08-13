@@ -1,28 +1,25 @@
-name: the-summer-scoring-camp-item-in-source-items-jso
-statement: The 'summer-scoring-camp' item in source_items.json has price 60
+name: the-fall-tune-up-item-in-source-items-json-has-d
+statement: The 'fall-tune-up' item in source_items.json has date 2026-09-14
 trigger:
-- source_items.json::contains::edf6e329
+- source_items.json::contains::01ecf4f5
 method:
   steps:
   - tool: filesystem.read_file
     args:
       path: source_items.json
-  hash: 1778bc2f4c04
+  hash: cbd9a4a93d13
 check:
   predicate: contains
-  value: '"price": "60"'
+  value: '"fall-tune-up",           "title": "Fall Tune-Up",           "price": "40",
+    "date": "2026-09-14"'
 requires:
   tools:
   - filesystem.read_file
 provenance:
 - banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
-- banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
+  rule_id: r016
+  banked_at: '2026-08-13T14:34:07'
+  confirmed_by_poke: 26
 certificate:
   status: certified
   theta: 0.7

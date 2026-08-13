@@ -1,28 +1,24 @@
-name: the-summer-scoring-camp-item-in-source-items-jso
-statement: The 'summer-scoring-camp' item in source_items.json has price 60
+name: migration-json-s-internal-link-base-field-is-nul
+statement: migration.json's internal_link_base field is null
 trigger:
-- source_items.json::contains::edf6e329
+- migration.json::contains::385c4b5f
 method:
   steps:
   - tool: filesystem.read_file
     args:
-      path: source_items.json
-  hash: 1778bc2f4c04
+      path: migration.json
+  hash: 40bca82174f1
 check:
   predicate: contains
-  value: '"price": "60"'
+  value: '"internal_link_base": null'
 requires:
   tools:
   - filesystem.read_file
 provenance:
 - banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
-- banked_from: migration
-  rule_id: r002
-  banked_at: '2026-08-13T14:21:40'
-  confirmed_by_poke: 4
+  rule_id: r017
+  banked_at: '2026-08-13T14:34:12'
+  confirmed_by_poke: 27
 certificate:
   status: certified
   theta: 0.7
