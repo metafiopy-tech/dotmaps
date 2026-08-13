@@ -304,3 +304,47 @@ cd dotmaps && python3 -m pytest tests -q
 ```
 
 Build well. Gates, not advice. Silence except trips. 🦈
+
+## Human flights 1–4 (Aug 12–13) — the first conversation
+
+**Flight 1** (`bd7909b`): `dotmaps queen migration` — all five frontier
+predicates shelved honestly; after the second shelve the queen raised her
+first five ESCALATE questions. The surface flipped from "Nothing needs
+you." to five real decisions with three options each.
+
+**Flight 2** (`cce82ed`): the human answered all five (choice 1, grow now —
+Purple's first five acted events, seq 23–27) and ran the first live
+subscription-billed growth. Five primitives banked, including r004, a real
+mutation rule. **Gap found:** grown primitives were never harvested into
+the library, and "grow now" dispatched a 3-poke smoke.
+
+**Gap closure** (`flight-2 gap closure` commit): HARVEST wired into sleep
+(bank_extract over runs/queen-live/*), library-wide dedup in the extractor,
+certify_all hardened to run on a disposable seed copy, AUTHORIZED_BUDGET
+(60 pokes) + `--authorized`. Integration: harvested 5, coverage 5→9.
+
+**Flight 3** (`847d46f`): authorized campaign, 14 more primitives banked,
+library 25 cards / 23 certified. **Miss:** the TARGET STATEMENTS directive
+never reached the reused agent-ws (board still ended at the July 12
+approval); the learner foraged the source corpus instead of the five dots.
+
+**Flight 4** (`481bed2`, after the directive-delivery fix): the mission
+brief reached the board — and the learner still banked 16 source
+invariants and never created target_items.json. **The program's own law
+explains it: mechanical gates beat informational surfacing (36/36 vs
+5/10). A mission written as board text is advice; the grow protocol is the
+mechanism, and the mechanism hunts invariants.** The five migration dots
+describe a COMPLETED migration; verification-only growth cannot make them
+true.
+
+**Standing finding → next organ:** separate DO from VERIFY. A work-order
+phase — full agentic Claude Code (tools on) scoped to a temp workspace,
+one job: perform the migration — followed by targeted growth against the
+completed state, where the five statements are finally bankable. Execution
+as mechanism, verification as growth. This is Layer 2's first plank,
+arrived by evidence.
+
+**Colony state at close:** 61 hash-chained trips (chain verified intact) ·
+library 25 cards / 23 certified · Purple 5/20 events · migration map
+honestly 0/5 covered, pilot map 4/4 at $0 · every flight and every miss on
+the public record.
