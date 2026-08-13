@@ -19,3 +19,19 @@ dots:
     spiral: 1
     confirmed_by_poke: 3
     kind: invariant
+- id: r002
+  statement: The 'summer-scoring-camp' item in source_items.json has price 60
+  verifier: verifiers/r002.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 4
+    kind: invariant
+- id: r003
+  statement: migration.json sets spot_hash_sample to 3
+  verifier: verifiers/r003.py
+  depends_on: []
+  grown_from:
+    spiral: 1
+    confirmed_by_poke: 6
+    kind: invariant

@@ -1,0 +1,12 @@
+statement: migration.json sets spot_hash_sample to 3
+steps:
+- tool: filesystem.read_file
+  args:
+    path: migration.json
+expect:
+  predicate: contains
+  value: '"spot_hash_sample": 3'
+id: r003
+confirmed_by_poke: 6
+spiral: 1
+banked_at: '2026-08-13T14:21:53'

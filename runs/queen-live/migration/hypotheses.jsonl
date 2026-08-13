@@ -1,2 +1,6 @@
 {"t": "2026-08-12T23:50:02", "event": "proposed", "rule": {"statement": "source_items.json contains exactly 5 items", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "json_item_count", "value": 5}, "id": "r001"}}
 {"t": "2026-08-12T23:50:02", "event": "banked", "rule_id": "r001"}
+{"t": "2026-08-13T14:21:40", "event": "proposed", "rule": {"statement": "The 'summer-scoring-camp' item in source_items.json has price 60", "steps": [{"tool": "filesystem.read_file", "args": {"path": "source_items.json"}}], "expect": {"predicate": "contains", "value": "\"price\": \"60\""}, "id": "r002"}}
+{"t": "2026-08-13T14:21:40", "event": "banked", "rule_id": "r002"}
+{"t": "2026-08-13T14:21:53", "event": "proposed", "rule": {"statement": "migration.json sets spot_hash_sample to 3", "steps": [{"tool": "filesystem.read_file", "args": {"path": "migration.json"}}], "expect": {"predicate": "contains", "value": "\"spot_hash_sample\": 3"}, "id": "r003"}}
+{"t": "2026-08-13T14:21:53", "event": "banked", "rule_id": "r003"}
