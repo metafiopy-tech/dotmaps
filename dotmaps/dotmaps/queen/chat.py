@@ -25,7 +25,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import re
 import shutil
 import subprocess
@@ -40,6 +39,7 @@ import yaml
 from ..grow import banking
 from . import dispatch as dispatch_mod
 from . import init as init_mod
+from . import sandbox as sandbox_mod
 from . import surface as surface_mod
 from . import trips as trips_mod
 from . import workflows as workflows_mod
@@ -230,15 +230,23 @@ def _run_agentic_stream(workspace: Path, job: str, *, model: str, max_turns: int
     """The full agentic Claude Code, tools ON, streamed so the Run tab can
     show live steps as they happen (WORK_ORDER phase="step" trips). Falls
     back to reporting the plain error if the stream can't be parsed —
-    never fakes a step that didn't happen."""
-    env = {k: v for k, v in os.environ.items() if k != "ANTHROPIC_API_KEY"}
-    cmd = ["claude", "-p", "--output-format", "stream-json", "--verbose",
-           "--model", model, "--max-turns", str(max_turns),
-           "--dangerously-skip-permissions"]
+    never fakes a step that didn't happen.
+
+    H2 (HARDENING_BRIEF): the subprocess env/command come from
+    queen/sandbox.py's run_config(), not a wholesale os.environ passthrough
+    — see that module for what "docker" vs "restricted-env" mode actually
+    means and honestly does not mean."""
+    base_cmd = ["claude", "-p", "--output-format", "stream-json", "--verbose",
+               "--model", model, "--max-turns", str(max_turns),
+               "--dangerously-skip-permissions"]
+    cfg = sandbox_mod.run_config(workspace, base_cmd)
+    trips_mod.emit("WORK_ORDER", path=trips_path, phase="sandbox", run_id=run_id,
+                   sandbox_mode=cfg["mode"], sandbox_warning=cfg["warning"])
     start = time.time()
     try:
-        proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE, text=True, cwd=str(workspace), env=env)
+        proc = subprocess.Popen(cfg["cmd"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, text=True, cwd=str(workspace),
+                                env=cfg["env"], preexec_fn=cfg["preexec_fn"])
     except FileNotFoundError as e:
         return {"ok": False, "error": f"claude CLI not found: {e}"}
     assert proc.stdin is not None and proc.stdout is not None

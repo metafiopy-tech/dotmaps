@@ -28,7 +28,6 @@ only runs under an explicit `--authorized` live dispatch.
 from __future__ import annotations
 
 import json
-import os
 import shutil
 import subprocess
 import tempfile
@@ -40,6 +39,7 @@ import yaml
 from ..models import Map
 from ..verifier.runner import Verifier
 from . import dispatch as dispatch_mod
+from . import sandbox as sandbox_mod
 from . import trips as trips_mod
 
 WORK_ORDER_MODEL = "claude-sonnet-5"
@@ -85,20 +85,22 @@ def compose_job(map_dir: Path, workspace: Path) -> str:
 def _run_agentic(workspace: Path, job: str, *, model: str, max_turns: int,
                   timeout_s: int) -> dict[str, Any]:
     """The full agentic Claude Code, tools ON, via the local `claude` CLI —
-    subscription-billed, same env-stripping as grow/learner.py's
-    ClaudeCodeLearner (a present ANTHROPIC_API_KEY must never reach the
-    child process). Scoped to `workspace` by cwd, no --add-dir, so no tool
-    call can reach outside it. `--dangerously-skip-permissions` is required
-    for a non-interactive `-p` run to actually write files; it is safe here
+    subscription-billed. Scoped to `workspace` by cwd, no --add-dir, so no
+    tool call can reach outside it (though cwd alone is not OS isolation —
+    see queen/sandbox.py for the real boundary: an empty-allowlist child env,
+    not a wholesale os.environ passthrough, plus a real docker mode when
+    configured). `--dangerously-skip-permissions` is required for a
+    non-interactive `-p` run to actually write files; it is safe here
     because `workspace` is always a disposable temp copy, never the repo."""
-    env = {k: v for k, v in os.environ.items() if k != "ANTHROPIC_API_KEY"}
+    base_cmd = ["claude", "-p", "--output-format", "json",
+               "--model", model, "--max-turns", str(max_turns),
+               "--dangerously-skip-permissions"]
+    cfg = sandbox_mod.run_config(workspace, base_cmd)
     try:
         proc = subprocess.run(
-            ["claude", "-p", "--output-format", "json",
-             "--model", model, "--max-turns", str(max_turns),
-             "--dangerously-skip-permissions"],
-            input=job, capture_output=True, text=True,
-            timeout=timeout_s, cwd=str(workspace), env=env)
+            cfg["cmd"], input=job, capture_output=True, text=True,
+            timeout=timeout_s, cwd=str(workspace), env=cfg["env"],
+            preexec_fn=cfg["preexec_fn"])
     except subprocess.TimeoutExpired:
         return {"ok": False, "error": f"wall-clock timeout after {timeout_s}s"}
     try:
