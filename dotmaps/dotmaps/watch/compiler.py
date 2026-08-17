@@ -27,6 +27,7 @@ from typing import Any
 from urllib.parse import urljoin, urlparse
 
 from ..grow.banking import run_steps
+from ..queen import identity as identity_mod
 from .oracle import DUMMY_WORKSPACE
 
 MAX_INTERNAL_PAGES = 6   # crawl-1-level cap: homepage + up to this many links
@@ -37,8 +38,19 @@ _TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 
 
 def slugify(url: str) -> str:
+    """A readable label only — NOT the persistent watcher identity (see
+    H7 below). Kept for anywhere a short display name is wanted."""
     net = urlparse(url).netloc or url
     return "".join(c if c.isalnum() else "-" for c in net).strip("-").lower() or "target"
+
+
+def watcher_id(normalized_url: str) -> str:
+    """H7 (HARDENING_BRIEF): the audit's P1 finding — `slugify()` alone
+    used netloc ONLY, so two different Watch targets on the same host
+    (different paths) collided into the same persistent watcher namespace.
+    The readable netloc stays as a prefix; a hash of the FULL normalized
+    URL is what actually makes the id unique."""
+    return identity_mod.stable_id(slugify(normalized_url), normalized_url)
 
 
 def _normalize(url: str) -> str:
@@ -119,7 +131,7 @@ def compile_health_map(target_url: str,
     target that doesn't even answer still compiles to a (failing) 1-dot
     map, honestly."""
     target_url = _normalize(target_url)
-    slug = slugify(target_url)
+    slug = watcher_id(target_url)
     dots: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
 

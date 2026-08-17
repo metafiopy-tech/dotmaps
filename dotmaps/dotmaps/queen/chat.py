@@ -39,6 +39,7 @@ import yaml
 from ..grow import banking
 from . import _journal as journal_mod
 from . import dispatch as dispatch_mod
+from . import identity as identity_mod
 from . import init as init_mod
 from . import sandbox as sandbox_mod
 from . import surface as surface_mod
@@ -369,8 +370,13 @@ def _rule_from_answer(answer: dict[str, Any]) -> dict[str, Any]:
 
 
 def _slug(text: str, max_len: int = 40) -> str:
-    s = re.sub(r"[^a-z0-9]+", "-", (text or "").lower()).strip("-")
-    return s[:max_len].rstrip("-") or "ask"
+    """H7 (HARDENING_BRIEF): the audit's P1 finding — a plain 40-char
+    truncation of the normalized question meant two long questions sharing
+    a 40-char prefix collided into the same learned-map namespace
+    (map-chat-{slug}, runs/queen-live/chat-{slug}). The readable prefix
+    stays (still capped at max_len, still legible in a directory listing)
+    but a hash of the FULL normalized text now makes the id unique."""
+    return identity_mod.stable_id(text, text, prefix_len=max_len)
 
 
 def _escalate_id(message: str) -> str:
