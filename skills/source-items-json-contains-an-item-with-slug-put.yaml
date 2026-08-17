@@ -1,0 +1,39 @@
+name: source-items-json-contains-an-item-with-slug-put
+statement: source_items.json contains an item with slug "putting-intensive"
+trigger:
+- source_items.json::contains::6b9e50e4
+method:
+  steps:
+  - tool: filesystem.read_file
+    args:
+      path: source_items.json
+  hash: 2c1db0eb5470
+check:
+  predicate: contains
+  value: putting-intensive
+requires:
+  tools:
+  - filesystem.read_file
+provenance:
+- banked_from: chat-is-there-a-putting-class-in-the-schedule
+  rule_id: r001
+  banked_at: '2026-08-17T00:36:00'
+  confirmed_by_poke: null
+certificate:
+  status: certified
+  theta: 0.7
+  wilson:
+  - 0.839
+  - 1.0
+  n: 20
+  oracle_gate: oracle gate passed (terminates, discriminates, stable)
+  probe_mode: deterministic-replay
+decay:
+  last_used: '2026-08-17T00:36:21'
+  stability: 1.0
+  shelf_recheck: null
+  invocations: 1
+usage:
+- t: '2026-08-17T00:36:21'
+  event: invoked
+  stability_after: 1.0

@@ -1,0 +1,13 @@
+name: map-chat-is-there-a-putting-class-in-the-schedule
+version: 0.0.1
+domain: chat
+mcp_required:
+- filesystem.read_file
+budget:
+  max_cycles: 5
+traveler:
+  driver: scripted
+dots:
+- id: r001
+  statement: source_items.json contains an item with slug "putting-intensive"
+  verifier: verifiers/r001.py

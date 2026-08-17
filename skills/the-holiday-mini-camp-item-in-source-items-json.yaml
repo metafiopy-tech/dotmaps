@@ -27,6 +27,10 @@ provenance:
   rule_id: r010
   banked_at: '2026-08-13T14:33:13'
   confirmed_by_poke: 18
+- banked_from: migration
+  rule_id: r010
+  banked_at: '2026-08-13T14:33:13'
+  confirmed_by_poke: 18
 certificate:
   status: certified
   theta: 0.7

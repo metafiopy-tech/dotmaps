@@ -348,3 +348,145 @@ arrived by evidence.
 library 25 cards / 23 certified · Purple 5/20 events · migration map
 honestly 0/5 covered, pilot map 4/4 at $0 · every flight and every miss on
 the public record.
+
+## QUEEN OS v1 — she's in service.
+
+Branch `queen-os`, off `queen-v1` with `queen-watch`'s W1–W3 already in the
+line. Built per `QUEEN_OS_PRD.md` in four commit-per-gate steps (G1–G4);
+`COMPANION_BRIEF.md`, named in the brief as required reading for its C1/C2
+mechanics, was not present in this checkout — its two mechanics (a
+first-launch home-folder pick, and route-first-then-work-order chat) were
+rebuilt from the PRD's own description rather than skipped.
+
+**What shipped, gate by gate:**
+
+- **G1 — `queen/init.py` + `queen/chat.py` + `queen/workflows.py`.**
+  `dotmaps init` (C1): one-screen, once — home folder + linked folders,
+  `runs/queen/home.json`. `dotmaps chat` (Tab 1's engine): a parallel
+  hash-chained ledger (`runs/queen/chat.jsonl`, same chain math as
+  `trips.py`, a separate file on purpose — chat messages aren't trip
+  types). ROUTE FIRST checks named workflows (`queen/workflows.py`, seed:
+  the demo workspace + the menu migration; chat-born: discovered live from
+  `maps/map-chat-*/chat_trigger.json`, no parallel registry) via
+  `bank/route.py` — $0, zero model calls, mechanically re-earned every
+  time, never a stored label. Not covered → a WORK ORDER: `claude -p`,
+  tools on, scoped to a disposable copy of the demo workspace, streamed
+  (`--output-format stream-json`) into `WORK_ORDER phase=step` trips so
+  the Run tab can show live steps as they happen. A mechanical completion
+  gate (an `answer.json` naming a real file + a real check, never
+  self-report) decides the reply; a passing answer gets re-validated with
+  `grow/banking.confirm()` — the actual discriminating bank gate, not a
+  rubber stamp — before she ever offers to learn it. "Yes" (via
+  `surface.py`'s escalate/resolve, reused verbatim, per the brief) writes
+  a real primitive under `runs/queen-live/chat-*/` (picked up by the
+  *existing* `sleep()` harvest — zero new code there) and compiles a real
+  one-dot map under `maps/map-chat-*/`, so the identical ask routes free
+  through the ordinary dispatch path the moment `dotmaps sleep` certifies
+  it.
+- **G2 — the four remaining tabs' backend.** `queen/paper.py`: a small,
+  dependency-free markdown→HTML pass over `docs/paper/*.md`, with live
+  numbers substituted from the real record before render. Six sections
+  written (The Receipt, How She Learns, What Died, The 12× Finding, The
+  Laws, The Colony & The Keeper) — every one hand-checked against the
+  zero-jargon list, one caught mid-draft ("frontier of the model" in The
+  Receipt's own prose) and rephrased. `queen/ui.py` gained
+  `/api/init`, `/api/chat` (+ `/api/chat/resolve`), `/api/run/state` (the
+  live step feed, grouped by `WORK_ORDER` `run_id`), `/api/memory`,
+  `/api/workflows` + `/api/workflow/<name>/run` (always the free dispatch
+  pass — a click never silently spends), `/api/watchers`, `/api/paper` —
+  all read-only except the two writes (chat, resolve), same discipline as
+  Q10.
+- **G3 — the five-tab rebuild.** `queen/static/index.html` rewritten
+  whole: light, soft-paper ground, one honey accent, Instrument Serif for
+  her voice only — DESIGN LAW, replacing `queen-v1`'s dark "night hive."
+  Chat (default) · Run (live steps, receipt-tap, idle tape replay) ·
+  Memory (honeycomb + list toggle, section-header stats, tap-through
+  detail sheet) · Workflows (coverage dot-row + RUN button, "point her at
+  something" folded in from the existing watch endpoints) · The Paper.
+  Onboarding overlay wired to `/api/init`, shown once. A second banned
+  word (`frontier_count`, a field name leaking into the page's own JS) was
+  caught by the scan and renamed to `not_yet` on both ends.
+- **G4 — `assure` grows three claims.** #12 chat routes covered work
+  modelless (stub-tested with a runner that raises if called — a
+  regression that falls through to a work order on covered ground fails
+  loud, not silent); #13 zero jargon across all five tabs (re-scans the
+  static page **and** the live-rendered paper — a page-only scan would
+  miss a paper regression); #14 chat chain integrity. `dotmaps assure`:
+  **14/14 PASS.**
+
+**The acceptance test — run for real, live, subscription-billed where the
+brief calls for it:**
+
+```
+$ dotmaps init --home ~/dotmaps
+{"home": "/Users/joefiorillo/dotmaps", "linked": [], "initialized_at": "..."}
+
+$ dotmaps hive --port 8811   # → onboarding once (already done above) → Chat tab
+
+POST /api/chat {"message": "check the demo workspace"}
+→ {"chip": {"kind": "free", "label": "$0 · certified replay", "model_calls": 0}}
+   (4/4 confirmed, $0, zero model calls)
+
+POST /api/chat {"message": "Is there a putting class in the schedule? Check
+                exactly which item slug it is."}
+→ live: 10 WORK_ORDER trips (start → 8 streamed steps, real tool names and
+   elapsed times → complete), watchable in the Run tab as they happened
+→ {"reply": "Yes, the putting class is \"Putting Intensive\", with the item
+   slug \"putting-intensive\".",
+   "chip": {"kind": "model", "label": "model called · 7 turns", "turns": 7,
+            "cost_usd": 0.0776},
+   "learn_offer": {"id": "77d5cf543c7c",
+     "statement": "source_items.json contains an item with slug \"putting-intensive\""}}
+
+POST /api/chat/resolve {"id": "77d5cf543c7c", "choice": 1}
+→ {"learned": true, "map": "map-chat-is-there-a-putting-class-in-the-schedule",
+   "note": "Got it — she'll know that for free after her next sleep."}
+   (runs/queen-live/chat-is-there-a-putting-class-in-the-schedule/primitives/r001.yaml
+    written; maps/map-chat-is-there-a-putting-class-in-the-schedule/ compiled)
+
+$ dotmaps sleep
+{"harvested_candidates": 1, "coverage": 33, "frontier": 2}
+   (skills/source-items-json-contains-an-item-with-slug-put.yaml: candidate
+    → certified, wilson [0.839, 1.0], n=20 — the real oracle gate, not a
+    rubber stamp)
+
+POST /api/chat {"message": "Is there a putting class in the schedule? Check
+                exactly which item slug it is."}   # the SAME ask
+→ {"reply": "Yes, the putting class is \"Putting Intensive\", with the item
+   slug \"putting-intensive\".",
+   "chip": {"kind": "free", "label": "$0 · certified replay", "model_calls": 0}}
+   (identical reply text, zero model calls — the loop closed)
+
+POST /api/workflow/migrate-the-menu-data/run
+→ {"covered": 0, "not_yet": 5, "model_calls": 0}   # honest — real, one-button, $0
+
+$ dotmaps assure    # ALL GREEN, 14/14
+$ cd dotmaps && python3 -m pytest tests -q    # 260 passed, 1 skipped
+```
+
+Colony state at close of this flight: **116** hash-chained decision-record
+entries (chain verified intact) · **7** chat messages (own chain verified
+intact) · library **35** cards / **33** certified, one of them — the
+putting-intensive fact — born entirely inside a chat conversation, banked,
+certified, and now replaying for $0 · **9** free executions on the record ·
+the one live model call this flight made cost **\$0.0776**, subscription-
+billed, no API key ever touched. Every claim in this section is one query
+away from the file that proves it, same as the paper tab says of itself.
+
+**Known limits, honestly carried forward:** the migration play still
+shows honestly 0/5 (its real work-order + authorized-growth path,
+`queen/live.py --authorized`, is a separate, deliberately-not-one-click
+action — MONEY LAW; the Workflows RUN button always takes the free
+dispatch pass). Chat's WORK ORDER is scoped to the demo workspace only
+(`corpus/pilot/seed-ws`) in this flight — home/linked-folder scoping from
+`dotmaps init` names the *allowed* directories (`queen/init.py`'s
+`scoped_dirs()`) but chat's default `seed` parameter isn't yet threaded to
+prefer them over the demo workspace; a real keeper's non-demo folder would
+need `dotmaps chat` called with `--home`-aware wiring not yet built. A
+freshly re-asked, not-yet-certified chat question (between "yes" and the
+next `dotmaps sleep`) currently re-runs a full billed work order rather
+than saying "ask me again after she sleeps" — mechanically honest, just
+not the cheapest possible UX; out of scope for this brief's acceptance
+test, which never exercises that path.
+
+The keeper's next act after this merge is USE, not another brief. 🐝

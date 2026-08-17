@@ -1,0 +1,5 @@
+{
+  "trigger": "is there a putting class in the schedule? check exactly which item slug it is.",
+  "statement": "source_items.json contains an item with slug \"putting-intensive\"",
+  "answer": "Yes, the putting class is \"Putting Intensive\", with the item slug \"putting-intensive\"."
+}
