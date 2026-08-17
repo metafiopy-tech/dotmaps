@@ -127,6 +127,20 @@ def main(argv: list[str] | None = None) -> int:
     p_assure.add_argument("--freeze", action="store_true",
                           help="(re)generate the frozen-hashes manifest — a deliberate, human-run action")
 
+    p_init = sub.add_parser("init", help="C1: pick a home folder + linked folders, once")
+    p_init.add_argument("--home", help="the home folder (default: this repo)")
+    p_init.add_argument("--link", action="append", default=[],
+                        help="a folder to link (repeatable)")
+
+    p_chat = sub.add_parser("chat", help="the front door (QUEEN OS PRD, Tab 1): "
+                            "route first, else a work order, else a plain reply")
+    p_chat.add_argument("message", nargs="+")
+
+    p_hive = sub.add_parser("hive", help="dotmaps hive: the five-tab keeper's edition "
+                            "(alias: dotmaps ui)")
+    p_hive.add_argument("--host", default="127.0.0.1")
+    p_hive.add_argument("--port", type=int, default=8765)
+
     p_watch = sub.add_parser("watch", help="point-and-watch (W1-W3): compile a real target's "
                              "health map and verify it mechanically — no model")
     p_watch.add_argument("url", nargs="?", default=None,
@@ -322,9 +336,23 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(sleep_fn(), indent=2))
         return 0
 
-    if args.cmd == "ui":
+    if args.cmd == "ui" or args.cmd == "hive":
         from .queen.ui import main as ui_main
         ui_main(host=args.host, port=args.port)
+        return 0
+
+    if args.cmd == "init":
+        from .queen.init import REPO_ROOT as _repo_root
+        from .queen.init import run_init
+        home = args.home or str(_repo_root)
+        state = run_init(home, args.link)
+        print(json.dumps(state, indent=2))
+        return 0
+
+    if args.cmd == "chat":
+        from .queen.chat import ask
+        out = ask(" ".join(args.message))
+        print(json.dumps(out, indent=2, default=str))
         return 0
 
     if args.cmd == "watch":
