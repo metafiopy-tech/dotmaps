@@ -66,16 +66,24 @@ from ..bank.route import route_map
 from ..watch import compiler as watch_compiler
 from ..watch import history as watch_history
 from ..watch import runner as watch_runner
+from . import chat as chat_mod
 from . import dispatch as dispatch_mod
+from . import init as init_mod
+from . import paper as paper_mod
 from . import purple as purple_mod
 from . import reconsolidate
 from . import surface as surface_mod
 from . import trips as trips_mod
+from . import workflows as workflows_mod
 
 REPO_ROOT = trips_mod.REPO_ROOT
 STATIC_PAGE = Path(__file__).parent / "static" / "index.html"
 DEFAULT_SKILLS = REPO_ROOT / "skills"
 DEFAULT_LIVE_ROOT = REPO_ROOT / "runs" / "queen-live"
+DEFAULT_CHAT_PATH = chat_mod.DEFAULT_CHAT_PATH
+DEFAULT_MAPS_DIR = workflows_mod.DEFAULT_MAPS_DIR
+DEFAULT_HOME_PATH = init_mod.DEFAULT_HOME_STATE_PATH
+DEFAULT_SEED = chat_mod.DEFAULT_SEED
 WATCH_PRESETS = ["https://bensluzasgolf.com"]
 
 # In-process only, by design: a compiled health map and its running/rewatch
@@ -240,7 +248,36 @@ def status_payload(trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH) -> dict[str,
             "free_jobs_count": free_jobs}
 
 
-def _skill_summary(card: dict, path: Path) -> dict[str, Any]:
+def _plain_description(statement: str | None) -> str:
+    """One sentence, in plain words — Tab 3's list view needs a sentence a
+    keeper can read at a glance, not a raw statement. Deterministic (pure
+    function of the statement), so it's always in sync with the card —
+    never stored, never able to drift stale."""
+    stmt = (statement or "something she checked").strip()
+    s = stmt[0].upper() + stmt[1:] if stmt else stmt
+    if not s.endswith((".", "!", "?")):
+        s += "."
+    return f"Confirms: {s}"
+
+
+def _cost_to_learn(statement: str | None, trips_path: Path) -> float | None:
+    """What it cost, the one time she learned it — read from the WORK_ORDER
+    completion trip a chat-taught fact leaves behind. None (shown as
+    "already known") for anything grown before this cost was tracked."""
+    if not statement:
+        return None
+    for rec in trips_mod.read_all(trips_path):
+        d = rec.get("data", {})
+        if rec["type"] == "WORK_ORDER" and d.get("phase") == "complete":
+            ans = (d.get("gate") or {}).get("answer") or {}
+            if ans.get("statement") == statement:
+                cost = (d.get("claude") or {}).get("cost_usd")
+                return round(float(cost), 4) if cost is not None else None
+    return None
+
+
+def _skill_summary(card: dict, path: Path,
+                   trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH) -> dict[str, Any]:
     decay = card.get("decay", {}) or {}
     last_used = decay.get("last_used")
     fresh = reconsolidate.freshness_ratio(path) if last_used else 1.0
@@ -255,9 +292,12 @@ def _skill_summary(card: dict, path: Path) -> dict[str, Any]:
     return {
         "name": card["name"],
         "statement": card.get("statement"),
+        "description": _plain_description(card.get("statement")),
         "status": card.get("certificate", {}).get("status", "candidate"),
         "learned": _earliest_learned(card),
         "used_count": decay.get("invocations") or 0,
+        "times_used_free": decay.get("invocations") or 0,
+        "cost_to_learn": _cost_to_learn(card.get("statement"), trips_path),
         "last_checked": last_used or recheck,
         "freshness": round(fresh, 3) if fresh is not None else 1.0,
         "pulse": pulse,
@@ -277,13 +317,18 @@ def _all_skill_files(skills_dir: Path) -> list[Path]:
     return files
 
 
-def skills_payload(skills_dir: Path = DEFAULT_SKILLS) -> list[dict[str, Any]]:
-    """The honeycomb: one entry per skill card, bank and watch alike."""
-    return [_skill_summary(_load_card(f), f) for f in _all_skill_files(skills_dir)]
+def skills_payload(skills_dir: Path = DEFAULT_SKILLS,
+                   trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH) -> list[dict[str, Any]]:
+    """The honeycomb (and Tab 3's plain-list toggle over the same rows):
+    one entry per skill card, bank and watch alike."""
+    return [_skill_summary(_load_card(f), f, trips_path) for f in _all_skill_files(skills_dir)]
 
 
-def skill_detail_payload(skills_dir: Path, name: str) -> dict[str, Any] | None:
-    """One hex, tapped: the plain card plus the raw receipt."""
+def skill_detail_payload(skills_dir: Path, name: str,
+                         trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH
+                         ) -> dict[str, Any] | None:
+    """One hex, tapped: the plain card plus the raw receipt (the receipt
+    chain — born in run X, certified with evidence Y — lives in `raw`)."""
     skills_dir = Path(skills_dir)
     path = skills_dir / f"{name}.yaml"
     if not path.exists():
@@ -291,11 +336,145 @@ def skill_detail_payload(skills_dir: Path, name: str) -> dict[str, Any] | None:
     if not path.exists():
         return None
     card = _load_card(path)
-    detail = _skill_summary(card, path)
+    detail = _skill_summary(card, path, trips_path)
     detail["learned_from"] = sorted({p.get("banked_from") for p in
                                      card.get("provenance", []) if p.get("banked_from")})
     detail["raw"] = card
     return detail
+
+
+def memory_stats_payload(skills_dir: Path = DEFAULT_SKILLS) -> dict[str, Any]:
+    """Tab 3's section header: "She knows N things. M certified.
+    Everything re-checks itself on a clock." — counted fresh, every time."""
+    files = _all_skill_files(Path(skills_dir))
+    total = len(files)
+    certified = sum(1 for f in files
+                    if _load_card(f).get("certificate", {}).get("status") == "certified")
+    return {"total": total, "certified": certified,
+            "text": f"She knows {total} thing{'s' if total != 1 else ''}. "
+                    f"{certified} certified. Everything re-checks itself on a clock."}
+
+
+# --------------------------------------------------------------------------- #
+# CHAT — Tab 1, the front door (QUEEN OS PRD)                                #
+# --------------------------------------------------------------------------- #
+
+def init_payload(path: Path = DEFAULT_HOME_PATH) -> dict[str, Any]:
+    st = init_mod.home_state(path)
+    return {"initialized": False} if st is None else {"initialized": True, **st}
+
+
+def chat_payload(chat_path: Path = DEFAULT_CHAT_PATH,
+                 trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH) -> dict[str, Any]:
+    """The transcript plus any open learn-offers rendered as trailing
+    message-shaped cards with answer buttons (PRD: "reuse resolve")."""
+    messages = chat_mod.read_chat(chat_path)
+    open_learn = [e for e in surface_mod.open_escalations(trips_path)
+                 if e.get("kind") == "learn_offer"]
+    offers = [{"id": e["id"], "text": e["question"],
+              "options": [{"choice": i, "label": opt}
+                         for i, opt in enumerate(e.get("options", []), 1)]}
+             for e in open_learn]
+    ok, reason = chat_mod.verify_chat_integrity(chat_path)
+    return {"messages": messages, "open_learn_offers": offers,
+            "chain_ok": ok, "chain_reason": reason}
+
+
+# --------------------------------------------------------------------------- #
+# RUN — Tab 2, the glass engine room                                         #
+# --------------------------------------------------------------------------- #
+
+_RUN_PHASE_TEXT = {
+    "start": "Starting a hands-on job...",
+    "complete": "Finished — checked out clean.",
+}
+
+
+def run_state_payload(trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH,
+                      run_id: str | None = None) -> dict[str, Any]:
+    """The live step feed: every WORK_ORDER trip sharing one run_id,
+    translated to a plain card. Defaults to the MOST RECENT run — active if
+    it hasn't reached complete/failed yet, otherwise the idle replay of the
+    last tape. Read-only: never emits a trip just by being polled."""
+    records = trips_mod.read_all(trips_path)
+    rid = run_id
+    if rid is None:
+        for rec in records:
+            if rec["type"] == "WORK_ORDER" and rec["data"].get("run_id"):
+                rid = rec["data"]["run_id"]
+    if rid is None:
+        return {"active": False, "run_id": None, "steps": []}
+
+    steps = []
+    active = False
+    for rec in records:
+        d = rec.get("data", {})
+        if rec["type"] != "WORK_ORDER" or d.get("run_id") != rid:
+            continue
+        phase = d.get("phase")
+        if phase in ("start", "step"):
+            active = True
+        elif phase in ("complete", "failed"):
+            active = False
+        else:
+            continue
+        if phase == "step":
+            text = d.get("text") or "Working..."
+        elif phase == "failed":
+            text = f"Stopped — {d.get('reason') or 'did not check out'}."
+        else:
+            text = _RUN_PHASE_TEXT.get(phase, phase)
+        steps.append({"seq": rec["seq"], "t": rec["t"], "phase": phase, "text": text,
+                     "tool": d.get("tool"), "model_call": d.get("model_call", phase == "step"),
+                     "elapsed": d.get("elapsed"), "failed": phase == "failed", "receipt": rec})
+    return {"active": active, "run_id": rid, "steps": steps}
+
+
+# --------------------------------------------------------------------------- #
+# WORKFLOWS — Tab 4                                                          #
+# --------------------------------------------------------------------------- #
+
+def run_workflow(name: str, *, skills_dir: Path = DEFAULT_SKILLS,
+                 maps_dir: Path = DEFAULT_MAPS_DIR,
+                 trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH) -> dict[str, Any]:
+    """The RUN button: always the free, mechanical dispatch pass (route +
+    honest staffing plan for whatever's still unproven) — never a live,
+    billed campaign by a single click. Live/authorized growth stays an
+    explicit, separate, human-run action (queen/live.py), same MONEY LAW
+    every other default path in this package already holds to."""
+    wf = workflows_mod.find(name, maps_dir)
+    if wf is None:
+        raise KeyError(f"unknown workflow {name!r}")
+    target = wf["target"] if wf["kind"] == "seed" else str(Path(maps_dir) / wf["target"])
+    report = dispatch_mod.dispatch(target, trips_path=trips_path, skills=skills_dir)
+    return {"workflow": name, "covered": len(report["covered"]),
+            "frontier_count": len(report["frontier"]), "model_calls": report["model_calls"]}
+
+
+def watchers_payload(trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH) -> list[dict[str, Any]]:
+    """Every point-and-watch target this process knows about, with its
+    next-check time — the Workflows tab's "watchers" section."""
+    records = trips_mod.read_all(trips_path)
+    with _watch_lock:
+        items = list(_watch_status.items())
+    out = []
+    for slug, st in items:
+        last = None
+        for rec in records:
+            if rec.get("data", {}).get("target") == slug:
+                last = rec["t"]
+        minutes = st.get("rewatch_minutes")
+        next_check = None
+        if minutes and last:
+            try:
+                ts = time.mktime(time.strptime(last, "%Y-%m-%dT%H:%M:%S"))
+                next_check = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(ts + minutes * 60))
+            except ValueError:
+                next_check = None
+        out.append({"slug": slug, "rewatch_minutes": minutes,
+                    "running": st.get("running", False),
+                    "last_checked": last, "next_check": next_check})
+    return out
 
 
 def _sleep_text(data: dict) -> str:
@@ -526,8 +705,12 @@ def set_rewatch(slug: str, minutes: float | None, trips_path: Path, skills_dir: 
 # HTTP handler — stdlib only                                                 #
 # --------------------------------------------------------------------------- #
 
-def make_handler(trips_path: Path, skills_dir: Path, live_root: Path):
+def make_handler(trips_path: Path, skills_dir: Path, live_root: Path,
+                 chat_path: Path = DEFAULT_CHAT_PATH, maps_dir: Path = DEFAULT_MAPS_DIR,
+                 home_path: Path = DEFAULT_HOME_PATH, seed: Path = DEFAULT_SEED):
     trips_path, skills_dir, live_root = Path(trips_path), Path(skills_dir), Path(live_root)
+    chat_path, maps_dir, home_path, seed = (Path(chat_path), Path(maps_dir),
+                                            Path(home_path), Path(seed))
 
     class Handler(BaseHTTPRequestHandler):
         server_version = "QueenConsole/1.0"
@@ -559,8 +742,17 @@ def make_handler(trips_path: Path, skills_dir: Path, live_root: Path):
                 "/api/manifest": lambda: manifest_state(skills_dir),
                 "/api/flights": lambda: flights_state(live_root),
                 "/api/status": lambda: status_payload(trips_path),
-                "/api/skills": lambda: skills_payload(skills_dir),
+                "/api/skills": lambda: skills_payload(skills_dir, trips_path),
                 "/api/diary": lambda: diary_payload(trips_path, skills_dir),
+                "/api/init": lambda: init_payload(home_path),
+                "/api/chat": lambda: chat_payload(chat_path, trips_path),
+                "/api/run/state": lambda: run_state_payload(trips_path),
+                "/api/memory": lambda: memory_stats_payload(skills_dir),
+                "/api/workflows": lambda: workflows_mod.payload(skills_dir, maps_dir, trips_path),
+                "/api/watchers": lambda: watchers_payload(trips_path),
+                "/api/paper": lambda: paper_mod.payload(paper_dir=paper_mod.DEFAULT_PAPER_DIR,
+                                                        skills_dir=skills_dir,
+                                                        trips_path=trips_path, chat_path=chat_path),
             }
             if path in routes:
                 try:
@@ -571,7 +763,7 @@ def make_handler(trips_path: Path, skills_dir: Path, live_root: Path):
             if path.startswith("/api/skill/"):
                 name = unquote(path[len("/api/skill/"):])
                 try:
-                    detail = skill_detail_payload(skills_dir, name)
+                    detail = skill_detail_payload(skills_dir, name, trips_path)
                 except Exception as e:
                     self._send_json({"error": str(e)}, status=500)
                     return
@@ -602,6 +794,51 @@ def make_handler(trips_path: Path, skills_dir: Path, live_root: Path):
                     self._send_json({"error": str(e)}, status=400)
                     return
                 self._send_json({"resolved": rec})
+                return
+            if path == "/api/init":
+                length = int(self.headers.get("Content-Length", 0) or 0)
+                try:
+                    payload = json.loads(self.rfile.read(length) or b"{}")
+                    state = init_mod.run_init(payload["home"], payload.get("linked") or [],
+                                              path=home_path)
+                except Exception as e:
+                    self._send_json({"error": str(e)}, status=400)
+                    return
+                self._send_json({"initialized": True, **state})
+                return
+            if path == "/api/chat":
+                length = int(self.headers.get("Content-Length", 0) or 0)
+                try:
+                    payload = json.loads(self.rfile.read(length) or b"{}")
+                    out = chat_mod.ask(payload["message"], trips_path=trips_path,
+                                       chat_path=chat_path, skills_dir=skills_dir,
+                                       maps_dir=maps_dir, seed=seed)
+                except Exception as e:
+                    self._send_json({"error": str(e)}, status=400)
+                    return
+                self._send_json(out)
+                return
+            if path == "/api/chat/resolve":
+                length = int(self.headers.get("Content-Length", 0) or 0)
+                try:
+                    payload = json.loads(self.rfile.read(length) or b"{}")
+                    out = chat_mod.resolve_learn_offer(
+                        payload["id"], int(payload["choice"]), trips_path=trips_path,
+                        chat_path=chat_path, maps_dir=maps_dir, live_root=live_root)
+                except Exception as e:
+                    self._send_json({"error": str(e)}, status=400)
+                    return
+                self._send_json(out)
+                return
+            m = re.match(r"^/api/workflow/([^/]+)/run$", path)
+            if m:
+                try:
+                    out = run_workflow(unquote(m.group(1)), skills_dir=skills_dir,
+                                       maps_dir=maps_dir, trips_path=trips_path)
+                except KeyError as e:
+                    self._send_json({"error": str(e)}, status=404)
+                    return
+                self._send_json(out)
                 return
             if path == "/api/watch/start":
                 length = int(self.headers.get("Content-Length", 0) or 0)
@@ -647,10 +884,15 @@ def make_handler(trips_path: Path, skills_dir: Path, live_root: Path):
 def serve(host: str = "127.0.0.1", port: int = 8765,
           trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH,
           skills_dir: Path = DEFAULT_SKILLS,
-          live_root: Path = DEFAULT_LIVE_ROOT) -> ThreadingHTTPServer:
+          live_root: Path = DEFAULT_LIVE_ROOT,
+          chat_path: Path = DEFAULT_CHAT_PATH,
+          maps_dir: Path = DEFAULT_MAPS_DIR,
+          home_path: Path = DEFAULT_HOME_PATH,
+          seed: Path = DEFAULT_SEED) -> ThreadingHTTPServer:
     """Build and start the server; returns the (already-serving-capable, not
     yet serve_forever'd) httpd so callers/tests can run it in a thread."""
-    handler = make_handler(trips_path, skills_dir, live_root)
+    handler = make_handler(trips_path, skills_dir, live_root, chat_path, maps_dir,
+                           home_path, seed)
     return ThreadingHTTPServer((host, port), handler)
 
 
