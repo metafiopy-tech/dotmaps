@@ -490,3 +490,58 @@ not the cheapest possible UX; out of scope for this brief's acceptance
 test, which never exercises that path.
 
 The keeper's next act after this merge is USE, not another brief. 🐝
+
+## Hardened: the audit response
+
+Branch `queen-hardened`, off `queen-os`. An outside technical/product
+diligence review (`docs/audit-2026-08-17.md`, committed verbatim first,
+G0) read the whole project — code, experiments, product layer — and named
+four P0s and six P1s the queen-os branch needed closed before it could be
+called production-safe. `HARDENING_BRIEF.md` turned each into a gate,
+priority order, one commit per gate, full suite + `dotmaps assure` green
+after every single one. No push; merge to `main` is the keeper's call.
+
+**Finding → fix → test, in gate order:**
+
+| Gate | Audit finding | Fix | Test |
+| --- | --- | --- | --- |
+| H1 `2228956` | Chat's mechanical gate checked answer.json's SHAPE, never the proposed predicate/value — a false claim, or a `subtype!=success` run, could still reach the user. | `_chat_gate()` now mechanically executes the predicate against the real file and requires `subtype=="success"` before touching anything; a new deterministic renderer (`_render_checked_reply`) builds the reply from the checked fact only, dropping any free text that fails a mechanical contradiction filter. | `tests/test_queen_chat_proof.py` — the audit's three regression tests, verbatim. |
+| H2 `7138272` | The work order passed the rest of `os.environ` (minus one key) to `claude -p --dangerously-skip-permissions` — an untrusted process. | New `queen/sandbox.py`: `build_child_env()` is an EMPTY allowlist + PATH, never wholesale; `run_config()` picks a real docker mode when configured, else an honest, LOUD "unsandboxed — dev only" restricted-env degrade. | `tests/test_queen_sandbox.py` — a planted `SECRET_TOKEN` never survives. |
+| H3 `faa5358` | `fetch.get` accepted any http(s) URL via plain `urllib` — no block on localhost/private/link-local/metadata, no redirect revalidation, no DNS-rebind defense. | New `net/safefetch.py`: public-IP-only, resolve-then-pin (one resolution, ever), manually-revalidated redirects. The one call site (`ToolBox._fetch_get`) closes it for Watch and every traveler fetch at once. | `tests/test_safefetch.py` — the audit's full SSRF matrix. |
+| H4 `a726997` | `trips.emit()`/`chat.emit_chat()` read-tail → computed → appended with no lock — concurrent writers could fork the chain. | New `queen/_journal.py`: one `flock`-held critical section, tail read INSIDE the lock, `fsync` before release. | `tests/test_journal_concurrency.py` — two real OS processes, 1,000 events, chain stays linear/unique/complete. |
+| H5 `ac80bde` | `bank/certify.py` replayed 20 identical deterministic trials against ONE shared seed copy and called the result a Wilson confidence interval; a mutating skill's writes could leak into a later skill's certification. | Fresh disposable copy per skill AND per probe; certificates now carry a `regime` label (`deterministic-consistency` vs watch's genuine `sampled-reliability`); promotion for the deterministic regime requires every replay to hold, not a Wilson-vs-θ comparison. | `tests/test_bank_certify_isolation.py` — mutation isolation, reorder-identical-certificates, a single flaky replay disqualifies. |
+| H6 `ced53b4` | `sleep()` reset a due skill's freshness and logged a success trip even when its re-cert failed; stability canceled out of the shelf-recheck math algebraically. | Freshness resets only on a passing re-cert (a failure emits `CONVICTED`, stays stale); stability now scales the effective half-life for real. Skill cards gained `formation_context` (a content fingerprint); `route_map()` refuses a skill whose fingerprint no longer matches. | `tests/test_queen_recert_and_context.py`. |
+| H7 `1db0a15` | Watch's slug used netloc only; chat's learned-map slug truncated at 40 chars — both could collide across genuinely different targets. | New `queen/identity.py`: readable prefix + a hash of the FULL normalized identity, everywhere a persistent id is minted. | `tests/test_identity.py` — same host/different path, long same-prefix questions. |
+| H8 `a73a061` | Two hand-rolled, undeclared `claude` CLI contracts (chat.py, workorder.py) with no version pin, no compatibility check. | New `queen/runner_adapter.py`: `ClaudeCliAdapter` — one contract, a cached `self_test()`, product logic never reads a CLI flag or output field directly again. | `tests/test_runner_adapter.py`. |
+| H9 `e36beec` | No in-product signal, before a frontier ask, of model/no-model, what's read, what leaves the machine, or whether the answer is stored. | `chat.egress_preview()` + `GET /api/egress`; the same block now rides every WORK_ORDER "start" trip, surfaced per-action in the Run tab. | `tests/test_egress_labels.py`. |
+| H10 `f40c95f` | "Certified," the 12x finding, and the certification-confidence language overclaimed relative to what's actually measured; no external prior-art/claim-status framing. | `docs/paper/06-numbers.md` + `03-the-12x-finding.md` corrected; new `07-what-this-is.md` (verifier-relative "certified," honest repo age, Voyager/PCC/FSRS named first, the three-tier claim table). `assure` grows claims 15–18 (chat proof boundary, SSRF matrix, env isolation, concurrency — H1/H3/H2/H4 re-run live, every pass). | `tests/test_assure_growth.py`. |
+
+**Acceptance, run for real:**
+
+```
+$ cd dotmaps && python3 -m pytest tests -q
+324 passed, 1 skipped (the 1 skip is pre-existing and unrelated — docker
+daemon not responsive in this environment, same skip as before this work)
+
+$ python3 -m dotmaps.queen.assure
+ASSURE: ALL GREEN — 18/18 (was 14/14 before this branch)
+```
+
+Every gate landed with the full suite green, not just its own new tests —
+run after every single commit above, not just at the end, so a
+cross-gate regression (H5's cert-schema fields reaching `ui.py`, H8's
+adapter reshaping the `_runner` seam H2's tests depend on) would have
+been caught the moment it happened, not discovered at the finish line.
+
+One deliberate scope call, stated honestly rather than silently skipped:
+the brief's H4 offered a SQLite WAL projection for product-state reads
+"if needed." It wasn't — the acceptance test only requires atomic,
+race-free JSONL appends, which `_journal.py` delivers outright — so it
+was not built. If Queen's product surface grows enough that JSONL scans
+become the bottleneck, that projection is still the right next move, just
+not one this gate's evidence demanded.
+
+`queen-hardened`'s H1–H7 gates — the ones the brief marks as blocking —
+are green, and H8–H10 landed alongside them rather than being deferred.
+Per the brief: no push, and the merge to `main` is the keeper's call, not
+this branch's own. 🐝
