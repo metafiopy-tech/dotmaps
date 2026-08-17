@@ -156,7 +156,11 @@ def run_work_order(target: str, *, model: str = WORK_ORDER_MODEL,
     claude_result = _runner(workspace, job, model=model, max_turns=max_turns,
                             timeout_s=timeout_s)
     gate = mechanical_completion_gate(map_dir, workspace)
-    ok = bool(gate["passed"])
+    # H1 (defense-in-depth, see queen/chat.py's _chat_gate): the gate re-runs
+    # the map's own real verifiers, so it already re-derives truth rather than
+    # trusting self-report — but a subtype!=success run must never count as ok
+    # even if the workspace happens to already satisfy the verifiers.
+    ok = bool(gate["passed"]) and bool(claude_result.get("ok"))
 
     if ok:
         trips_mod.emit("WORK_ORDER", path=trips_path, phase="complete",

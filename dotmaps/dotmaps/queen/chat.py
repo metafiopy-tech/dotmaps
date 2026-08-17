@@ -277,9 +277,24 @@ def _run_agentic_stream(workspace: Path, job: str, *, model: str, max_turns: int
             "raw": result}
 
 
-def _chat_gate(workspace: Path) -> dict[str, Any]:
-    """Mechanical completion gate for a chat work order — never self-report:
-    answer.json must exist, parse, name a real file with a known predicate."""
+def _chat_gate(workspace: Path, claude_result: dict[str, Any]) -> dict[str, Any]:
+    """Mechanical completion gate for a chat work order — never self-report.
+
+    H1 (HARDENING_BRIEF): the audit's P0 finding was that this gate checked
+    only the SHAPE of answer.json (parses, path exists, predicate name known)
+    and never actually re-ran the predicate against the real file — so a
+    structurally valid but FALSE claim, or even a claude_result whose
+    subtype != "success", could still reach the user as an asserted answer.
+    Three checks now, in order, each one closing exactly one of those holes:
+      1. the model process itself must have succeeded (subtype == "success")
+      2. answer.json must exist, parse, and name a real file + known predicate
+      3. the predicate/value must be MECHANICALLY EXECUTED against that file
+         (banking.run_steps + banking.evaluate — the same two functions
+         bank/route.py and bank/certify.py judge every other claim with) and
+         actually hold — a false value now fails here, not downstream."""
+    if claude_result.get("subtype") != "success":
+        return {"passed": False,
+                "reason": f"model process did not succeed (subtype={claude_result.get('subtype')!r})"}
     p = workspace / "answer.json"
     if not p.exists():
         return {"passed": False, "reason": "no answer.json produced"}
@@ -294,7 +309,58 @@ def _chat_gate(workspace: Path) -> dict[str, Any]:
         return {"passed": False, "reason": f"unknown predicate {answer['predicate']!r}"}
     if not (workspace / answer["path"]).exists():
         return {"passed": False, "reason": f"referenced file {answer['path']!r} does not exist"}
-    return {"passed": True, "answer": answer}
+
+    rule = {"steps": [{"tool": "filesystem.read_file", "args": {"path": answer["path"]}}]}
+    obs = banking.run_steps(rule, workspace)
+    if not banking.evaluate(answer["predicate"], answer.get("value"), obs):
+        return {"passed": False,
+                "reason": (f"predicate did not mechanically hold: {answer['predicate']!r} "
+                           f"against {answer.get('value')!r} failed on the real file")}
+    return {"passed": True, "answer": answer, "obs": obs}
+
+
+_REPLY_TEMPLATE: dict[str, Callable[[dict[str, Any]], str]] = {
+    "contains": lambda a: f"Confirmed — {a['path']} contains {a.get('value')!r}.",
+    "equals": lambda a: f"Confirmed — {a['path']} equals {a.get('value')!r}.",
+    "json_item_count": lambda a: f"Confirmed — {a['path']} contains exactly {a.get('value')} items.",
+    "json_parses": lambda a: f"Confirmed — {a['path']} parses as valid JSON.",
+}
+
+_NEGATION_MARKERS = ("no ", "not ", "n't", "false", "doesn't", "does not",
+                     "isn't", "cannot", "can't", "never", "wasn't", "aren't")
+
+
+def _color_contradicts(predicate: str, value: Any, free_text: str) -> bool:
+    """Cheap, mechanical contradiction filter — deliberately NOT an NLI
+    classifier (H1: the renderer's job is to never let free text override
+    the checked fact, not to understand language). json_item_count gets a
+    concrete check: any digit token in the free text that disagrees with
+    the confirmed count is a contradiction. Every predicate also gets a
+    coarse negation-marker scan. False positives just drop harmless color;
+    false negatives can never happen for the PRIMARY assertion, since the
+    template sentence — never the free text — is always what's returned."""
+    lowered = free_text.lower()
+    if predicate == "json_item_count":
+        nums = re.findall(r"\d+", free_text)
+        if nums and all(str(n) != str(value) for n in nums):
+            return True
+    return any(m in lowered for m in _NEGATION_MARKERS)
+
+
+def _render_checked_reply(answer: dict[str, Any]) -> str:
+    """H1's deterministic renderer: the reply is DERIVED from the checked
+    result. The leading sentence is always the frozen template above — it
+    can never come from the model's free text, so it can never contradict
+    the mechanically-confirmed fact. The model's own `answer["answer"]` is
+    appended only as trailing color, and only if it survives the mechanical
+    contradiction filter; a contradicting or nonsensical free-text claim is
+    simply dropped rather than shown (never precede or contradict the
+    checked fact)."""
+    base = _REPLY_TEMPLATE[answer["predicate"]](answer)
+    free = (answer.get("answer") or "").strip()
+    if free and not _color_contradicts(answer["predicate"], answer.get("value"), free):
+        return f"{base} {free}"
+    return base
 
 
 def _rule_from_answer(answer: dict[str, Any]) -> dict[str, Any]:
@@ -331,7 +397,7 @@ def run_work_order(message: str, *, seed: Path = DEFAULT_SEED,
 
     claude_result = _runner(workspace, job, model=model, max_turns=max_turns,
                             timeout_s=timeout_s, trips_path=trips_path, run_id=run_id)
-    gate = _chat_gate(workspace)
+    gate = _chat_gate(workspace, claude_result)
 
     if gate["passed"]:
         trips_mod.emit("WORK_ORDER", path=trips_path, phase="complete", run_id=run_id,
@@ -386,7 +452,9 @@ def ask(message: str, *, trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH,
 
     if order["gate"]["passed"]:
         answer = order["gate"]["answer"]
-        reply_text = answer["answer"]
+        # H1: the reply is DERIVED from the checked result, never trusted
+        # off the model's free-text field — see _render_checked_reply().
+        reply_text = _render_checked_reply(answer)
         rule = _rule_from_answer(answer)
         problem = banking.validate_rule(rule)
         confirmed = False
@@ -400,9 +468,12 @@ def ask(message: str, *, trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH,
                     eid, f"Want her to learn this so next time is free: {answer['statement']!r}?",
                     ["Yes — learn it now", "No — leave it be"],
                     path=trips_path, kind="learn_offer", message=message, rule=rule,
-                    answer=reply_text)
+                    answer=answer["answer"])
             learn_offer = {"id": eid, "statement": answer["statement"]}
     else:
+        # H1: honest failure — the model's free-text claim (if any) is never
+        # surfaced when the gate didn't mechanically pass, whatever the reason
+        # (structural, a false predicate/value, or subtype != success).
         reply_text = "I tried, but I couldn't find a clean, checkable answer to that."
 
     rec = emit_chat("queen", reply_text, path=chat_path, chip=chip,
