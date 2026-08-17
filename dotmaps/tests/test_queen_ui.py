@@ -52,18 +52,20 @@ def _get_json(url):
 
 
 def test_index_page_serves_html_with_no_console_errors_shape(running_server):
-    """The keeper's edition (rebuilt): plain page, plain endpoint names.
-    The OLD jargon endpoints (/api/surface, /api/trips, /api/manifest,
+    """QUEEN OS's five-tab rebuild: plain page, plain endpoint names. The
+    OLD jargon endpoints (/api/surface, /api/trips, /api/manifest,
     /api/flights) still exist server-side for queen/assure.py's Claim 10
-    below, but the rebuilt page itself never references them — it reads
-    the new zero-jargon layer instead."""
+    below, but the page itself never references them — it reads the
+    zero-jargon Chat/Run/Memory/Workflows/Paper layer instead."""
     base, _ = running_server
     with urllib.request.urlopen(base + "/", timeout=5) as r:
         assert r.status == 200
         assert "text/html" in r.headers.get("Content-Type", "")
         body = r.read().decode()
     assert "<title>The Hive</title>" in body
-    assert "/api/status" in body and "/api/skills" in body and "/api/diary" in body
+    for ep in ("/api/init", "/api/chat", "/api/run/state", "/api/memory",
+              "/api/skills", "/api/workflows", "/api/paper"):
+        assert ep in body, ep
     assert "<script>" in body  # single-file: no external JS/CSS dependency
 
 

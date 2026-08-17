@@ -6,249 +6,403 @@
 <title>The Hive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ground: #10181F;
-    --panel: #161F28;
-    --edge: #243140;
-    --bone: #DCE6EE;
-    --dim: #7E93A3;
-    --honey: #E8A93D;
-    --wax: #C9B48A;
-    --quiet: #3A4A5A;
-    --good: #2FBF83;
-    --gone: #6B4B4B;
+    --paper: #FAF6EF;
+    --panel: #FFFFFF;
+    --edge: #E9E1D3;
+    --ink: #2B241C;
+    --dim: #8A7E6D;
+    --faint: #B8AD9B;
+    --honey: #B8792A;
+    --honey-wash: #F3E3C4;
+    --honey-soft: #FBF0DA;
+    --good: #3D7A56;
+    --good-wash: #E4EFE6;
+    --bad: #A8493A;
+    --bad-wash: #F7E7E2;
+    --quiet: #F1EBE0;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { background: var(--ground); }
+  html { background: var(--paper); }
   body {
     font-family: 'IBM Plex Sans', sans-serif;
-    background: var(--ground);
-    color: var(--bone);
+    background: var(--paper);
+    color: var(--ink);
     line-height: 1.55;
-    padding-bottom: 4rem;
+    padding-bottom: 5.5rem;
+    -webkit-font-smoothing: antialiased;
   }
-  .voice, h1, h2, .big {
-    font-family: 'Instrument Serif', serif;
-    font-weight: 400;
-  }
-  .wrap { max-width: 640px; margin: 0 auto; padding: 1.4rem 1.1rem; }
+  .voice, .serif { font-family: 'Instrument Serif', serif; font-weight: 400; }
+  mono, .mono { font-family: 'IBM Plex Mono', monospace; }
+  a { color: var(--honey); }
+  button { font-family: inherit; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 1.1rem 1.15rem 2rem; }
+  .hidden { display: none !important; }
 
-  /* ---- 1. the hive door ---- */
-  .door {
-    text-align: center;
-    padding: 2.6rem 1rem 2rem;
+  /* ---- top bar + tabs ---- */
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(250,246,239,.92); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--edge);
   }
-  .door .glyph { font-size: 2.6rem; margin-bottom: .6rem; }
-  .door h1 {
-    font-size: clamp(1.9rem, 8vw, 2.7rem);
-    line-height: 1.15;
-    color: var(--bone);
+  .topbar-inner {
+    max-width: 640px; margin: 0 auto; padding: .85rem 1.15rem .1rem;
+    display: flex; align-items: baseline; justify-content: space-between;
   }
-  .door h1 em { font-style: italic; color: var(--honey); }
-  .questions { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.6rem; text-align: left; }
-  .question-card {
-    background: var(--panel);
-    border: 1px solid var(--edge);
-    border-radius: 14px;
-    padding: 1.1rem 1.2rem;
+  .brand { font-family: 'Instrument Serif', serif; font-size: 1.3rem; }
+  .brand em { font-style: italic; color: var(--honey); }
+  .tabs { display: flex; gap: 1.3rem; margin-top: .6rem; overflow-x: auto; }
+  .tab-btn {
+    background: none; border: none; color: var(--dim); font-size: .92rem; font-weight: 500;
+    padding: .55rem .1rem .7rem; cursor: pointer; white-space: nowrap;
+    border-bottom: 2px solid transparent;
   }
-  .question-card p { font-size: 1.05rem; margin-bottom: .9rem; }
-  .answers { display: flex; flex-direction: column; gap: .55rem; }
-  .answer-btn {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    padding: .8rem 1rem;
-    border-radius: 10px;
-    border: none;
-    background: var(--honey);
-    color: #1c1406;
-    cursor: pointer;
-    text-align: left;
-  }
-  .answer-btn:active { transform: scale(.98); }
-  .answer-btn.secondary { background: transparent; border: 1px solid var(--edge); color: var(--bone); }
+  .tab-btn.active { color: var(--ink); border-bottom-color: var(--honey); }
 
-  /* ---- section chrome ---- */
-  section { margin-top: 2.4rem; }
-  h2 { font-size: 1.6rem; color: var(--bone); margin-bottom: .3rem; }
-  .subtext { color: var(--dim); font-size: .92rem; margin-bottom: 1.1rem; }
+  section.tab { display: none; }
+  section.tab.active { display: block; }
 
-  /* ---- 2. the honeycomb ---- */
-  .honeycomb { display: flex; flex-direction: column; align-items: center; }
-  .hex-row { display: flex; justify-content: center; margin-top: -16px; }
+  /* ---- shared: cost chip ---- */
+  .chip {
+    display: inline-flex; align-items: center; gap: .35rem;
+    font-size: .78rem; font-weight: 500; padding: .22rem .6rem;
+    border-radius: 999px; white-space: nowrap;
+  }
+  .chip.free { background: var(--good-wash); color: var(--good); }
+  .chip.model { background: var(--honey-wash); color: var(--honey); }
+
+  /* ---- shared: empty/calm state ---- */
+  .calm { text-align: center; color: var(--dim); padding: 2.4rem 1rem; }
+  .calm .glyph { font-size: 2rem; margin-bottom: .5rem; }
+
+  /* =========================================================== */
+  /* TAB 1 — CHAT                                                */
+  /* =========================================================== */
+  .chat-intro { text-align: center; padding: 1.2rem 0 1.6rem; }
+  .chat-intro h1 { font-family: 'Instrument Serif', serif; font-size: clamp(1.7rem, 7vw, 2.3rem); }
+  .chat-intro h1 em { font-style: italic; color: var(--honey); }
+  .chat-intro p { color: var(--dim); font-size: .92rem; margin-top: .3rem; }
+
+  .thread { display: flex; flex-direction: column; gap: .8rem; margin-bottom: 1rem; }
+  .msg { display: flex; flex-direction: column; max-width: 88%; }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.queen { align-self: flex-start; align-items: flex-start; }
+  .bubble {
+    padding: .7rem .95rem; border-radius: 16px; font-size: .97rem;
+  }
+  .msg.user .bubble { background: var(--honey-wash); color: var(--ink); border-bottom-right-radius: 4px; }
+  .msg.queen .bubble { background: var(--panel); border: 1px solid var(--edge); border-bottom-left-radius: 4px; }
+  .msg .chip { margin-top: .4rem; }
+
+  .offer-card {
+    background: var(--panel); border: 1px solid var(--edge); border-radius: 14px;
+    padding: 1rem 1.1rem; margin-top: .3rem; max-width: 100%;
+  }
+  .offer-card p { font-size: .95rem; margin-bottom: .8rem; }
+  .offer-buttons { display: flex; flex-direction: column; gap: .5rem; }
+  .offer-btn {
+    font-size: .93rem; font-weight: 600; padding: .68rem 1rem; border-radius: 10px;
+    border: none; background: var(--honey); color: #fff; cursor: pointer; text-align: left;
+  }
+  .offer-btn.secondary { background: transparent; border: 1px solid var(--edge); color: var(--ink); }
+
+  .composer {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    background: linear-gradient(to top, var(--paper) 65%, rgba(250,246,239,0));
+    padding: 1.1rem 1.15rem 1.3rem;
+  }
+  .composer-inner {
+    max-width: 640px; margin: 0 auto; display: flex; gap: .5rem;
+    background: var(--panel); border: 1px solid var(--edge); border-radius: 14px; padding: .35rem;
+  }
+  .composer input {
+    flex: 1; border: none; background: none; font-size: .97rem; padding: .55rem .6rem; color: var(--ink);
+  }
+  .composer input:focus { outline: none; }
+  .composer button {
+    background: var(--honey); color: #fff; border: none; border-radius: 10px;
+    padding: 0 1.05rem; font-weight: 600; cursor: pointer;
+  }
+  .composer button:disabled { opacity: .5; cursor: default; }
+  .thinking { color: var(--dim); font-size: .88rem; padding: .2rem .2rem .6rem; }
+
+  /* =========================================================== */
+  /* TAB 2 — RUN                                                 */
+  /* =========================================================== */
+  .run-head { margin-bottom: 1.1rem; }
+  .run-head h2 { font-family: 'Instrument Serif', serif; font-size: 1.6rem; }
+  .run-head .subtext { color: var(--dim); font-size: .9rem; margin-top: .2rem; }
+  .run-live-dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--honey); margin-right: .4rem; animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+  .steps { display: flex; flex-direction: column; gap: .55rem; }
+  .step-card {
+    background: var(--panel); border: 1px solid var(--edge); border-radius: 12px;
+    padding: .7rem .9rem; cursor: pointer;
+  }
+  .step-card.failed { border-color: var(--bad); background: var(--bad-wash); }
+  .step-row { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; }
+  .step-text { font-size: .93rem; }
+  .step-meta { font-family: 'IBM Plex Mono', monospace; font-size: .72rem; color: var(--dim); margin-top: .25rem; }
+  .step-receipt {
+    display: none; margin-top: .55rem; padding-top: .55rem; border-top: 1px dashed var(--edge);
+    font-family: 'IBM Plex Mono', monospace; font-size: .74rem; color: var(--dim);
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .step-card.open .step-receipt { display: block; }
+
+  /* =========================================================== */
+  /* TAB 3 — MEMORY                                              */
+  /* =========================================================== */
+  .memory-stats { font-size: .95rem; color: var(--dim); margin-bottom: 1rem; }
+  .view-toggle { display: flex; gap: .4rem; margin-bottom: 1.2rem; }
+  .toggle-btn {
+    font-size: .84rem; font-weight: 500; padding: .4rem .9rem; border-radius: 999px;
+    border: 1px solid var(--edge); background: var(--panel); color: var(--dim); cursor: pointer;
+  }
+  .toggle-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .honeycomb { display: flex; flex-direction: column; align-items: center; margin-bottom: .5rem; }
+  .hex-row { display: flex; justify-content: center; margin-top: -14px; }
   .hex-row:first-child { margin-top: 0; }
-  .hex-row.offset { margin-left: 42px; }
+  .hex-row.offset { margin-left: 38px; }
   .hex {
-    width: 78px; height: 67.5px;
+    width: 70px; height: 60.6px;
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-    margin: -6px 3px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    background: var(--wax);
-    position: relative;
-    transition: transform .15s ease;
+    margin: -5px 3px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; background: var(--quiet); position: relative; transition: transform .15s ease;
   }
   .hex:active { transform: scale(.94); }
-  .hex.trusted { background: var(--honey); }
-  .hex.retired { background: var(--gone); }
-  .hex .mark { font-size: 1.1rem; opacity: .85; }
+  .hex.certified { background: var(--honey); }
+  .hex.candidate { background: var(--edge); }
+  .hex.convicted { background: var(--bad-wash); }
+  .hex .mark { font-size: 1rem; opacity: .8; }
   .hex.pulse { animation: hexpulse 1.8s ease-in-out infinite; }
   @keyframes hexpulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(232,169,61,.5); }
-    50% { box-shadow: 0 0 0 8px rgba(232,169,61,0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(184,121,42,.45); }
+    50% { box-shadow: 0 0 0 7px rgba(184,121,42,0); }
   }
-  .honeycomb-empty { color: var(--dim); text-align: center; padding: 1rem; }
 
-  /* ---- card sheet (skill detail) ---- */
+  .skill-list { display: flex; flex-direction: column; gap: .5rem; }
+  .skill-row {
+    background: var(--panel); border: 1px solid var(--edge); border-radius: 12px;
+    padding: .8rem .95rem; cursor: pointer; display: flex; justify-content: space-between; gap: .8rem;
+  }
+  .skill-row .sr-text { font-size: .93rem; }
+  .skill-row .sr-meta { color: var(--dim); font-size: .78rem; margin-top: .3rem; }
+  .badge {
+    font-size: .72rem; font-weight: 600; padding: .18rem .55rem; border-radius: 999px;
+    align-self: flex-start; white-space: nowrap;
+  }
+  .badge.certified { background: var(--honey-wash); color: var(--honey); }
+  .badge.candidate { background: var(--quiet); color: var(--dim); }
+  .badge.convicted { background: var(--bad-wash); color: var(--bad); }
+
+  /* ---- bottom sheet (skill detail) ---- */
   .sheet-backdrop {
-    position: fixed; inset: 0; background: rgba(0,0,0,.55);
-    display: none; align-items: flex-end; justify-content: center; z-index: 20;
+    position: fixed; inset: 0; background: rgba(43,36,28,.4);
+    display: none; align-items: flex-end; justify-content: center; z-index: 40;
   }
   .sheet-backdrop.open { display: flex; }
   .sheet {
-    background: var(--panel); border: 1px solid var(--edge);
-    border-radius: 18px 18px 0 0; padding: 1.4rem 1.3rem 1.8rem;
-    width: 100%; max-width: 640px; max-height: 80vh; overflow-y: auto;
+    background: var(--panel); border: 1px solid var(--edge); border-radius: 18px 18px 0 0;
+    padding: 1.3rem 1.2rem 1.7rem; width: 100%; max-width: 640px; max-height: 82vh; overflow-y: auto;
   }
-  .sheet h3 { font-family: 'Instrument Serif', serif; font-size: 1.5rem; margin-bottom: .5rem; }
-  .sheet .field { color: var(--dim); font-size: .95rem; margin: .25rem 0; }
-  .sheet .field b { color: var(--bone); font-weight: 600; }
+  .sheet h3 { font-family: 'Instrument Serif', serif; font-size: 1.4rem; margin-bottom: .5rem; }
+  .sheet .field { color: var(--dim); font-size: .93rem; margin: .25rem 0; }
+  .sheet .field b { color: var(--ink); font-weight: 600; }
+  .sheet pre {
+    background: var(--quiet); border-radius: 10px; padding: .8rem; margin-top: .8rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: .74rem; overflow-x: auto; white-space: pre-wrap;
+  }
   .close-btn {
     display: block; margin: 1.1rem auto 0; background: none; border: 1px solid var(--edge);
-    color: var(--dim); padding: .55rem 1.4rem; border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--dim); padding: .55rem 1.4rem; border-radius: 8px; cursor: pointer;
   }
 
-  /* ---- point-and-watch ---- */
-  .point-form { display: flex; gap: .5rem; margin-top: 1.6rem; }
-  .point-form input {
-    flex: 1; font-family: 'IBM Plex Sans', sans-serif; font-size: .95rem;
-    padding: .75rem .9rem; border-radius: 10px; border: 1px solid var(--edge);
-    background: var(--panel); color: var(--bone);
+  /* =========================================================== */
+  /* TAB 4 — WORKFLOWS                                           */
+  /* =========================================================== */
+  .wf-card {
+    background: var(--panel); border: 1px solid var(--edge); border-radius: 14px;
+    padding: 1rem 1.05rem; margin-bottom: .8rem;
   }
-  .point-form input::placeholder { color: var(--quiet); }
-  .point-form button {
-    font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: .95rem;
-    padding: 0 1.1rem; border-radius: 10px; border: none;
-    background: var(--honey); color: #1c1406; cursor: pointer;
+  .wf-card h4 { font-family: 'Instrument Serif', serif; font-size: 1.2rem; }
+  .wf-card .subtext { color: var(--dim); font-size: .88rem; margin: .3rem 0 .7rem; }
+  .dots-row { display: flex; gap: 4px; margin-bottom: .7rem; }
+  .cbar-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--quiet); }
+  .cbar-dot.on { background: var(--honey); }
+  .wf-footer { display: flex; align-items: center; justify-content: space-between; }
+  .wf-last { color: var(--faint); font-size: .78rem; }
+  .run-btn {
+    background: var(--ink); color: var(--paper); border: none; border-radius: 8px;
+    padding: .5rem 1rem; font-size: .85rem; font-weight: 600; cursor: pointer;
   }
-  .point-preset {
-    background: none; border: none; color: var(--dim); font-size: .82rem;
-    text-decoration: underline; cursor: pointer; margin-top: .5rem; padding: 0;
+  .run-btn:disabled { opacity: .5; }
+  .run-result { font-size: .82rem; color: var(--good); margin-top: .5rem; }
+
+  .watch-form { display: flex; gap: .5rem; margin: 1.2rem 0; }
+  .watch-form input {
+    flex: 1; font-size: .93rem; padding: .65rem .8rem; border-radius: 10px;
+    border: 1px solid var(--edge); background: var(--panel); color: var(--ink);
   }
-  .constellation { display: flex; flex-wrap: wrap; gap: .55rem; justify-content: center; padding: .4rem 0; }
-  .cdot {
-    width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--quiet); border: 2px solid var(--edge);
-    font-size: .85rem; transition: background .25s ease, transform .15s ease;
+  .watch-form button {
+    background: var(--honey); color: #fff; border: none; border-radius: 10px;
+    padding: 0 1rem; font-weight: 600; cursor: pointer;
   }
-  .cdot:active { transform: scale(.92); }
-  .cdot.unlit { opacity: .5; }
-  .cdot.green { background: var(--good); border-color: var(--good); }
-  .cdot.red { background: #C24545; border-color: #C24545; }
-  .cdot.amber { background: var(--honey); border-color: var(--honey); }
-  .watch-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
-  .watch-target { color: var(--dim); font-size: .88rem; word-break: break-all; }
-  .watch-controls { display: flex; gap: .5rem; margin-top: 1rem; flex-wrap: wrap; }
-  .watch-controls button, .watch-controls select {
-    font-family: 'IBM Plex Sans', sans-serif; font-size: .88rem;
-    padding: .55rem .9rem; border-radius: 8px; border: 1px solid var(--edge);
-    background: var(--panel); color: var(--bone); cursor: pointer;
+  .watcher-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .65rem 0; border-bottom: 1px solid var(--edge); font-size: .9rem;
+  }
+  .watcher-row:last-child { border-bottom: none; }
+  .watcher-row .wr-next { color: var(--dim); font-size: .8rem; }
+
+  /* =========================================================== */
+  /* TAB 5 — THE PAPER                                           */
+  /* =========================================================== */
+  .paper-nav { display: flex; flex-wrap: wrap; gap: .5rem .9rem; margin-bottom: 1.6rem; }
+  .paper-nav a { font-size: .82rem; color: var(--dim); text-decoration: none; }
+  .paper-nav a:hover { color: var(--honey); }
+  article.paper-section { margin-bottom: 2.2rem; padding-bottom: 1.6rem; border-bottom: 1px solid var(--edge); }
+  article.paper-section:last-child { border-bottom: none; }
+  article.paper-section h1 {
+    font-family: 'Instrument Serif', serif; font-size: 1.7rem; margin-bottom: .8rem;
+  }
+  article.paper-section p { font-size: .95rem; margin-bottom: .8rem; }
+  article.paper-section ul { margin: .3rem 0 .9rem 1.2rem; }
+  article.paper-section li { font-size: .95rem; margin-bottom: .5rem; }
+  article.paper-section code {
+    font-family: 'IBM Plex Mono', monospace; font-size: .85em; background: var(--quiet);
+    padding: .1rem .3rem; border-radius: 4px;
   }
 
-  /* ---- 3. the diary ---- */
-  .diary-list { display: flex; flex-direction: column; gap: .1rem; }
-  .diary-line {
-    display: flex; align-items: baseline; gap: .6rem;
-    padding: .6rem 0; border-bottom: 1px solid var(--edge);
+  /* =========================================================== */
+  /* ONBOARDING                                                  */
+  /* =========================================================== */
+  .onboard-backdrop {
+    position: fixed; inset: 0; background: var(--paper); z-index: 50;
+    display: flex; align-items: center; justify-content: center; padding: 1.5rem;
   }
-  .diary-line .g { font-size: 1.05rem; flex-shrink: 0; }
-  .diary-line .t { flex: 1; font-size: .98rem; }
-  .diary-line .when { color: var(--quiet); font-size: .75rem; white-space: nowrap; }
-  .receipt-toggle {
-    background: none; border: none; color: var(--dim); font-size: .95rem;
-    cursor: pointer; padding: 0 .2rem; flex-shrink: 0;
+  .onboard-card { max-width: 420px; width: 100%; text-align: center; }
+  .onboard-card .glyph { font-size: 2.4rem; margin-bottom: .8rem; }
+  .onboard-card h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; margin-bottom: .5rem; }
+  .onboard-card h1 em { font-style: italic; color: var(--honey); }
+  .onboard-card p { color: var(--dim); font-size: .93rem; margin-bottom: 1.6rem; }
+  .onboard-field { text-align: left; margin-bottom: 1rem; }
+  .onboard-field label { display: block; font-size: .82rem; color: var(--dim); margin-bottom: .35rem; }
+  .onboard-field input {
+    width: 100%; font-size: .93rem; padding: .65rem .8rem; border-radius: 10px;
+    border: 1px solid var(--edge); background: var(--panel); color: var(--ink);
   }
-  .receipt {
-    display: none; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-    font-size: .74rem; color: var(--dim); background: var(--ground);
-    border: 1px solid var(--edge); border-radius: 8px; padding: .6rem .7rem;
-    margin: .2rem 0 .6rem; white-space: pre-wrap; word-break: break-word;
+  .onboard-begin {
+    width: 100%; background: var(--honey); color: #fff; border: none; border-radius: 10px;
+    padding: .8rem 1rem; font-size: .97rem; font-weight: 600; cursor: pointer; margin-top: .4rem;
   }
-  .receipt.open { display: block; }
-  .diary-empty { color: var(--dim); padding: 1rem 0; }
-
-  /* ---- 4. the one counter ---- */
-  .counter {
-    text-align: center; padding: 2rem 1rem 1rem;
-  }
-  .counter .num {
-    font-family: 'Instrument Serif', serif;
-    font-size: 3.4rem; color: var(--honey); line-height: 1;
-  }
-  .counter .label { color: var(--dim); margin-top: .4rem; font-size: .95rem; }
-
-  footer { text-align: center; color: var(--quiet); font-size: .75rem; padding: 2rem 1rem 0; }
 </style>
 </head>
 <body>
 
+<div id="onboard" class="onboard-backdrop hidden">
+  <div class="onboard-card">
+    <div class="glyph">🐝</div>
+    <h1>Welcome to <em>the hive</em></h1>
+    <p>Before she starts, pick the folder she should call home — and any
+       other folders you'd like her to see. You only do this once.</p>
+    <div class="onboard-field">
+      <label for="onboard-home">Home folder</label>
+      <input id="onboard-home" type="text" placeholder="/Users/you/dotmaps">
+    </div>
+    <div class="onboard-field">
+      <label for="onboard-linked">Linked folders (optional, comma-separated)</label>
+      <input id="onboard-linked" type="text" placeholder="/Users/you/Documents/shop">
+    </div>
+    <button class="onboard-begin" id="onboard-begin">Begin</button>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">the <em>hive</em></div>
+  </div>
+  <div class="topbar-inner" style="padding-top:0">
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" data-tab="chat">Chat</button>
+      <button class="tab-btn" data-tab="run">Run</button>
+      <button class="tab-btn" data-tab="memory">Memory</button>
+      <button class="tab-btn" data-tab="workflows">Workflows</button>
+      <button class="tab-btn" data-tab="paper">The Paper</button>
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
 
-  <!-- 1. THE HIVE DOOR -->
-  <div class="door" id="door">
-    <div class="glyph">🐝</div>
-    <h1 id="door-headline">Checking in on her…</h1>
-    <div class="questions" id="questions"></div>
-    <form class="point-form" id="point-form">
-      <input type="text" id="point-input" placeholder="Point me at something (a website)">
-      <button type="submit">Watch it</button>
-    </form>
-    <button type="button" class="point-preset" id="point-preset">or try the one she already knows</button>
-  </div>
-
-  <!-- WHAT SHE'S WATCHING -->
-  <section id="watching-section" style="display:none;">
-    <div class="watch-head">
-      <h2>What she's watching</h2>
+  <!-- ===================== TAB 1: CHAT ===================== -->
+  <section class="tab active" id="tab-chat">
+    <div class="chat-intro" id="chat-intro">
+      <h1>Ask her <em>anything</em></h1>
+      <p>What she already knows, she answers for free. What's new, she goes and does.</p>
     </div>
-    <p class="subtext" id="watch-target"></p>
-    <div class="constellation" id="constellation"></div>
-    <div class="watch-controls">
-      <button type="button" id="watch-check-btn">Check it again</button>
-      <select id="watch-rewatch">
-        <option value="">Don't recheck on its own</option>
-        <option value="1">Recheck every minute</option>
-        <option value="5">Recheck every 5 minutes</option>
-        <option value="30">Recheck every 30 minutes</option>
-      </select>
+    <div class="thread" id="thread"></div>
+  </section>
+
+  <!-- ===================== TAB 2: RUN ===================== -->
+  <section class="tab" id="tab-run">
+    <div class="run-head">
+      <h2 id="run-title">Nothing running</h2>
+      <p class="subtext" id="run-subtext">Ask her something new in Chat, and you'll watch her work here.</p>
     </div>
+    <div class="steps" id="steps"></div>
   </section>
 
-  <!-- 2. THE HONEYCOMB -->
-  <section>
-    <h2>What she's learned</h2>
-    <p class="subtext">Every hex is one thing she can now do for free. Tap one to see it.</p>
-    <div class="honeycomb" id="honeycomb"></div>
+  <!-- ===================== TAB 3: MEMORY ===================== -->
+  <section class="tab" id="tab-memory">
+    <p class="memory-stats" id="memory-stats">Loading…</p>
+    <div class="view-toggle">
+      <button class="toggle-btn active" data-view="honeycomb">Honeycomb</button>
+      <button class="toggle-btn" data-view="list">List</button>
+    </div>
+    <div id="honeycomb-view"><div class="honeycomb" id="honeycomb"></div></div>
+    <div id="list-view" class="hidden"><div class="skill-list" id="skill-list"></div></div>
   </section>
 
-  <!-- 3. THE DIARY -->
-  <section>
-    <h2>Her diary</h2>
-    <p class="subtext">The last few things that happened. Tap ⌁ for the receipt.</p>
-    <div class="diary-list" id="diary"></div>
+  <!-- ===================== TAB 4: WORKFLOWS ===================== -->
+  <section class="tab" id="tab-workflows">
+    <div class="run-head">
+      <h2>Known plays</h2>
+      <p class="subtext">Jobs she already knows how to run, ready when you are.</p>
+    </div>
+    <div id="workflow-list"></div>
+
+    <div class="run-head" style="margin-top:2rem">
+      <h2>Point her at something</h2>
+      <p class="subtext">Give her a web address and she'll watch it stay healthy, on her own clock.</p>
+    </div>
+    <div class="watch-form">
+      <input id="watch-url" type="text" placeholder="https://example.com">
+      <button id="watch-go">Watch it</button>
+    </div>
+    <div id="watcher-list"></div>
   </section>
 
-  <!-- 4. THE ONE COUNTER -->
-  <div class="counter">
-    <div class="num" id="counter-num">—</div>
-    <div class="label">jobs done for free since she learned them</div>
+  <!-- ===================== TAB 5: THE PAPER ===================== -->
+  <section class="tab" id="tab-paper">
+    <div class="paper-nav" id="paper-nav"></div>
+    <div id="paper-body"></div>
+  </section>
+
+</div>
+
+<div class="composer" id="composer">
+  <div class="composer-inner">
+    <input id="chat-input" type="text" placeholder="Ask her something…" autocomplete="off">
+    <button id="chat-send">Send</button>
   </div>
-
-  <footer>The Hive · a quiet page, only speaks when something needs you.</footer>
 </div>
 
 <div class="sheet-backdrop" id="sheet-backdrop">
@@ -256,299 +410,278 @@
 </div>
 
 <script>
-const $ = (sel) => document.querySelector(sel);
+const $ = (sel, el) => (el || document).querySelector(sel);
+const $$ = (sel, el) => Array.from((el || document).querySelectorAll(sel));
 
-async function getJSON(url, opts) {
-  const r = await fetch(url, opts);
+async function getJSON(path) {
+  const r = await fetch(path);
   return r.json();
 }
-
-function timeAgo(iso) {
-  if (!iso) return 'not yet';
-  const then = new Date(iso.replace(' ', 'T') + (iso.includes('Z') ? '' : ''));
-  const days = Math.floor((Date.now() - then.getTime()) / 86400000);
-  if (Number.isNaN(days)) return iso;
-  if (days <= 0) return 'today';
-  if (days === 1) return 'yesterday';
-  if (days < 30) return days + ' days ago';
-  return then.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+async function postJSON(path, body) {
+  const r = await fetch(path, {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body || {}),
+  });
+  return r.json();
+}
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : String(s);
+  return d.innerHTML;
+}
+function chipHTML(chip) {
+  if (!chip) return '';
+  if (chip.kind === 'free') return `<span class="chip free">⬡ ${esc(chip.label)}</span>`;
+  return `<span class="chip model">◍ ${esc(chip.label)}</span>`;
 }
 
-// ---------------- 1. the hive door ----------------
-async function loadDoor() {
-  const status = await getJSON('/api/status');
-  $('#counter-num').textContent = status.free_jobs_count;
-  const headline = $('#door-headline');
-  const box = $('#questions');
-  box.innerHTML = '';
-  if (status.calm) {
-    headline.innerHTML = 'All quiet. <em>Nothing needs you.</em>';
-    return;
-  }
-  const n = status.questions.length;
-  headline.innerHTML = `The hive has <em>${n} question${n === 1 ? '' : 's'}</em>`;
-  status.questions.forEach((q) => {
-    const card = document.createElement('div');
-    card.className = 'question-card';
-    const p = document.createElement('p');
-    p.textContent = q.text;
-    card.appendChild(p);
-    const answers = document.createElement('div');
-    answers.className = 'answers';
-    q.options.forEach((opt, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'answer-btn' + (i === 0 ? '' : ' secondary');
-      btn.textContent = opt.label;
-      btn.onclick = () => answer(q.id, opt.choice);
-      answers.appendChild(btn);
+/* ----------------------------- tabs ----------------------------- */
+let activeTab = 'chat';
+function showTab(name) {
+  activeTab = name;
+  $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  $$('.tab').forEach(s => s.classList.toggle('active', s.id === 'tab-' + name));
+  $('#composer').classList.toggle('hidden', name !== 'chat');
+  if (name === 'run') loadRun();
+  if (name === 'memory') loadMemory();
+  if (name === 'workflows') { loadWorkflows(); loadWatchers(); }
+  if (name === 'paper') loadPaper();
+}
+$$('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+
+/* ----------------------------- onboarding ----------------------------- */
+async function checkOnboarding() {
+  const st = await getJSON('/api/init');
+  if (!st.initialized) $('#onboard').classList.remove('hidden');
+}
+$('#onboard-begin').addEventListener('click', async () => {
+  const home = $('#onboard-home').value.trim();
+  if (!home) return;
+  const linked = $('#onboard-linked').value.split(',').map(s => s.trim()).filter(Boolean);
+  await postJSON('/api/init', {home, linked});
+  $('#onboard').classList.add('hidden');
+});
+
+/* ----------------------------- CHAT (Tab 1) ----------------------------- */
+function renderMessage(m) {
+  const cls = m.role === 'user' ? 'user' : 'queen';
+  let html = `<div class="msg ${cls}"><div class="bubble">${esc(m.text)}</div>`;
+  if (m.chip) html += chipHTML(m.chip);
+  html += '</div>';
+  return html;
+}
+function renderOffer(o) {
+  const btns = o.options.map(opt =>
+    `<button class="offer-btn ${opt.choice === 2 ? 'secondary' : ''}" data-id="${esc(o.id)}" data-choice="${opt.choice}">${esc(opt.label)}</button>`
+  ).join('');
+  return `<div class="offer-card"><p>${esc(o.text)}</p><div class="offer-buttons">${btns}</div></div>`;
+}
+async function loadChat() {
+  const data = await getJSON('/api/chat');
+  const thread = $('#thread');
+  $('#chat-intro').classList.toggle('hidden', data.messages.length > 0);
+  thread.innerHTML = data.messages.map(renderMessage).join('') +
+    data.open_learn_offers.map(renderOffer).join('');
+  thread.querySelectorAll('.offer-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      btn.closest('.offer-buttons').querySelectorAll('button').forEach(b => b.disabled = true);
+      await postJSON('/api/chat/resolve', {id: btn.dataset.id, choice: Number(btn.dataset.choice)});
+      loadChat();
     });
-    card.appendChild(answers);
-    box.appendChild(card);
   });
+  window.scrollTo(0, document.body.scrollHeight);
 }
-
-async function answer(id, choice) {
-  await getJSON('/api/resolve', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, choice }),
-  });
-  loadDoor();
-  loadDiary();
-}
-
-// ---------------- 2. the honeycomb ----------------
-function hexClass(skill) {
-  if (skill.status === 'certified') return 'trusted';
-  if (skill.status === 'convicted') return 'retired';
-  return '';
-}
-
-function statusWord(status) {
-  if (status === 'certified') return "She's sure of this one";
-  if (status === 'convicted') return "Retired — it didn't hold up";
-  return 'Still testing it';
-}
-
-async function loadHoneycomb() {
-  const skills = await getJSON('/api/skills');
-  const box = $('#honeycomb');
-  box.innerHTML = '';
-  if (!skills.length) {
-    box.innerHTML = '<p class="honeycomb-empty">She hasn’t learned anything yet.</p>';
-    return;
+async function sendChat() {
+  const input = $('#chat-input');
+  const message = input.value.trim();
+  if (!message) return;
+  input.value = '';
+  const sendBtn = $('#chat-send');
+  sendBtn.disabled = true;
+  const thinking = document.createElement('div');
+  thinking.className = 'thinking';
+  thinking.textContent = 'She\'s on it — check the Run tab to watch.';
+  $('#thread').appendChild(thinking);
+  window.scrollTo(0, document.body.scrollHeight);
+  try {
+    await postJSON('/api/chat', {message});
+  } finally {
+    thinking.remove();
+    sendBtn.disabled = false;
+    loadChat();
   }
-  const perRow = window.innerWidth < 480 ? 4 : window.innerWidth < 860 ? 6 : 8;
+}
+$('#chat-send').addEventListener('click', sendChat);
+$('#chat-input').addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
+
+/* ----------------------------- RUN (Tab 2) ----------------------------- */
+let runPollTimer = null;
+function renderStep(s) {
+  const failedCls = s.failed ? ' failed' : '';
+  const chip = s.phase === 'step'
+    ? (s.model_call ? '<span class="chip model">◍ model</span>' : '<span class="chip free">⬡ free</span>')
+    : '';
+  const meta = [s.tool, s.elapsed != null ? `${s.elapsed}s` : null].filter(Boolean).join(' · ');
+  return `<div class="step-card${failedCls}" data-seq="${s.seq}">
+    <div class="step-row"><span class="step-text">${esc(s.text)}</span>${chip}</div>
+    ${meta ? `<div class="step-meta">${esc(meta)}</div>` : ''}
+    <div class="step-receipt">${esc(JSON.stringify(s.receipt, null, 2))}</div>
+  </div>`;
+}
+async function loadRun() {
+  const data = await getJSON('/api/run/state');
+  const title = $('#run-title'), sub = $('#run-subtext'), steps = $('#steps');
+  if (!data.run_id) {
+    title.textContent = 'Nothing running';
+    sub.textContent = "Ask her something new in Chat, and you'll watch her work here.";
+    steps.innerHTML = '';
+  } else {
+    title.innerHTML = data.active
+      ? '<span class="run-live-dot"></span>Working now'
+      : 'Last time she worked';
+    sub.textContent = data.active ? 'Live — updating every second.' : 'Idle — the tape from her last job.';
+    steps.innerHTML = data.steps.map(renderStep).join('') ||
+      '<div class="calm"><div class="glyph">🐝</div>Getting started…</div>';
+    steps.querySelectorAll('.step-card').forEach(card => {
+      card.addEventListener('click', () => card.classList.toggle('open'));
+    });
+  }
+  clearTimeout(runPollTimer);
+  if (activeTab === 'run') runPollTimer = setTimeout(loadRun, data.active ? 1000 : 4000);
+}
+
+/* ----------------------------- MEMORY (Tab 3) ----------------------------- */
+let memoryView = 'honeycomb';
+let memorySkills = [];
+$$('.toggle-btn').forEach(b => b.addEventListener('click', () => {
+  memoryView = b.dataset.view;
+  $$('.toggle-btn').forEach(t => t.classList.toggle('active', t === b));
+  $('#honeycomb-view').classList.toggle('hidden', memoryView !== 'honeycomb');
+  $('#list-view').classList.toggle('hidden', memoryView !== 'list');
+}));
+function statusClass(s) { return s === 'certified' ? 'certified' : (s === 'convicted' ? 'convicted' : 'candidate'); }
+function statusMark(s) { return s === 'certified' ? '✦' : (s === 'convicted' ? '✕' : '·'); }
+function renderHoneycomb(skills) {
+  const perRow = 5;
+  let html = '';
   for (let i = 0; i < skills.length; i += perRow) {
-    const row = document.createElement('div');
-    row.className = 'hex-row' + (((i / perRow) % 2) ? ' offset' : '');
-    skills.slice(i, i + perRow).forEach((skill) => row.appendChild(hexEl(skill)));
-    box.appendChild(row);
+    const row = skills.slice(i, i + perRow);
+    const offset = (i / perRow) % 2 === 1 ? ' offset' : '';
+    html += `<div class="hex-row${offset}">` + row.map(s =>
+      `<div class="hex ${statusClass(s.status)}${s.pulse ? ' pulse' : ''}" data-name="${esc(s.name)}">
+         <span class="mark">${statusMark(s.status)}</span></div>`
+    ).join('') + '</div>';
   }
+  return html || '<div class="calm"><div class="glyph">🍯</div>Nothing learned yet.</div>';
 }
-
-function hexEl(skill) {
-  const hex = document.createElement('div');
-  hex.className = 'hex ' + hexClass(skill);
-  if (skill.pulse) hex.classList.add('pulse');
-  hex.style.opacity = Math.max(0.3, skill.freshness ?? 1);
-  hex.title = skill.statement || skill.name;
-  const mark = document.createElement('div');
-  mark.className = 'mark';
-  mark.textContent = skill.status === 'certified' ? '✓' : skill.status === 'convicted' ? '✕' : '·';
-  hex.appendChild(mark);
-  hex.onclick = () => openSheet(skill.name);
-  return hex;
+function renderSkillList(skills) {
+  if (!skills.length) return '<div class="calm"><div class="glyph">🍯</div>Nothing learned yet.</div>';
+  return skills.map(s => `
+    <div class="skill-row" data-name="${esc(s.name)}">
+      <div>
+        <div class="sr-text">${esc(s.description)}</div>
+        <div class="sr-meta">learned ${esc(s.learned || 'unknown')} · used free ${s.times_used_free}×
+          ${s.cost_to_learn != null ? ' · cost to learn $' + s.cost_to_learn : ''}</div>
+      </div>
+      <span class="badge ${statusClass(s.status)}">${esc(s.status)}</span>
+    </div>`).join('');
 }
-
-async function openSheet(name) {
-  const detail = await getJSON('/api/skill/' + encodeURIComponent(name));
-  const sheet = $('#sheet');
-  sheet.innerHTML = '';
-  const h3 = document.createElement('h3');
-  h3.textContent = detail.statement || detail.name;
-  sheet.appendChild(h3);
-
-  const fields = [
-    ['Learned', detail.learned ? timeAgo(detail.learned) : 'not yet'],
-    ['Cost', 'once, free every time since'],
-    ['Used', `${detail.used_count} time${detail.used_count === 1 ? '' : 's'}, free`],
-    ['Last checked', timeAgo(detail.last_checked)],
-    ['How sure she is', statusWord(detail.status)],
-  ];
-  fields.forEach(([label, val]) => {
-    const p = document.createElement('div');
-    p.className = 'field';
-    p.innerHTML = `<b>${label}:</b> ${val}`;
-    sheet.appendChild(p);
-  });
-
-  const receiptBtn = document.createElement('button');
-  receiptBtn.className = 'receipt-toggle';
-  receiptBtn.textContent = '⌁ receipt';
-  const receipt = document.createElement('div');
-  receipt.className = 'receipt';
-  receipt.textContent = JSON.stringify(detail.raw, null, 2);
-  receiptBtn.onclick = () => receipt.classList.toggle('open');
-  sheet.appendChild(receiptBtn);
-  sheet.appendChild(receipt);
-
-  const close = document.createElement('button');
-  close.className = 'close-btn';
-  close.textContent = 'Close';
-  close.onclick = closeSheet;
-  sheet.appendChild(close);
-
+async function loadMemory() {
+  const [stats, skills] = await Promise.all([getJSON('/api/memory'), getJSON('/api/skills')]);
+  memorySkills = skills;
+  $('#memory-stats').textContent = stats.text;
+  $('#honeycomb').innerHTML = renderHoneycomb(skills);
+  $('#skill-list').innerHTML = renderSkillList(skills);
+  $$('#honeycomb .hex, #skill-list .skill-row').forEach(el =>
+    el.addEventListener('click', () => openSkillSheet(el.dataset.name)));
+}
+async function openSkillSheet(name) {
+  const d = await getJSON('/api/skill/' + encodeURIComponent(name));
+  if (d.error) return;
+  $('#sheet').innerHTML = `
+    <h3>${esc(d.description)}</h3>
+    <div class="field"><b>Status:</b> ${esc(d.status)}</div>
+    <div class="field"><b>Learned:</b> ${esc(d.learned || 'unknown')}</div>
+    <div class="field"><b>Used free:</b> ${d.times_used_free} time${d.times_used_free === 1 ? '' : 's'}</div>
+    <div class="field"><b>Last checked:</b> ${esc(d.last_checked || 'never')}</div>
+    ${d.cost_to_learn != null ? `<div class="field"><b>Cost to learn:</b> $${d.cost_to_learn}</div>` : ''}
+    <pre>${esc(JSON.stringify(d.raw, null, 2))}</pre>
+    <button class="close-btn" id="sheet-close">Close</button>`;
+  $('#sheet-close').addEventListener('click', closeSheet);
   $('#sheet-backdrop').classList.add('open');
 }
-
 function closeSheet() { $('#sheet-backdrop').classList.remove('open'); }
-$('#sheet-backdrop').addEventListener('click', (e) => {
-  if (e.target === $('#sheet-backdrop')) closeSheet();
-});
+$('#sheet-backdrop').addEventListener('click', e => { if (e.target.id === 'sheet-backdrop') closeSheet(); });
 
-// ---------------- 3. the diary ----------------
-async function loadDiary() {
-  const events = await getJSON('/api/diary');
-  const box = $('#diary');
-  box.innerHTML = '';
-  if (!events.length) {
-    box.innerHTML = '<p class="diary-empty">Nothing written yet.</p>';
-    return;
+/* ----------------------------- WORKFLOWS (Tab 4) ----------------------------- */
+function renderWorkflow(wf) {
+  const dots = Array.from({length: Math.max(wf.total, 1)}, (_, i) =>
+    `<div class="cbar-dot ${i < wf.covered ? 'on' : ''}"></div>`).join('');
+  return `<div class="wf-card" data-name="${esc(wf.name)}">
+    <h4>${esc(wf.title)}</h4>
+    <p class="subtext">${esc(wf.description)}</p>
+    <div class="dots-row">${dots}</div>
+    <div class="wf-footer">
+      <span class="wf-last">${wf.last_run ? 'last run ' + esc(wf.last_run) : 'never run'}</span>
+      <button class="run-btn" data-name="${esc(wf.name)}">Run</button>
+    </div>
+    <div class="run-result hidden"></div>
+  </div>`;
+}
+async function loadWorkflows() {
+  const wfs = await getJSON('/api/workflows');
+  $('#workflow-list').innerHTML = wfs.map(renderWorkflow).join('') ||
+    '<div class="calm">No plays yet.</div>';
+  $$('.run-btn').forEach(btn => btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    const card = btn.closest('.wf-card');
+    const out = await postJSON('/api/workflow/' + encodeURIComponent(btn.dataset.name) + '/run', {});
+    const result = card.querySelector('.run-result');
+    result.classList.remove('hidden');
+    result.textContent = out.error ? out.error :
+      `${out.covered}/${out.covered + out.not_yet} confirmed, $0, no model called.`;
+    btn.disabled = false;
+    loadWorkflows();
+  }));
+}
+function renderWatcher(w) {
+  return `<div class="watcher-row">
+    <span>${esc(w.slug)}${w.running ? ' — checking now' : ''}</span>
+    <span class="wr-next">${w.next_check ? 'next check ' + esc(w.next_check) : (w.rewatch_minutes ? 'watching' : 'one-time')}</span>
+  </div>`;
+}
+async function loadWatchers() {
+  const ws = await getJSON('/api/watchers');
+  $('#watcher-list').innerHTML = ws.map(renderWatcher).join('') ||
+    '<p class="subtext">Nothing being watched yet.</p>';
+}
+$('#watch-go').addEventListener('click', async () => {
+  const url = $('#watch-url').value.trim();
+  if (!url) return;
+  $('#watch-go').disabled = true;
+  try {
+    const hm = await postJSON('/api/watch/start', {url});
+    await postJSON(`/api/watch/${encodeURIComponent(hm.slug)}/run`, {});
+    await postJSON(`/api/watch/${encodeURIComponent(hm.slug)}/rewatch`, {minutes: 60});
+    $('#watch-url').value = '';
+    loadWatchers();
+  } finally {
+    $('#watch-go').disabled = false;
   }
-  events.forEach((ev) => {
-    const line = document.createElement('div');
-    line.className = 'diary-line';
-    line.innerHTML = `
-      <span class="g">${ev.glyph}</span>
-      <span class="t">${ev.text}</span>
-      <span class="when">${timeAgo(ev.t)}</span>
-      <button class="receipt-toggle" aria-label="receipt">⌁</button>
-    `;
-    const receipt = document.createElement('div');
-    receipt.className = 'receipt';
-    receipt.textContent = JSON.stringify(ev.raw, null, 2);
-    line.querySelector('.receipt-toggle').onclick = () => receipt.classList.toggle('open');
-    box.appendChild(line);
-    box.appendChild(receipt);
-  });
-}
-
-// ---------------- point-and-watch ----------------
-let currentSlug = localStorage.getItem('dotmaps-watch-slug') || null;
-let pollTimer = null;
-
-function statusGlyph(status) {
-  return status === 'green' ? '✓' : status === 'red' ? '✗' : status === 'amber' ? '⚠' : '';
-}
-
-async function startWatch(url) {
-  const res = await fetch('/api/watch/start', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url }),
-  });
-  const data = await res.json();
-  if (data.error) { alert(data.error); return; }
-  currentSlug = data.slug;
-  localStorage.setItem('dotmaps-watch-slug', currentSlug);
-  $('#watching-section').style.display = '';
-  $('#watch-target').textContent = data.target;
-  checkNow();
-}
-
-async function checkNow() {
-  if (!currentSlug) return;
-  await getJSON(`/api/watch/${encodeURIComponent(currentSlug)}/run`, { method: 'POST' });
-  pollWatchState();
-}
-
-async function pollWatchState() {
-  if (!currentSlug) return;
-  clearTimeout(pollTimer);
-  const data = await getJSON(`/api/watch/${encodeURIComponent(currentSlug)}/state`);
-  if (data.error) return;
-  $('#watching-section').style.display = '';
-  if (data.target) $('#watch-target').textContent = data.target;
-  renderConstellation(data.dots);
-  loadDiary();
-  loadHoneycomb();
-  loadDoor();
-  if (data.running) pollTimer = setTimeout(pollWatchState, 700);
-}
-
-function renderConstellation(dots) {
-  const box = $('#constellation');
-  box.innerHTML = '';
-  dots.forEach((d) => {
-    const dot = document.createElement('div');
-    dot.className = 'cdot ' + (d.lit ? d.status : 'unlit');
-    dot.textContent = statusGlyph(d.lit ? d.status : '');
-    dot.title = d.statement || d.id;
-    dot.onclick = () => openDotSheet(d);
-    box.appendChild(dot);
-  });
-}
-
-function openDotSheet(d) {
-  const sheet = $('#sheet');
-  sheet.innerHTML = '';
-  const h3 = document.createElement('h3');
-  h3.textContent = d.statement || d.id;
-  sheet.appendChild(h3);
-  const fields = [
-    ['Right now', d.lit ? (d.status === 'green' ? 'Checking out fine' :
-      d.status === 'red' ? 'Failing' : 'Unreachable') : 'Not checked yet'],
-    ['Checked', d.lit ? `${d.n} time${d.n === 1 ? '' : 's'}` : '0 times'],
-    ['Clean streak', `${d.streak} in a row`],
-    ['Last checked', timeAgo(d.last_checked)],
-  ];
-  fields.forEach(([label, val]) => {
-    const p = document.createElement('div');
-    p.className = 'field';
-    p.innerHTML = `<b>${label}:</b> ${val}`;
-    sheet.appendChild(p);
-  });
-  if (d.evidence) {
-    const receipt = document.createElement('div');
-    receipt.className = 'receipt open';
-    receipt.textContent = d.evidence;
-    sheet.appendChild(receipt);
-  }
-  const close = document.createElement('button');
-  close.className = 'close-btn';
-  close.textContent = 'Close';
-  close.onclick = closeSheet;
-  sheet.appendChild(close);
-  $('#sheet-backdrop').classList.add('open');
-}
-
-$('#point-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const url = $('#point-input').value.trim();
-  if (url) startWatch(url);
 });
 
-$('#point-preset').addEventListener('click', async () => {
-  const presets = await getJSON('/api/watch/presets');
-  if (presets.presets && presets.presets.length) startWatch(presets.presets[0]);
-});
+/* ----------------------------- PAPER (Tab 5) ----------------------------- */
+async function loadPaper() {
+  const data = await getJSON('/api/paper');
+  $('#paper-nav').innerHTML = data.sections.map(s =>
+    `<a href="#p-${esc(s.slug)}">${esc(s.title)}</a>`).join('');
+  $('#paper-body').innerHTML = data.sections.map(s =>
+    `<article class="paper-section" id="p-${esc(s.slug)}">${s.html}</article>`).join('');
+}
 
-$('#watch-check-btn').addEventListener('click', checkNow);
-
-$('#watch-rewatch').addEventListener('change', async (e) => {
-  if (!currentSlug) return;
-  const minutes = e.target.value ? Number(e.target.value) : null;
-  await fetch(`/api/watch/${encodeURIComponent(currentSlug)}/rewatch`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ minutes }),
-  });
-});
-
-// ---------------- boot ----------------
-loadDoor();
-loadHoneycomb();
-loadDiary();
-if (currentSlug) pollWatchState();
+/* ----------------------------- boot ----------------------------- */
+checkOnboarding();
+loadChat();
 </script>
 </body>
 </html>

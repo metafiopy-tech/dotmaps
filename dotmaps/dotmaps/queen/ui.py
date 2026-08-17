@@ -448,7 +448,7 @@ def run_workflow(name: str, *, skills_dir: Path = DEFAULT_SKILLS,
     target = wf["target"] if wf["kind"] == "seed" else str(Path(maps_dir) / wf["target"])
     report = dispatch_mod.dispatch(target, trips_path=trips_path, skills=skills_dir)
     return {"workflow": name, "covered": len(report["covered"]),
-            "frontier_count": len(report["frontier"]), "model_calls": report["model_calls"]}
+            "not_yet": len(report["frontier"]), "model_calls": report["model_calls"]}
 
 
 def watchers_payload(trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH) -> list[dict[str, Any]]:

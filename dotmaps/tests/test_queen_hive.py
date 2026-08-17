@@ -105,7 +105,7 @@ def test_workflow_run_button_dispatches_pilot_free(running_server):
     base = running_server["base"]
     st, out = _post(base, "/api/workflow/check-demo-workspace/run", {})
     assert st == 200
-    assert out["covered"] == 4 and out["frontier_count"] == 0 and out["model_calls"] == 0
+    assert out["covered"] == 4 and out["not_yet"] == 0 and out["model_calls"] == 0
 
 
 def test_workflow_run_unknown_name_404s(running_server):
