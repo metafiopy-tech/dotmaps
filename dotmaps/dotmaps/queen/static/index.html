@@ -84,6 +84,10 @@
   .chat-intro h1 { font-family: 'Instrument Serif', serif; font-size: clamp(1.7rem, 7vw, 2.3rem); }
   .chat-intro h1 em { font-style: italic; color: var(--honey); }
   .chat-intro p { color: var(--dim); font-size: .92rem; margin-top: .3rem; }
+  .egress-note {
+    color: var(--dim); font-size: .78rem; margin-top: .7rem; padding: .1rem 1rem;
+    line-height: 1.4;
+  }
 
   .thread { display: flex; flex-direction: column; gap: .8rem; margin-bottom: 1rem; }
   .msg { display: flex; flex-direction: column; max-width: 88%; }
@@ -347,6 +351,7 @@
     <div class="chat-intro" id="chat-intro">
       <h1>Ask her <em>anything</em></h1>
       <p>What she already knows, she answers for free. What's new, she goes and does.</p>
+      <p class="egress-note" id="egress-note"></p>
     </div>
     <div class="thread" id="thread"></div>
   </section>
@@ -679,9 +684,22 @@ async function loadPaper() {
     `<article class="paper-section" id="p-${esc(s.slug)}">${s.html}</article>`).join('');
 }
 
+/* ----------------------------- egress note (H9) ----------------------------- */
+async function loadEgress() {
+  try {
+    const e = await getJSON('/api/egress');
+    const n = e.sources ? e.sources.length : 0;
+    const where = n === 1 ? 'the folder you gave her' : `the ${n} folders you gave her`;
+    $('#egress-note').textContent =
+      `If this needs new, hands-on work: she reads inside ${where}, thinks it through with ` +
+      `${e.model}, and saves the question and her answer to her record. Nothing else leaves this machine.`;
+  } catch (e) { /* quiet — the note is a courtesy, not load-bearing */ }
+}
+
 /* ----------------------------- boot ----------------------------- */
 checkOnboarding();
 loadChat();
+loadEgress();
 </script>
 </body>
 </html>

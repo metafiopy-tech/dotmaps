@@ -434,7 +434,12 @@ def run_state_payload(trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH,
             text = _RUN_PHASE_TEXT.get(phase, phase)
         steps.append({"seq": rec["seq"], "t": rec["t"], "phase": phase, "text": text,
                      "tool": d.get("tool"), "model_call": d.get("model_call", phase == "step"),
-                     "elapsed": d.get("elapsed"), "failed": phase == "failed", "receipt": rec})
+                     "elapsed": d.get("elapsed"), "failed": phase == "failed", "receipt": rec,
+                     # H9 (HARDENING_BRIEF): the per-action egress label —
+                     # model / sources / network / stored-in-record — is
+                     # only present on the "start" step, exactly where the
+                     # real call it describes was made.
+                     "egress": d.get("egress")})
     return {"active": active, "run_id": rid, "steps": steps}
 
 
@@ -754,6 +759,10 @@ def make_handler(trips_path: Path, skills_dir: Path, live_root: Path,
                 "/api/diary": lambda: diary_payload(trips_path, skills_dir),
                 "/api/init": lambda: init_payload(home_path),
                 "/api/chat": lambda: chat_payload(chat_path, trips_path),
+                # H9 (HARDENING_BRIEF): shown before a frontier submission —
+                # model/no-model, sources to be read, network destinations,
+                # stored-in-record (audit Q40/Q51).
+                "/api/egress": lambda: chat_mod.egress_preview(home_path=home_path),
                 "/api/run/state": lambda: run_state_payload(trips_path),
                 "/api/memory": lambda: memory_stats_payload(skills_dir),
                 "/api/workflows": lambda: workflows_mod.payload(skills_dir, maps_dir, trips_path),

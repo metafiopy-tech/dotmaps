@@ -131,6 +131,30 @@ def model_chip(claude_result: dict[str, Any]) -> dict[str, Any]:
 
 
 # --------------------------------------------------------------------------- #
+# H9 (HARDENING_BRIEF): egress + data labels — what leaves the machine,      #
+# shown BEFORE a frontier ask, not inferred after the fact (audit Q40/Q51:   #
+# "the product should surface a per-action egress label instead of making    #
+# users infer this from the driver").                                       #
+# --------------------------------------------------------------------------- #
+
+def egress_preview(model: str = WORK_ORDER_MODEL,
+                   home_path: Path = init_mod.DEFAULT_HOME_STATE_PATH) -> dict[str, Any]:
+    """The four things Q51 says a user needs before answering an ask that
+    might not be covered: model or not, what gets read, what leaves the
+    machine, and whether the answer is stored. `sources` is workspace-level
+    (init.scoped_dirs()) rather than a specific file list — the agent picks
+    which files to read at runtime, so the honest thing to promise up front
+    is the SCOPE, not a guess at the exact files."""
+    return {
+        "model": model,
+        "sources": init_mod.scoped_dirs(home_path),
+        "network_destinations": [f"api.anthropic.com (via the claude CLI, "
+                                 f"subscription-billed — model {model!r})"],
+        "stored_in_record": True,
+    }
+
+
+# --------------------------------------------------------------------------- #
 # ROUTE FIRST — a known workflow, covered, $0                                #
 # --------------------------------------------------------------------------- #
 
@@ -334,9 +358,12 @@ def run_work_order(message: str, *, seed: Path = DEFAULT_SEED,
     shutil.copytree(seed, workspace)
 
     job = compose_job(message)
+    # H9: the egress label is attached at the true moment of the call — it
+    # can never drift from what actually happens, since it's the same
+    # inputs (model, scope) the call itself is about to use.
     trips_mod.emit("WORK_ORDER", path=trips_path, phase="start", run_id=run_id,
                    job="chat", message=message, workspace=str(workspace),
-                   max_turns=max_turns)
+                   max_turns=max_turns, egress=egress_preview(model=model))
 
     claude_result = _runner(workspace, job, model=model, max_turns=max_turns,
                             timeout_s=timeout_s, trips_path=trips_path, run_id=run_id)

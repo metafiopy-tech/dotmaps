@@ -138,8 +138,14 @@ def run_work_order(target: str, *, model: str = WORK_ORDER_MODEL,
     shutil.copytree(seed, workspace)
 
     job = compose_job(map_dir, workspace)
+    # H9 (HARDENING_BRIEF): the same per-action egress label chat.py's
+    # WORK_ORDER trips carry — attached at the true moment of the call.
+    egress = {"model": model, "sources": [str(workspace)],
+             "network_destinations": [f"api.anthropic.com (via the claude CLI, "
+                                      f"subscription-billed — model {model!r})"],
+             "stored_in_record": True}
     trips_mod.emit("WORK_ORDER", path=trips_path, phase="start", target=t["name"],
-                   workspace=str(workspace), max_turns=max_turns)
+                   workspace=str(workspace), max_turns=max_turns, egress=egress)
 
     claude_result = _runner(workspace, job, model=model, max_turns=max_turns,
                             timeout_s=timeout_s)
