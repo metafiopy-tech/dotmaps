@@ -126,6 +126,14 @@ def manifest_state(skills_dir: Path = DEFAULT_SKILLS) -> dict[str, Any]:
         cards.append({
             "name": card.get("name"), "statement": card.get("statement"),
             "status": cert.get("status"), "wilson": cert.get("wilson"),
+            # H5 (HARDENING_BRIEF): the honest label — "deterministic-
+            # consistency" (repeated replays of the same frozen steps) vs
+            # "sampled-reliability" (independent live samples, e.g. watch
+            # cards). `consistency` is the plain-English display string for
+            # the former; `wilson` is kept for back-compat but is no longer
+            # what decides certification for that regime — see
+            # bank/certify.py.
+            "regime": cert.get("regime"), "consistency": cert.get("consistency"),
             "n": cert.get("n"), "invocations": decay.get("invocations"),
             "stability": decay.get("stability"), "last_used": decay.get("last_used"),
         })

@@ -14,6 +14,13 @@ rather than skills/ — bank/certify.py's generic reverify assumes
 filesystem-workspace break-copy semantics that don't mean anything for a
 live URL; see queen/assure.py's watch-oracle claim for how a watch card
 gets re-proven instead (a fresh local target, a real sabotage, for real).
+
+H5 (HARDENING_BRIEF): this regime genuinely earns its Wilson interval —
+each of the CERT_N checks in the streak is a real, separate, time-spaced
+HTTP round-trip against the live target, not a replay of byte-identical
+frozen steps against one static copy (that's bank/certify.py's regime,
+now explicitly labeled "deterministic-consistency"). `regime:
+"sampled-reliability"` says so plainly on every card.
 """
 from __future__ import annotations
 
@@ -58,6 +65,8 @@ def build_card(slug: str, target: str, dot: dict[str, Any], streak: int) -> dict
             "oracle_gate": (f"watch oracle: {streak} consecutive live checks against "
                             f"the real target held (mechanical HTTP/DOM, no model)"),
             "probe_mode": "watch-live-history",
+            "regime": "sampled-reliability",  # H5 — real, time-spaced, live samples
+            "consistency": f"{streak}/{streak} consecutive live checks",
         },
         "decay": {"last_used": now, "stability": None, "shelf_recheck": None},
     }
