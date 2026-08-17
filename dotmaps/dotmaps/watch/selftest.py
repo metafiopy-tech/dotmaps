@@ -10,11 +10,21 @@ ThreadingHTTPServer on an ephemeral port (real fetch.get round-trips, not
 mocked) whose page table can be mutated live — sabotage a page, take one
 down entirely, heal it back — so the exact three WATCH BRIEF done-tests
 can be re-run inside `dotmaps assure` itself.
+
+H3 (HARDENING_BRIEF): production fetch.get is SSRF-hardened
+(net/safefetch.py) and refuses loopback/private targets by construction —
+which this harness's own target (127.0.0.1) would otherwise trip.
+start()/stop() register and deregister this one ephemeral port with
+safefetch's narrow, self-expiring test-loopback allowance, so the REAL
+fetch mechanism is still what gets exercised (no mock, no bypassed tool),
+without opening that door for any real, user-supplied Watch/traveler URL.
 """
 from __future__ import annotations
 
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+from ..net.safefetch import allow_loopback_for_testing, disallow_loopback_for_testing
 
 
 class WatchSite:
@@ -58,10 +68,12 @@ class WatchSite:
         self.thread = threading.Thread(target=self.httpd.serve_forever, daemon=True)
         self.thread.start()
         port = self.httpd.socket.getsockname()[1]
+        allow_loopback_for_testing(port)
         return f"http://127.0.0.1:{port}/"
 
     def stop(self) -> None:
         if self.httpd:
+            disallow_loopback_for_testing(self.httpd.socket.getsockname()[1])
             self.httpd.shutdown()
             self.httpd.server_close()
         if self.thread:

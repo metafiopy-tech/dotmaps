@@ -272,25 +272,19 @@ class ToolBox:
             p.unlink()
         return f"deleted {path}"
 
-    # -- built-in fetch (GET only, size-capped) ----------------------------- #
+    # -- built-in fetch (GET only, size-capped, SSRF-hardened) --------------- #
     def _fetch_get(self, url: str) -> str:
         """Read-only HTTP: enough for a traveler to check a page or an API
         response. No POST/PUT/DELETE — mutation via fetch stays absent, not
-        discouraged (rule 3). 64KB cap keeps a huge page from flooding the
-        weak traveler's context."""
-        import urllib.error
-        import urllib.request
+        discouraged (rule 3). H3 (HARDENING_BRIEF): this is the ONE egress
+        door for both Watch (via watch/oracle.py) and every traveler fetch —
+        the actual SSRF hardening (public-IP-only, resolve-then-pin,
+        revalidated redirects, size/time caps) lives in net/safefetch.py so
+        there is exactly one place to audit, not two."""
         if not url.startswith(("http://", "https://")):
             raise ScopeViolation(f"fetch.get only accepts http(s) URLs, got {url!r}")
-        req = urllib.request.Request(url, headers={"User-Agent": "dotmaps-traveler/0.1"})
-        try:
-            with urllib.request.urlopen(req, timeout=60) as r:
-                body = r.read(65536).decode("utf-8", errors="replace")
-                return f"HTTP {r.status}\n{body}"
-        except urllib.error.HTTPError as e:
-            return f"HTTP {e.code}\n{e.read(2048).decode('utf-8', errors='replace')}"
-        except urllib.error.URLError as e:
-            return f"ERROR: could not reach {url}: {e.reason}"
+        from ..net.safefetch import safe_get
+        return safe_get(url)
 
 
 # --------------------------------------------------------------------------- #
