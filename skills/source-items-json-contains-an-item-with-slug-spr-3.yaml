@@ -29,6 +29,8 @@ certificate:
   n: 20
   oracle_gate: oracle gate passed (terminates, discriminates, stable)
   probe_mode: deterministic-replay
+  regime: deterministic-consistency
+  consistency: 20/20 deterministic replays
 decay:
   last_used: '2026-08-17T00:35:14'
   stability: 2.0
@@ -41,3 +43,6 @@ usage:
 - t: '2026-08-17T00:35:14'
   event: invoked
   stability_after: 2.0
+formation_context:
+  seed_fingerprint: 1d7725ca7ffbaf5b
+  compiled_at: '2026-08-17T02:11:45'

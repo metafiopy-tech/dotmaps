@@ -30,9 +30,21 @@ from . import trips as trips_mod
 # difficulty, fitted retrievability curve) is EMPIRICAL-TODO — no re-cert
 # failure data exists yet to fit against; this is the deliberately crude
 # v0 the metabolism spec calls for (C7: "BUILT... needs rewiring to C3").
+#
+# H6 (HARDENING_BRIEF): the audit's P1 finding — due_for_recheck() used to
+# compare `stability * ratio < stability * SHELF_THRESHOLD`, and stability
+# cancels out of that inequality algebraically, so every card went due at
+# the SAME fixed-age ratio no matter how many times it had been used.
+# Stability now scales the effective half-life instead (see
+# _effective_half_life() below) — a well-used card genuinely gets a longer
+# recheck interval. Still v0/crude (still EMPIRICAL-TODO, still no fitted
+# curve), just no longer mathematically vacuous.
 STABILITY_INCREMENT = 1.0     # EMPIRICAL-TODO: flat per-use bump, unweighted.
 SHELF_HALF_LIFE_DAYS = 30.0   # EMPIRICAL-TODO: no re-cert failure data yet
                               # to fit against; order-of-magnitude guess.
+                              # This is the BASE half-life at stability ==
+                              # STABILITY_INCREMENT (one invocation); see
+                              # _effective_half_life().
 SHELF_THRESHOLD = 0.2         # EMPIRICAL-TODO: decay fraction that triggers
                               # a re-check proposal.
 STABILITY_CEILING = 10.0
@@ -86,12 +98,21 @@ def touch(skill_path: Path, trips_path: Path = trips_mod.DEFAULT_TRIPS_PATH,
             "stability": decay["stability"], "last_used": now}
 
 
+def _effective_half_life(stability: float | None) -> float:
+    """H6: stability scales the half-life directly — a card at stability
+    2.0 (two invocations) decays half as fast as one just banked at 1.0,
+    up to STABILITY_CEILING. This is what makes stability actually
+    modulate the recheck interval instead of cancelling out."""
+    s = stability if stability else STABILITY_INCREMENT
+    return SHELF_HALF_LIFE_DAYS * (s / STABILITY_INCREMENT)
+
+
 def freshness_ratio(skill_path: Path, now_ts: float | None = None) -> float | None:
-    """Time made visible: exp(-days_since_last_used / half_life), 1.0 =
-    just used, ->0 as it goes stale. None if never invoked (no last_used
-    yet — a candidate, or a certified card route hasn't touched). Shared
-    math with due_for_recheck() so the UI's opacity and the governor's
-    shelf trigger read the same clock."""
+    """Time made visible: exp(-days_since_last_used / effective_half_life),
+    1.0 = just used, ->0 as it goes stale. None if never invoked (no
+    last_used yet — a candidate, or a certified card route hasn't
+    touched). Shared math with due_for_recheck() so the UI's opacity and
+    the governor's shelf trigger read the same clock."""
     card = yaml.safe_load(Path(skill_path).read_text())
     decay = card.get("decay", {})
     if not decay.get("last_used"):
@@ -99,19 +120,24 @@ def freshness_ratio(skill_path: Path, now_ts: float | None = None) -> float | No
     now_ts = now_ts if now_ts is not None else time.time()
     last = time.mktime(time.strptime(decay["last_used"], "%Y-%m-%dT%H:%M:%S"))
     days = max(0.0, (now_ts - last) / 86400.0)
-    return math.exp(-days / SHELF_HALF_LIFE_DAYS)
+    return math.exp(-days / _effective_half_life(decay.get("stability")))
 
 
 def due_for_recheck(skill_path: Path, now_ts: float | None = None) -> bool:
-    """FSRS-lite decay: stability decays exponentially since last_used at
-    SHELF_HALF_LIFE_DAYS. Below SHELF_THRESHOLD of its banked value -> due."""
+    """FSRS-lite decay: freshness decays exponentially since last_used at a
+    stability-scaled half-life (_effective_half_life). Below SHELF_THRESHOLD
+    -> due. (H6: previously compared `stability * ratio < stability *
+    SHELF_THRESHOLD` — stability canceled out of that inequality
+    algebraically, so every card went due at the same fixed-age ratio
+    regardless of use count. Stability now lives inside `ratio` itself via
+    the effective half-life, so this is a plain ratio-vs-threshold compare.)
+    """
     card = yaml.safe_load(Path(skill_path).read_text())
     decay = card.get("decay", {})
     if not decay.get("last_used") or not decay.get("stability"):
         return False
     ratio = freshness_ratio(skill_path, now_ts=now_ts)
-    decayed = decay["stability"] * ratio
-    return decayed < (decay["stability"] * SHELF_THRESHOLD)
+    return ratio < SHELF_THRESHOLD
 
 
 def reset_after_recert(skill_path: Path, now_ts: float | None = None) -> dict[str, Any]:

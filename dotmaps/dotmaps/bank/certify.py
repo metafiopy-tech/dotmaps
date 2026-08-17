@@ -32,13 +32,23 @@ root cause — one shared seed copy):
       disposable seed every time — cheap at this repo's seed size, and it
       makes "reorder skill files -> identical certificates" true by
       construction rather than by luck.
+
+H6 (HARDENING_BRIEF): every card certify_all() writes now also gets a
+`formation_context` — the seed content fingerprint it was actually
+certified against, plus when. bank/route.py recomputes the same
+fingerprint against whatever workspace it's routing a dot through and
+refuses a skill whose stored context doesn't match (stale-context skills
+route to frontier, not blind trust) — see fingerprint_workspace() below
+and route.py's match().
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import shutil
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -52,6 +62,19 @@ PROBE_N = 20
 STABILITY_N = 3
 
 REGIME_DETERMINISTIC = "deterministic-consistency"  # H5: this rung's honest label
+
+
+def fingerprint_workspace(workspace: Path) -> str:
+    """H6: a formation-context fingerprint — sha256 over every file's
+    (relative path, content hash) pair, sorted by path so it's stable
+    across filesystem iteration order and depends only on actual file
+    content, never on mtimes or ordering. Written into a skill's
+    formation_context at certify time; bank/route.py recomputes the same
+    fingerprint against the workspace it's routing a dot through."""
+    workspace = Path(workspace)
+    parts = [f"{p.relative_to(workspace)}:{hashlib.sha256(p.read_bytes()).hexdigest()}"
+            for p in sorted(workspace.rglob("*")) if p.is_file()]
+    return hashlib.sha256("\n".join(parts).encode()).hexdigest()[:16]
 
 
 def wilson(successes: int, n: int, z: float = 1.96) -> tuple[float, float]:
@@ -142,6 +165,13 @@ def certify_all(skills_dir: Path, seed: Path) -> dict[str, Any]:
         skill = yaml.safe_load(f.read_text())
         cert = skill["certificate"]
         skill_seed = _fresh_copy(seed, "certify-skill-")
+        # H6: formation context — what this skill was actually certified
+        # against, written every pass regardless of verdict (a conviction
+        # is still meaningful context to keep).
+        skill["formation_context"] = {
+            "seed_fingerprint": fingerprint_workspace(skill_seed),
+            "compiled_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        }
 
         ok, verdict = oracle_gate(skill, skill_seed)     # GATE FIRST — always
         cert["oracle_gate"] = verdict

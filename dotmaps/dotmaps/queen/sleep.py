@@ -81,15 +81,30 @@ def sleep(skills_dir: Path = DEFAULT_SKILLS, seed: Path = DEFAULT_SEED,
     certify_all(skills_dir, seed)
 
     # 2. due shelf re-checks executed: the recompute above already re-
-    #    verified them; log the trip and reset the decay clock (C6
-    #    annealing) for whichever cards were due.
+    #    verified them. H6 (HARDENING_BRIEF): the audit's P1 finding —
+    #    this used to reset every due card's decay clock and log
+    #    action="re-certified" WITHOUT checking whether the post-recert
+    #    status actually held. Freshness now resets ONLY on a passing
+    #    re-cert; a due card that fails re-cert is convicted, left stale,
+    #    and never gets a success trip.
     shelf_trips = []
+    convicted = []
     for name in due:
-        rec = trips_mod.emit("SHELVED", path=trips_path, skill=name,
-                             reason="stability decayed below shelf threshold",
-                             action="re-certified this tick")
-        reconsolidate.reset_after_recert(skills_dir / f"{name}.yaml", now_ts=now_ts)
-        shelf_trips.append(rec)
+        card_path = skills_dir / f"{name}.yaml"
+        fresh = yaml.safe_load(card_path.read_text())
+        cert = fresh.get("certificate", {})
+        if cert.get("status") == "certified":
+            rec = trips_mod.emit("SHELVED", path=trips_path, skill=name,
+                                 reason="stability decayed below shelf threshold",
+                                 action="re-certified this tick")
+            reconsolidate.reset_after_recert(card_path, now_ts=now_ts)
+            shelf_trips.append(rec)
+        else:
+            trips_mod.emit("CONVICTED", path=trips_path, skill=name,
+                           reason=(f"due re-cert failed: status={cert.get('status')!r} "
+                                   f"({cert.get('oracle_gate')})"),
+                           action="left stale — freshness NOT reset, no success trip")
+            convicted.append(name)
 
     # 3. dedup sweep (audit only)
     dupes = _dedup_conflicts(skills_dir)
@@ -98,7 +113,8 @@ def sleep(skills_dir: Path = DEFAULT_SKILLS, seed: Path = DEFAULT_SEED,
     summary = {
         "harvested_candidates": harvested,
         "shelf_rechecks": len(shelf_trips),
-        "shelf_recheck_skills": due,
+        "shelf_recheck_skills": [t["data"]["skill"] for t in shelf_trips],
+        "convicted_on_recheck": convicted,
         "dedup_conflicts": dupes,
         "coverage": len(manifest.get("coverage", {})),
         "frontier": len(manifest.get("frontier", [])),

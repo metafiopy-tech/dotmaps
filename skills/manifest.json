@@ -14,7 +14,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -31,7 +33,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -48,7 +52,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -65,7 +71,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -82,7 +90,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -99,7 +109,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -116,7 +128,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -133,7 +147,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -150,7 +166,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -167,7 +185,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -184,7 +204,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -201,7 +223,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -218,7 +242,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -235,7 +261,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -252,7 +280,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -269,7 +299,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -286,7 +318,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -303,7 +337,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -320,7 +356,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -337,7 +375,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -354,7 +394,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -371,7 +413,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -388,7 +432,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -405,7 +451,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -422,7 +470,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -439,7 +489,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -456,7 +508,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -473,7 +527,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -490,7 +546,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -507,7 +565,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -524,7 +584,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -541,7 +603,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     },
     {
@@ -584,7 +648,9 @@
         ],
         "n": 20,
         "oracle_gate": "oracle gate passed (terminates, discriminates, stable)",
-        "probe_mode": "deterministic-replay"
+        "probe_mode": "deterministic-replay",
+        "regime": "deterministic-consistency",
+        "consistency": "20/20 deterministic replays"
       }
     }
   ],

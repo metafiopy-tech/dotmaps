@@ -68,6 +68,12 @@ def build_card(slug: str, target: str, dot: dict[str, Any], streak: int) -> dict
             "regime": "sampled-reliability",  # H5 — real, time-spaced, live samples
             "consistency": f"{streak}/{streak} consecutive live checks",
         },
+        # H6 (HARDENING_BRIEF): a watch card has no local workspace to
+        # fingerprint (bank/certify.py's seed_fingerprint), so its
+        # formation context is the target itself + when it was compiled —
+        # the invalidation condition is "the target's page shape changed",
+        # which watch/runner.py's ongoing checks already detect live.
+        "formation_context": {"target": target, "compiled_at": now},
         "decay": {"last_used": now, "stability": None, "shelf_recheck": None},
     }
 
