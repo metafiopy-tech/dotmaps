@@ -29,6 +29,8 @@ import time
 from pathlib import Path
 from typing import Any
 
+from . import _journal as journal_mod
+
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_TRIPS_PATH = REPO_ROOT / "runs" / "queen" / "trips.jsonl"
 
@@ -52,32 +54,25 @@ def _line_hash(seq: int, t: str, type_: str, data: dict, prev_hash: str) -> str:
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
-def _tail(path: Path) -> dict | None:
-    if not path.exists() or path.stat().st_size == 0:
-        return None
-    last = None
-    for line in path.read_text().splitlines():
-        if line.strip():
-            last = json.loads(line)
-    return last
-
-
 def emit(type_: str, path: Path = DEFAULT_TRIPS_PATH, **data: Any) -> dict:
-    """Append one trip. The only write path — there is no update or delete."""
+    """Append one trip. The only write path — there is no update or delete.
+
+    H4 (HARDENING_BRIEF): seq/prev_hash are now computed from a tail read
+    inside queen/_journal.py's locked critical section, not from a separate,
+    unlocked pre-read — closing the fork/duplicate-seq race two concurrent
+    writers previously could hit."""
     if type_ not in TYPES:
         raise ValueError(f"unknown trip type {type_!r} — not in {sorted(TYPES)}")
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tail = _tail(path)
-    seq = (tail["seq"] + 1) if tail else 1
-    prev_hash = tail["hash"] if tail else GENESIS_HASH
-    t = _now()
-    h = _line_hash(seq, t, type_, data, prev_hash)
-    rec = {"seq": seq, "t": t, "type": type_, "data": data,
-           "prev_hash": prev_hash, "hash": h}
-    with open(path, "a") as f:
-        f.write(json.dumps(rec) + "\n")
-    return rec
+
+    def _build(tail: dict | None) -> dict:
+        seq = (tail["seq"] + 1) if tail else 1
+        prev_hash = tail["hash"] if tail else GENESIS_HASH
+        t = _now()
+        h = _line_hash(seq, t, type_, data, prev_hash)
+        return {"seq": seq, "t": t, "type": type_, "data": data,
+                "prev_hash": prev_hash, "hash": h}
+
+    return journal_mod.append_locked(Path(path), _build)
 
 
 def read_all(path: Path = DEFAULT_TRIPS_PATH) -> list[dict]:

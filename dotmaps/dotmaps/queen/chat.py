@@ -37,6 +37,7 @@ from typing import Any, Callable
 import yaml
 
 from ..grow import banking
+from . import _journal as journal_mod
 from . import dispatch as dispatch_mod
 from . import init as init_mod
 from . import sandbox as sandbox_mod
@@ -76,31 +77,21 @@ def _chat_line_hash(seq: int, t: str, role: str, text: str, chip: dict | None,
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
-def _chat_tail(path: Path) -> dict | None:
-    if not path.exists() or path.stat().st_size == 0:
-        return None
-    last = None
-    for line in path.read_text().splitlines():
-        if line.strip():
-            last = json.loads(line)
-    return last
-
-
 def emit_chat(role: str, text: str, path: Path = DEFAULT_CHAT_PATH,
              chip: dict | None = None, **meta: Any) -> dict:
+    """H4 (HARDENING_BRIEF): same locked-critical-section fix as
+    queen/trips.py's emit() — see queen/_journal.py."""
     assert role in ("user", "queen"), f"unknown chat role {role!r}"
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tail = _chat_tail(path)
-    seq = (tail["seq"] + 1) if tail else 1
-    prev_hash = tail["hash"] if tail else GENESIS_HASH
-    t = _now()
-    h = _chat_line_hash(seq, t, role, text, chip, meta, prev_hash)
-    rec = {"seq": seq, "t": t, "role": role, "text": text, "chip": chip,
-           "meta": meta, "prev_hash": prev_hash, "hash": h}
-    with open(path, "a") as f:
-        f.write(json.dumps(rec) + "\n")
-    return rec
+
+    def _build(tail: dict | None) -> dict:
+        seq = (tail["seq"] + 1) if tail else 1
+        prev_hash = tail["hash"] if tail else GENESIS_HASH
+        t = _now()
+        h = _chat_line_hash(seq, t, role, text, chip, meta, prev_hash)
+        return {"seq": seq, "t": t, "role": role, "text": text, "chip": chip,
+                "meta": meta, "prev_hash": prev_hash, "hash": h}
+
+    return journal_mod.append_locked(Path(path), _build)
 
 
 def read_chat(path: Path = DEFAULT_CHAT_PATH) -> list[dict]:
