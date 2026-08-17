@@ -25,6 +25,16 @@ nobody's covered yet, instead of ground already settled. That's not an
 efficiency instrument. It's a reach instrument, and it's the surviving,
 publishable half of the original bet.
 
+**Say it exactly right:** this is a measured campaign result, not a law
+of nature yet. It's a real number from a real, cleanly-run trial, repeated
+across three trials by the same team, with the same instrument — and it
+hasn't been independently rerun by anyone outside this project. "12x
+deeper" should be read as "what we found, so far, running our own
+protocol" until an outside group reruns it and it holds. That's not a
+hedge to bury the finding — it's the same standard the killed efficiency
+claim got held to, and it's the reason that finding is trustworthy: this
+project reports what it measured, not what it hoped for.
+
 **receipts:** `runs/e1d-verdict/verdict.json` (63 vs. 5, the final
 trial) and the three-trial comparison summarized in the project's own
 public writeup.

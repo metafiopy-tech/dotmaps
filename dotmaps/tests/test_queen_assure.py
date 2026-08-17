@@ -119,12 +119,12 @@ def test_watch_oracle_check_passes_for_real():
     assert ok, detail
 
 
-def test_run_assure_all_fourteen_rows_green_on_this_checkout():
+def test_run_assure_all_eighteen_rows_green_on_this_checkout():
     result = assure_mod.run_assure()
     failing = [r for r in result["rows"] if not r["passed"]]
     assert result["pass"] is True, failing
-    assert len(result["rows"]) == 14
-    assert [r["n"] for r in result["rows"]] == list(range(1, 15))
+    assert len(result["rows"]) == 18
+    assert [r["n"] for r in result["rows"]] == list(range(1, 19))
 
 
 def test_chat_routes_covered_work_modelless_check_passes_for_real():

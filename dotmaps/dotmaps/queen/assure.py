@@ -13,6 +13,8 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import multiprocessing
+import os
 import shutil
 import tempfile
 import threading
@@ -24,11 +26,13 @@ from typing import Any, Callable
 import yaml
 
 from ..bank.certify import certify_all
+from ..net import safefetch
 from . import chat as chat_mod
 from . import dispatch as dispatch_mod
 from . import governor as governor_mod
 from . import paper as paper_mod
 from . import reconsolidate
+from . import sandbox as sandbox_mod
 from . import sleep as sleep_mod
 from . import surface as surface_mod
 from . import trips as trips_mod
@@ -374,6 +378,110 @@ def check_chat_chain_integrity(chat_path: Path = chat_mod.DEFAULT_CHAT_PATH
     return ok, (f"{n} chat message(s), full chain verified OK" if ok else f"chain broken: {reason}")
 
 
+# --------------------------------------------------------------------------- #
+# H10 (HARDENING_BRIEF): four new claims growing assure to cover the audit's #
+# own P0/P1 hardening — chat proof boundary, SSRF matrix, env isolation,     #
+# concurrency. Same law as every check above: re-run the real instrument,   #
+# never trust a stored label.                                               #
+# --------------------------------------------------------------------------- #
+
+def check_chat_proof_boundary() -> tuple[bool, str]:
+    """H1's three regression tests, re-run for real on every assure pass —
+    catches a regression here even if the test suite itself never runs."""
+    tmp = Path(tempfile.mkdtemp(prefix="assure-chatproof-"))
+    skills = tmp / "skills"
+    shutil.copytree(REPO_ROOT / "skills", skills)
+    seed = tmp / "seed"
+    shutil.copytree(REPO_ROOT / "corpus" / "pilot" / "seed-ws", seed)
+
+    def _false_value_runner(workspace, job, *, model, max_turns, timeout_s, trips_path, run_id):
+        answer = {"answer": "Yes — 99 items, trust me.", "statement": "source_items.json holds 99",
+                  "path": "source_items.json", "predicate": "json_item_count", "value": 99}
+        (workspace / "answer.json").write_text(json.dumps(answer))
+        return {"ok": True, "subtype": "success", "num_turns": 1, "cost_usd": 0.0}
+
+    out1 = chat_mod.ask("how many items, really", trips_path=tmp / "t1.jsonl",
+                        chat_path=tmp / "c1.jsonl", skills_dir=skills, maps_dir=tmp / "maps",
+                        seed=seed, _runner=_false_value_runner)
+    test1 = "99" not in out1["reply"] and out1["learn_offer"] is None
+
+    contradicting = {"answer": "No, only 3 in there.", "statement": "source_items.json holds 5",
+                     "path": "source_items.json", "predicate": "json_item_count", "value": 5}
+    rendered = chat_mod._render_checked_reply(contradicting)
+    test2 = "3" not in rendered and rendered.startswith("Confirmed")
+
+    def _bad_subtype_runner(workspace, job, *, model, max_turns, timeout_s, trips_path, run_id):
+        (workspace / "answer.json").write_text(json.dumps({
+            "answer": "5 items.", "statement": "source_items.json holds 5",
+            "path": "source_items.json", "predicate": "json_item_count", "value": 5}))
+        return {"ok": False, "subtype": "error_max_turns", "num_turns": 20, "cost_usd": 0.0}
+
+    out3 = chat_mod.ask("how many items", trips_path=tmp / "t3.jsonl", chat_path=tmp / "c3.jsonl",
+                        skills_dir=skills, maps_dir=tmp / "maps", seed=seed,
+                        _runner=_bad_subtype_runner)
+    test3 = out3["learn_offer"] is None and "couldn't find" in out3["reply"]
+
+    ok = test1 and test2 and test3
+    return ok, (f"false-value blocked={test1} contradiction-filtered={test2} "
+               f"subtype-gate={test3}")
+
+
+_SSRF_TEST_URLS = ("http://localhost/", "http://127.0.0.1/", "http://[::1]/",
+                   "http://10.1.2.3/", "http://172.16.0.1/", "http://192.168.1.1/",
+                   "http://169.254.169.254/", "http://100.100.100.200/")
+
+
+def check_ssrf_matrix_green() -> tuple[bool, str]:
+    """H3's SafeFetcher, re-run against the same class list the audit named,
+    live, every assure pass."""
+    blocked = [u for u in _SSRF_TEST_URLS if safefetch.safe_get(u).startswith("ERROR:")]
+    ok = len(blocked) == len(_SSRF_TEST_URLS)
+    return ok, f"{len(blocked)}/{len(_SSRF_TEST_URLS)} SSRF-class targets refused"
+
+
+def check_env_isolation() -> tuple[bool, str]:
+    """H2's planted-secret test, re-run live: a secret in this process's own
+    env must never survive queen/sandbox.py's child-env allowlist."""
+    marker = "ASSURE_PLANTED_SECRET"
+    os.environ[marker] = "sk-should-never-leak-into-a-child-process"
+    try:
+        env = sandbox_mod.build_child_env()
+    finally:
+        del os.environ[marker]
+    ok = marker not in env
+    return ok, f"planted secret present in child env: {marker in env}"
+
+
+def _assure_concurrency_worker(path_str: str, n: int, worker: int) -> None:
+    """Module-level (not a closure) — multiprocessing needs a picklable
+    target on every platform's default start method."""
+    path = Path(path_str)
+    for i in range(n):
+        trips_mod.emit("SLEEP", path=path, worker=worker, i=i)
+
+
+def check_concurrency_safe_journal() -> tuple[bool, str]:
+    """H4's stress test, re-run live at a reduced N so assure stays fast:
+    two real OS processes append to the same trips.jsonl; the chain must
+    stay linear, unique, complete."""
+    tmp = Path(tempfile.mkdtemp(prefix="assure-concurrency-"))
+    path = tmp / "trips.jsonl"
+    n_per_proc = 100
+    procs = [multiprocessing.Process(target=_assure_concurrency_worker, args=(str(path), n_per_proc, w))
+            for w in range(2)]
+    for p in procs:
+        p.start()
+    for p in procs:
+        p.join(timeout=60)
+    records = trips_mod.read_all(path)
+    seqs = sorted(r["seq"] for r in records)
+    contiguous = seqs == list(range(1, n_per_proc * 2 + 1))
+    chain_ok, chain_reason = trips_mod.verify_integrity(path)
+    ok = len(records) == n_per_proc * 2 and contiguous and chain_ok
+    return ok, (f"{len(records)}/{n_per_proc * 2} events, contiguous_unique_seq={contiguous}, "
+               f"chain={'OK' if chain_ok else chain_reason}")
+
+
 @dataclass
 class Claim:
     n: int
@@ -416,6 +524,16 @@ def _claims() -> list[Claim]:
               check_zero_jargon_across_tabs),
         Claim(14, "Chat chain integrity: full hash-chain re-verification",
               "runs/queen/chat.jsonl", check_chat_chain_integrity),
+        Claim(15, "Chat proof boundary (H1): false value blocked, contradicting free "
+                  "text filtered, subtype!=success fails the work order",
+              "queen/chat.py _chat_gate() + _render_checked_reply()", check_chat_proof_boundary),
+        Claim(16, "SSRF matrix green (H3): localhost/private/link-local/metadata all refused",
+              "net/safefetch.py safe_get()", check_ssrf_matrix_green),
+        Claim(17, "Env isolation (H2): a planted secret never reaches the sandboxed child env",
+              "queen/sandbox.py build_child_env()", check_env_isolation),
+        Claim(18, "Concurrency (H4): two real processes append 200 trips — chain "
+                  "stays linear, unique, complete",
+              "queen/_journal.py append_locked()", check_concurrency_safe_journal),
     ]
 
 

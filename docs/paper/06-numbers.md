@@ -5,8 +5,15 @@ this page loads, the same way every other number in this product is
 computed: never a stored label, always re-derived from the actual files.
 
 - **{{skills_total}} things learned**, of which **{{skills_certified}}**
-  have cleared the real statistical-confidence check and count as
-  certified — trusted enough to answer for free.
+  have cleared a real certification pass and count as certified — trusted
+  enough to answer for free. Most of that pass is *consistency*, not a
+  confidence interval: twenty replays of the exact same frozen check,
+  every one of them holding, on a fresh disposable copy every time —
+  report that honestly as "it held every time it was tried," not as a
+  statistical guarantee about the world. A watch card earns the stronger
+  claim — real, separate, time-spaced checks against a live target — and
+  only that regime gets a genuine reliability interval. (More on the
+  difference in "What This Actually Is.")
 - **{{free_executions}} replies answered for nothing** so far — every
   one of them a case where a certified fact stood in for a model call.
 - **{{model_calls_total}} times** she's gone and done real work instead,
