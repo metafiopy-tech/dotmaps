@@ -119,12 +119,49 @@ def test_watch_oracle_check_passes_for_real():
     assert ok, detail
 
 
-def test_run_assure_all_eleven_rows_green_on_this_checkout():
+def test_run_assure_all_fourteen_rows_green_on_this_checkout():
     result = assure_mod.run_assure()
     failing = [r for r in result["rows"] if not r["passed"]]
     assert result["pass"] is True, failing
-    assert len(result["rows"]) == 11
-    assert [r["n"] for r in result["rows"]] == list(range(1, 12))
+    assert len(result["rows"]) == 14
+    assert [r["n"] for r in result["rows"]] == list(range(1, 15))
+
+
+def test_chat_routes_covered_work_modelless_check_passes_for_real():
+    ok, detail = assure_mod.check_chat_routes_covered_modelless()
+    assert ok, detail
+
+
+def test_zero_jargon_across_tabs_check_passes_for_real():
+    ok, detail = assure_mod.check_zero_jargon_across_tabs()
+    assert ok, detail
+
+
+def test_zero_jargon_check_catches_a_regression(monkeypatch, tmp_path):
+    bad_page = tmp_path / "index.html"
+    bad_page.write_text("<html>the manifest lives here</html>")
+    monkeypatch.setattr(assure_mod.ui_mod, "STATIC_PAGE", bad_page)
+    ok, detail = assure_mod.check_zero_jargon_across_tabs()
+    assert ok is False
+    assert "manifest" in detail
+
+
+def test_chat_chain_integrity_check_passes_on_an_empty_ledger(tmp_path):
+    ok, detail = assure_mod.check_chat_chain_integrity(chat_path=tmp_path / "chat.jsonl")
+    assert ok, detail
+
+
+def test_chat_chain_integrity_check_catches_tampering(tmp_path):
+    from dotmaps.queen import chat as chat_mod
+    p = tmp_path / "chat.jsonl"
+    chat_mod.emit_chat("user", "hello", path=p)
+    lines = p.read_text().splitlines()
+    tampered = json.loads(lines[0])
+    tampered["text"] = "tampered"
+    p.write_text(json.dumps(tampered) + "\n")
+    ok, detail = assure_mod.check_chat_chain_integrity(chat_path=p)
+    assert ok is False
+    assert "broken" in detail.lower()
 
 
 def test_render_marks_pass_and_fail_rows():

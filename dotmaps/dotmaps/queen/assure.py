@@ -24,8 +24,10 @@ from typing import Any, Callable
 import yaml
 
 from ..bank.certify import certify_all
+from . import chat as chat_mod
 from . import dispatch as dispatch_mod
 from . import governor as governor_mod
+from . import paper as paper_mod
 from . import reconsolidate
 from . import sleep as sleep_mod
 from . import surface as surface_mod
@@ -329,6 +331,49 @@ def check_ui_endpoints_serve() -> tuple[bool, str]:
         thread.join(timeout=5)
 
 
+def check_chat_routes_covered_modelless() -> tuple[bool, str]:
+    """QUEEN OS: Tab 1's ROUTE FIRST, stub-tested — a message matching a
+    known, fully-covered play must never reach the model runner. `_runner`
+    is swapped for one that raises, so a regression that accidentally
+    falls through to a work order fails loud, not silent."""
+    tmp = Path(tempfile.mkdtemp(prefix="assure-chat-"))
+    skills = tmp / "skills"
+    shutil.copytree(REPO_ROOT / "skills", skills)
+
+    def _refuse(*_a, **_k):
+        raise AssertionError("route-first fell through to the model runner")
+
+    out = chat_mod.ask("check the demo workspace", trips_path=tmp / "trips.jsonl",
+                       chat_path=tmp / "chat.jsonl", skills_dir=skills,
+                       maps_dir=tmp / "maps", _runner=_refuse)
+    ok = bool(out.get("chip")) and out["chip"]["kind"] == "free" and out["chip"]["model_calls"] == 0
+    return ok, f"chip={out.get('chip')}"
+
+
+BANNED_JARGON = ["manifest", "predicate", "wilson", "frontier", "trips"]
+
+
+def check_zero_jargon_across_tabs() -> tuple[bool, str]:
+    """PRD: "the existing banned-word test extends to all tabs." The
+    static page covers Chat/Run/Memory/Workflows; the Paper tab's prose is
+    server-rendered at request time (docs/paper/*.md), so it's re-rendered
+    and scanned here too — a regression there would never show up in a
+    plain scan of the HTML file alone."""
+    page = ui_mod.STATIC_PAGE.read_text(encoding="utf-8").lower()
+    paper_text = " ".join(s["html"] for s in paper_mod.payload()["sections"]).lower()
+    hits = sorted({w for w in BANNED_JARGON if w in page or w in paper_text})
+    ok = not hits
+    return ok, ("zero jargon across the page + the paper" if ok
+               else f"banned word(s) present: {hits}")
+
+
+def check_chat_chain_integrity(chat_path: Path = chat_mod.DEFAULT_CHAT_PATH
+                               ) -> tuple[bool, str]:
+    ok, reason = chat_mod.verify_chat_integrity(chat_path)
+    n = len(chat_mod.read_chat(chat_path))
+    return ok, (f"{n} chat message(s), full chain verified OK" if ok else f"chain broken: {reason}")
+
+
 @dataclass
 class Claim:
     n: int
@@ -364,6 +409,13 @@ def _claims() -> list[Claim]:
                   "clean checks mint a real certificate",
               "watch/runner.py + watch/certify.py -> skills/watch/*.yaml",
               check_watch_oracle),
+        Claim(12, "Chat routes covered work modelless (Tab 1's ROUTE FIRST)",
+              "queen/chat.py route_first() via bank/route.py", check_chat_routes_covered_modelless),
+        Claim(13, "Zero jargon across all five tabs (page + the live-rendered paper)",
+              "queen/static/index.html + queen/paper.py -> docs/paper/*.md",
+              check_zero_jargon_across_tabs),
+        Claim(14, "Chat chain integrity: full hash-chain re-verification",
+              "runs/queen/chat.jsonl", check_chat_chain_integrity),
     ]
 
 
