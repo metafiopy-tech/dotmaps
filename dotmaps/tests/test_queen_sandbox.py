@@ -102,7 +102,8 @@ def test_chat_runner_real_subprocess_call_uses_sandboxed_env(monkeypatch, tmp_pa
         captured["cmd"] = cmd
         return _FakeProc()
 
-    monkeypatch.setattr(chat_mod.subprocess, "Popen", _fake_popen)
+    monkeypatch.setattr(chat_mod._adapter, "_self_test_result", (True, "stubbed for test"))
+    monkeypatch.setattr(chat_mod.runner_adapter_mod.subprocess, "Popen", _fake_popen)
     chat_mod._run_agentic_stream(ws, "job text", model="claude-sonnet-5", max_turns=1,
                                  timeout_s=5, trips_path=tmp_path / "trips.jsonl", run_id="r1")
     assert "SECRET_TOKEN" not in captured["env"]
@@ -125,6 +126,7 @@ def test_workorder_runner_real_subprocess_call_uses_sandboxed_env(monkeypatch, t
         captured["cmd"] = cmd
         return _FakeCompleted()
 
-    monkeypatch.setattr(wo_mod.subprocess, "run", _fake_run)
+    monkeypatch.setattr(wo_mod._adapter, "_self_test_result", (True, "stubbed for test"))
+    monkeypatch.setattr(wo_mod.runner_adapter_mod.subprocess, "run", _fake_run)
     wo_mod._run_agentic(ws, "job text", model="claude-sonnet-5", max_turns=1, timeout_s=5)
     assert "SECRET_TOKEN" not in captured["env"]

@@ -27,7 +27,6 @@ import hashlib
 import json
 import re
 import shutil
-import subprocess
 import tempfile
 import time
 import uuid
@@ -41,7 +40,7 @@ from . import _journal as journal_mod
 from . import dispatch as dispatch_mod
 from . import identity as identity_mod
 from . import init as init_mod
-from . import sandbox as sandbox_mod
+from . import runner_adapter as runner_adapter_mod
 from . import surface as surface_mod
 from . import trips as trips_mod
 from . import workflows as workflows_mod
@@ -195,25 +194,14 @@ def compose_job(message: str) -> str:
     return JOB_TEMPLATE.format(message=message)
 
 
-def _describe_stream_event(ev: dict[str, Any]) -> dict[str, Any] | None:
-    """One stream-json event -> one plain-language step, or None if this
-    event carries no user-facing step (system/init noise, etc.)."""
-    t = ev.get("type")
-    if t == "assistant":
-        for block in (ev.get("message", {}) or {}).get("content", []) or []:
-            if block.get("type") == "tool_use":
-                name = block.get("name", "a tool")
-                args = block.get("input", {}) or {}
-                target = args.get("file_path") or args.get("path") or args.get("pattern") or ""
-                verb = {"Read": "Reading", "Write": "Writing", "Edit": "Editing",
-                        "Bash": "Running a command", "Grep": "Searching",
-                        "Glob": "Looking for files"}.get(name, f"Using {name}")
-                text = f"{verb} {target}".strip()
-                return {"text": text, "tool": name, "model_call": True}
-            if block.get("type") == "text" and block.get("text", "").strip():
-                snippet = block["text"].strip().splitlines()[0][:100]
-                return {"text": f"Thinking: {snippet}", "tool": None, "model_call": True}
-    return None
+# H8 (HARDENING_BRIEF): the actual subprocess construction + CLI output
+# field reading (subtype/num_turns/total_cost_usd, stream-json event
+# shapes) now lives in queen/runner_adapter.py's ClaudeCliAdapter — this
+# module (and workorder.py) call `.run_stream()`/`.run()` and read only
+# the normalized result dict; neither touches a CLI flag or field name
+# directly anymore. One adapter instance, reused across calls so its
+# self-test result is cached rather than re-run every job.
+_adapter = runner_adapter_mod.ClaudeCliAdapter()
 
 
 def _run_agentic_stream(workspace: Path, job: str, *, model: str, max_turns: int,
@@ -222,59 +210,9 @@ def _run_agentic_stream(workspace: Path, job: str, *, model: str, max_turns: int
     """The full agentic Claude Code, tools ON, streamed so the Run tab can
     show live steps as they happen (WORK_ORDER phase="step" trips). Falls
     back to reporting the plain error if the stream can't be parsed —
-    never fakes a step that didn't happen.
-
-    H2 (HARDENING_BRIEF): the subprocess env/command come from
-    queen/sandbox.py's run_config(), not a wholesale os.environ passthrough
-    — see that module for what "docker" vs "restricted-env" mode actually
-    means and honestly does not mean."""
-    base_cmd = ["claude", "-p", "--output-format", "stream-json", "--verbose",
-               "--model", model, "--max-turns", str(max_turns),
-               "--dangerously-skip-permissions"]
-    cfg = sandbox_mod.run_config(workspace, base_cmd)
-    trips_mod.emit("WORK_ORDER", path=trips_path, phase="sandbox", run_id=run_id,
-                   sandbox_mode=cfg["mode"], sandbox_warning=cfg["warning"])
-    start = time.time()
-    try:
-        proc = subprocess.Popen(cfg["cmd"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE, text=True, cwd=str(workspace),
-                                env=cfg["env"], preexec_fn=cfg["preexec_fn"])
-    except FileNotFoundError as e:
-        return {"ok": False, "error": f"claude CLI not found: {e}"}
-    assert proc.stdin is not None and proc.stdout is not None
-    proc.stdin.write(job)
-    proc.stdin.close()
-    result = None
-    step_n = 0
-    try:
-        for line in iter(proc.stdout.readline, ""):
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                ev = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            if ev.get("type") == "result":
-                result = ev
-                continue
-            step = _describe_stream_event(ev)
-            if step:
-                step_n += 1
-                trips_mod.emit("WORK_ORDER", path=trips_path, phase="step",
-                               run_id=run_id, seq_in_run=step_n, text=step["text"],
-                               tool=step.get("tool"), model_call=step.get("model_call", True),
-                               elapsed=round(time.time() - start, 2))
-        proc.wait(timeout=timeout_s)
-    except subprocess.TimeoutExpired:
-        proc.kill()
-        return {"ok": False, "error": f"wall-clock timeout after {timeout_s}s"}
-    if result is None:
-        stderr = (proc.stderr.read() if proc.stderr else "")[:500]
-        return {"ok": False, "error": f"no result event in stream (rc={proc.returncode}): {stderr}"}
-    return {"ok": result.get("subtype") == "success", "subtype": result.get("subtype"),
-            "num_turns": result.get("num_turns"), "cost_usd": result.get("total_cost_usd"),
-            "raw": result}
+    never fakes a step that didn't happen."""
+    return _adapter.run_stream(workspace, job, model=model, max_turns=max_turns,
+                               timeout_s=timeout_s, trips_path=trips_path, run_id=run_id)
 
 
 def _chat_gate(workspace: Path, claude_result: dict[str, Any]) -> dict[str, Any]:

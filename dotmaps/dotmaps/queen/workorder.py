@@ -29,7 +29,6 @@ from __future__ import annotations
 
 import json
 import shutil
-import subprocess
 import tempfile
 from pathlib import Path
 from typing import Any, Callable
@@ -39,7 +38,7 @@ import yaml
 from ..models import Map
 from ..verifier.runner import Verifier
 from . import dispatch as dispatch_mod
-from . import sandbox as sandbox_mod
+from . import runner_adapter as runner_adapter_mod
 from . import trips as trips_mod
 
 WORK_ORDER_MODEL = "claude-sonnet-5"
@@ -82,36 +81,23 @@ def compose_job(map_dir: Path, workspace: Path) -> str:
     return "\n".join(lines)
 
 
+# H8 (HARDENING_BRIEF): subprocess construction + CLI output-field reading
+# now lives in queen/runner_adapter.py's ClaudeCliAdapter, one version-
+# pinned contract shared with chat.py instead of two hand-rolled ones.
+_adapter = runner_adapter_mod.ClaudeCliAdapter()
+
+
 def _run_agentic(workspace: Path, job: str, *, model: str, max_turns: int,
                   timeout_s: int) -> dict[str, Any]:
     """The full agentic Claude Code, tools ON, via the local `claude` CLI —
     subscription-billed. Scoped to `workspace` by cwd, no --add-dir, so no
     tool call can reach outside it (though cwd alone is not OS isolation —
-    see queen/sandbox.py for the real boundary: an empty-allowlist child env,
-    not a wholesale os.environ passthrough, plus a real docker mode when
-    configured). `--dangerously-skip-permissions` is required for a
+    see queen/sandbox.py for the real boundary: an empty-allowlist child
+    env, not a wholesale os.environ passthrough, plus a real docker mode
+    when configured). `--dangerously-skip-permissions` is required for a
     non-interactive `-p` run to actually write files; it is safe here
     because `workspace` is always a disposable temp copy, never the repo."""
-    base_cmd = ["claude", "-p", "--output-format", "json",
-               "--model", model, "--max-turns", str(max_turns),
-               "--dangerously-skip-permissions"]
-    cfg = sandbox_mod.run_config(workspace, base_cmd)
-    try:
-        proc = subprocess.run(
-            cfg["cmd"], input=job, capture_output=True, text=True,
-            timeout=timeout_s, cwd=str(workspace), env=cfg["env"],
-            preexec_fn=cfg["preexec_fn"])
-    except subprocess.TimeoutExpired:
-        return {"ok": False, "error": f"wall-clock timeout after {timeout_s}s"}
-    try:
-        data = json.loads(proc.stdout)
-    except (json.JSONDecodeError, TypeError):
-        return {"ok": False,
-                "error": f"unparseable claude output (rc={proc.returncode}): "
-                         f"{(proc.stderr or '')[:500]}"}
-    return {"ok": data.get("subtype") == "success", "subtype": data.get("subtype"),
-            "num_turns": data.get("num_turns"), "cost_usd": data.get("total_cost_usd"),
-            "raw": data}
+    return _adapter.run(workspace, job, model=model, max_turns=max_turns, timeout_s=timeout_s)
 
 
 def mechanical_completion_gate(map_dir: Path, workspace: Path) -> dict[str, Any]:
