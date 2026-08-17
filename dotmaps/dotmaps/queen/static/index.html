@@ -121,6 +121,44 @@
     color: var(--dim); padding: .55rem 1.4rem; border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif;
   }
 
+  /* ---- point-and-watch ---- */
+  .point-form { display: flex; gap: .5rem; margin-top: 1.6rem; }
+  .point-form input {
+    flex: 1; font-family: 'IBM Plex Sans', sans-serif; font-size: .95rem;
+    padding: .75rem .9rem; border-radius: 10px; border: 1px solid var(--edge);
+    background: var(--panel); color: var(--bone);
+  }
+  .point-form input::placeholder { color: var(--quiet); }
+  .point-form button {
+    font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: .95rem;
+    padding: 0 1.1rem; border-radius: 10px; border: none;
+    background: var(--honey); color: #1c1406; cursor: pointer;
+  }
+  .point-preset {
+    background: none; border: none; color: var(--dim); font-size: .82rem;
+    text-decoration: underline; cursor: pointer; margin-top: .5rem; padding: 0;
+  }
+  .constellation { display: flex; flex-wrap: wrap; gap: .55rem; justify-content: center; padding: .4rem 0; }
+  .cdot {
+    width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--quiet); border: 2px solid var(--edge);
+    font-size: .85rem; transition: background .25s ease, transform .15s ease;
+  }
+  .cdot:active { transform: scale(.92); }
+  .cdot.unlit { opacity: .5; }
+  .cdot.green { background: var(--good); border-color: var(--good); }
+  .cdot.red { background: #C24545; border-color: #C24545; }
+  .cdot.amber { background: var(--honey); border-color: var(--honey); }
+  .watch-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+  .watch-target { color: var(--dim); font-size: .88rem; word-break: break-all; }
+  .watch-controls { display: flex; gap: .5rem; margin-top: 1rem; flex-wrap: wrap; }
+  .watch-controls button, .watch-controls select {
+    font-family: 'IBM Plex Sans', sans-serif; font-size: .88rem;
+    padding: .55rem .9rem; border-radius: 8px; border: 1px solid var(--edge);
+    background: var(--panel); color: var(--bone); cursor: pointer;
+  }
+
   /* ---- 3. the diary ---- */
   .diary-list { display: flex; flex-direction: column; gap: .1rem; }
   .diary-line {
@@ -165,7 +203,30 @@
     <div class="glyph">🐝</div>
     <h1 id="door-headline">Checking in on her…</h1>
     <div class="questions" id="questions"></div>
+    <form class="point-form" id="point-form">
+      <input type="text" id="point-input" placeholder="Point me at something (a website)">
+      <button type="submit">Watch it</button>
+    </form>
+    <button type="button" class="point-preset" id="point-preset">or try the one she already knows</button>
   </div>
+
+  <!-- WHAT SHE'S WATCHING -->
+  <section id="watching-section" style="display:none;">
+    <div class="watch-head">
+      <h2>What she's watching</h2>
+    </div>
+    <p class="subtext" id="watch-target"></p>
+    <div class="constellation" id="constellation"></div>
+    <div class="watch-controls">
+      <button type="button" id="watch-check-btn">Check it again</button>
+      <select id="watch-rewatch">
+        <option value="">Don't recheck on its own</option>
+        <option value="1">Recheck every minute</option>
+        <option value="5">Recheck every 5 minutes</option>
+        <option value="30">Recheck every 30 minutes</option>
+      </select>
+    </div>
+  </section>
 
   <!-- 2. THE HONEYCOMB -->
   <section>
@@ -373,10 +434,121 @@ async function loadDiary() {
   });
 }
 
+// ---------------- point-and-watch ----------------
+let currentSlug = localStorage.getItem('dotmaps-watch-slug') || null;
+let pollTimer = null;
+
+function statusGlyph(status) {
+  return status === 'green' ? '✓' : status === 'red' ? '✗' : status === 'amber' ? '⚠' : '';
+}
+
+async function startWatch(url) {
+  const res = await fetch('/api/watch/start', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url }),
+  });
+  const data = await res.json();
+  if (data.error) { alert(data.error); return; }
+  currentSlug = data.slug;
+  localStorage.setItem('dotmaps-watch-slug', currentSlug);
+  $('#watching-section').style.display = '';
+  $('#watch-target').textContent = data.target;
+  checkNow();
+}
+
+async function checkNow() {
+  if (!currentSlug) return;
+  await getJSON(`/api/watch/${encodeURIComponent(currentSlug)}/run`, { method: 'POST' });
+  pollWatchState();
+}
+
+async function pollWatchState() {
+  if (!currentSlug) return;
+  clearTimeout(pollTimer);
+  const data = await getJSON(`/api/watch/${encodeURIComponent(currentSlug)}/state`);
+  if (data.error) return;
+  $('#watching-section').style.display = '';
+  if (data.target) $('#watch-target').textContent = data.target;
+  renderConstellation(data.dots);
+  loadDiary();
+  loadHoneycomb();
+  loadDoor();
+  if (data.running) pollTimer = setTimeout(pollWatchState, 700);
+}
+
+function renderConstellation(dots) {
+  const box = $('#constellation');
+  box.innerHTML = '';
+  dots.forEach((d) => {
+    const dot = document.createElement('div');
+    dot.className = 'cdot ' + (d.lit ? d.status : 'unlit');
+    dot.textContent = statusGlyph(d.lit ? d.status : '');
+    dot.title = d.statement || d.id;
+    dot.onclick = () => openDotSheet(d);
+    box.appendChild(dot);
+  });
+}
+
+function openDotSheet(d) {
+  const sheet = $('#sheet');
+  sheet.innerHTML = '';
+  const h3 = document.createElement('h3');
+  h3.textContent = d.statement || d.id;
+  sheet.appendChild(h3);
+  const fields = [
+    ['Right now', d.lit ? (d.status === 'green' ? 'Checking out fine' :
+      d.status === 'red' ? 'Failing' : 'Unreachable') : 'Not checked yet'],
+    ['Checked', d.lit ? `${d.n} time${d.n === 1 ? '' : 's'}` : '0 times'],
+    ['Clean streak', `${d.streak} in a row`],
+    ['Last checked', timeAgo(d.last_checked)],
+  ];
+  fields.forEach(([label, val]) => {
+    const p = document.createElement('div');
+    p.className = 'field';
+    p.innerHTML = `<b>${label}:</b> ${val}`;
+    sheet.appendChild(p);
+  });
+  if (d.evidence) {
+    const receipt = document.createElement('div');
+    receipt.className = 'receipt open';
+    receipt.textContent = d.evidence;
+    sheet.appendChild(receipt);
+  }
+  const close = document.createElement('button');
+  close.className = 'close-btn';
+  close.textContent = 'Close';
+  close.onclick = closeSheet;
+  sheet.appendChild(close);
+  $('#sheet-backdrop').classList.add('open');
+}
+
+$('#point-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const url = $('#point-input').value.trim();
+  if (url) startWatch(url);
+});
+
+$('#point-preset').addEventListener('click', async () => {
+  const presets = await getJSON('/api/watch/presets');
+  if (presets.presets && presets.presets.length) startWatch(presets.presets[0]);
+});
+
+$('#watch-check-btn').addEventListener('click', checkNow);
+
+$('#watch-rewatch').addEventListener('change', async (e) => {
+  if (!currentSlug) return;
+  const minutes = e.target.value ? Number(e.target.value) : null;
+  await fetch(`/api/watch/${encodeURIComponent(currentSlug)}/rewatch`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ minutes }),
+  });
+});
+
 // ---------------- boot ----------------
 loadDoor();
 loadHoneycomb();
 loadDiary();
+if (currentSlug) pollWatchState();
 </script>
 </body>
 </html>

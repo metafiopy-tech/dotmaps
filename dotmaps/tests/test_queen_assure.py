@@ -114,12 +114,17 @@ def test_ui_endpoints_check_passes_for_real():
     assert ok, detail
 
 
-def test_run_assure_all_ten_rows_green_on_this_checkout():
+def test_watch_oracle_check_passes_for_real():
+    ok, detail = assure_mod.check_watch_oracle()
+    assert ok, detail
+
+
+def test_run_assure_all_eleven_rows_green_on_this_checkout():
     result = assure_mod.run_assure()
     failing = [r for r in result["rows"] if not r["passed"]]
     assert result["pass"] is True, failing
-    assert len(result["rows"]) == 10
-    assert [r["n"] for r in result["rows"]] == list(range(1, 11))
+    assert len(result["rows"]) == 11
+    assert [r["n"] for r in result["rows"]] == list(range(1, 12))
 
 
 def test_render_marks_pass_and_fail_rows():

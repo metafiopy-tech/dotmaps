@@ -28,6 +28,7 @@ from . import dispatch as dispatch_mod
 from . import governor as governor_mod
 from . import reconsolidate
 from . import sleep as sleep_mod
+from . import surface as surface_mod
 from . import trips as trips_mod
 from . import ui as ui_mod
 from . import workorder as workorder_mod
@@ -242,6 +243,64 @@ def check_work_order_gate_fails_closed() -> tuple[bool, str]:
                f"WORK_ORDER_FAILED trip emitted={tripped}")
 
 
+def check_watch_oracle() -> tuple[bool, str]:
+    """Q12 (WATCH_BRIEF): re-proves the whole point-and-watch mechanism
+    against a fresh, disposable, sabotage-able local target — the exact
+    three done-tests (W1 compiles >=8 dots, W2 sabotage flips one red with
+    a receipt, W3 twenty clean checks mint a real certificate), run for
+    real, every time `dotmaps assure` runs. Never touches the repo's own
+    skills/watch/ — cards land in a tempdir, same disposable-copy
+    discipline every other check here uses."""
+    from ..watch import certify as watch_certify
+    from ..watch import compiler as watch_compiler
+    from ..watch import runner as watch_runner
+    from ..watch.selftest import WatchSite
+
+    tmp = Path(tempfile.mkdtemp(prefix="assure-watch-"))
+    trips_path = tmp / "trips.jsonl"
+    skills_dir = tmp / "skills"
+    site = WatchSite()
+    base = site.start()
+    try:
+        hm = watch_compiler.compile_health_map(base)
+        if len(hm["dots"]) < 8:
+            return False, f"health map compiled only {len(hm['dots'])} dots (need >=8)"
+
+        about_title = next(d for d in hm["dots"]
+                           if d["kind"] == "page_title" and "/about" in d["url"])
+        site.sabotage("/about")
+        cycle1 = watch_runner.run_cycle(hm, trips_path=trips_path, skills_dir=skills_dir)
+        red = next(r for r in cycle1["results"] if r["dot"] == about_title["id"])
+        if red["status"] != "red":
+            return False, "sabotage did not flip the dot red"
+        esc = surface_mod.open_escalations(trips_path)
+        if not any(e["dot"] == about_title["id"] and red["evidence"] in (e.get("evidence") or "")
+                  for e in esc):
+            return False, "sabotage did not raise an ESCALATE carrying the evidence receipt"
+
+        site.heal("/about")
+        for _ in range(watch_certify.CERT_N):
+            watch_runner.run_cycle(hm, trips_path=trips_path, skills_dir=skills_dir)
+
+        cards = list((skills_dir / "watch").glob("*.yaml"))
+        if len(cards) != len(hm["dots"]):
+            return False, (f"only {len(cards)}/{len(hm['dots'])} dots certified after "
+                           f"{watch_certify.CERT_N} clean cycles")
+
+        ok, reason = trips_mod.verify_integrity(trips_path)
+        if not ok:
+            return False, f"watch trip chain broke: {reason}"
+        certified = any(r["type"] == "CERTIFIED" for r in trips_mod.read_all(trips_path))
+        if not certified:
+            return False, "no CERTIFIED trip emitted"
+
+        return True, (f"{len(hm['dots'])} dots compiled from a real crawl, sabotage->red->"
+                      f"escalate proven with receipt, all {len(cards)} certified after "
+                      f"{watch_certify.CERT_N} clean checks, chain intact")
+    finally:
+        site.stop()
+
+
 def check_ui_endpoints_serve() -> tuple[bool, str]:
     tmp = Path(tempfile.mkdtemp(prefix="assure-ui-"))
     skills = tmp / "skills"
@@ -300,6 +359,11 @@ def _claims() -> list[Claim]:
               "queen/workorder.py mechanical_completion_gate", check_work_order_gate_fails_closed),
         Claim(10, "UI endpoints serve (Q10): surface/trips/manifest/flights + index all 200",
               "queen/ui.py", check_ui_endpoints_serve),
+        Claim(11, "Watch oracle (point-and-watch): a real crawl compiles >=8 dots, "
+                  "sabotage flips one red with an evidence receipt, and 20 consecutive "
+                  "clean checks mint a real certificate",
+              "watch/runner.py + watch/certify.py -> skills/watch/*.yaml",
+              check_watch_oracle),
     ]
 
 

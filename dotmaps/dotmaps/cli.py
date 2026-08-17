@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from .models import Map
 from .runtime.orchestrator import Orchestrator
@@ -125,6 +126,17 @@ def main(argv: list[str] | None = None) -> int:
     p_assure = sub.add_parser("assure", help="the certainty command (QUEEN v1, Q11): CLAIMS table, PASS/FAIL")
     p_assure.add_argument("--freeze", action="store_true",
                           help="(re)generate the frozen-hashes manifest — a deliberate, human-run action")
+
+    p_watch = sub.add_parser("watch", help="point-and-watch (W1-W3): compile a real target's "
+                             "health map and verify it mechanically — no model")
+    p_watch.add_argument("url", nargs="?", default=None,
+                         help="target to watch, e.g. https://bensluzasgolf.com "
+                              "(omit to use the shipped preset)")
+    p_watch.add_argument("--cycles", type=int, default=1, help="how many check cycles to run")
+    p_watch.add_argument("--interval", type=float, default=0.0,
+                         help="seconds to wait between cycles (0 = back-to-back, for fast-clocking)")
+    p_watch.add_argument("--trips", help="override the trips.jsonl path")
+    p_watch.add_argument("--skills", help="override the skills/ directory")
 
     args = parser.parse_args(argv)
 
@@ -314,6 +326,34 @@ def main(argv: list[str] | None = None) -> int:
         from .queen.ui import main as ui_main
         ui_main(host=args.host, port=args.port)
         return 0
+
+    if args.cmd == "watch":
+        import time as time_mod
+
+        from .queen import trips as trips_mod
+        from .queen.ui import WATCH_PRESETS
+        from .watch import compiler as watch_compiler
+        from .watch import runner as watch_runner
+
+        target = args.url or WATCH_PRESETS[0]
+        trips_path = Path(args.trips) if args.trips else trips_mod.DEFAULT_TRIPS_PATH
+        skills_dir = Path(args.skills) if args.skills else trips_mod.REPO_ROOT / "skills"
+
+        hm = watch_compiler.compile_health_map(target)
+        print(f"compiled {len(hm['dots'])} dot(s) for {target}")
+        ok = True
+        for i in range(args.cycles):
+            out = watch_runner.run_cycle(hm, trips_path=trips_path, skills_dir=skills_dir)
+            greens = sum(1 for r in out["results"] if r["status"] == "green")
+            print(f"cycle {out['cycle']}: {greens}/{len(out['results'])} green")
+            for r in out["results"]:
+                mark = {"green": "✓", "red": "✗", "amber": "⚠"}[r["status"]]
+                extra = " [CERTIFIED]" if r["newly_certified"] else ""
+                print(f"  [{mark}] {r['statement']}{extra}")
+            ok = ok and greens == len(out["results"])
+            if i < args.cycles - 1 and args.interval:
+                time_mod.sleep(args.interval)
+        return 0 if ok else 1
 
     if args.cmd == "assure":
         from .queen.assure import generate_frozen_manifest, render, run_assure
